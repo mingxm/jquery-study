@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Succez Menu</title>
+<link rel="stylesheet" type="text/css"
+	href="../../js/jquery/myplugin/cjb/succez.menu.css">
+<script type="text/javascript" src="../../js/jquery/jquery-1.4.4.js"></script>
+<script type="text/javascript"
+	src="../../js/jquery/myplugin/cjb/succez.menu.js"></script>
+<script type="text/javascript">
+	(function($) {
+		$(function() {
+			$("ul[data-role='menu']").menu("show", {
+				left : 100,
+				top : 100
+			});
+		});
+	})(jQuery);
+</script>
+</head>
+<body>
+<ul data-role="menu">
+	<li>New
+	<ul>
+		<li>Package
+		<ul>
+			<li>org.zero.test</li>
+			<li>com.esensoft.web</li>
+			<li>com.esensoft.server</li>
+		</ul>
+		</li>
+		<li>Class</li>
+		<li>Folder</li>
+		<li>File</li>
+		<li>--</li>
+		<li>Other</li>
+	</ul>
+	</li>
+	<li>Open File</li>
+	<li>--</li>
+	<li>Close</li>
+	<li>Close All</li>
+	<li>--</li>
+	<li>Exit</li>
+</ul>
+</body>
+</html>
