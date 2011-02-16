@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../../js/jquery/jquery-1.4.4.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/mxm/jquery.properies.editor.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.fn.jproeditor({
+			caption:'编辑器',
+			width:200,
+			titleWidth:0.35,
+			defaultType:'type',
+			items:[
+				{
+					title:'用户名',
+					type:'edit',
+					defaultValue:'mxm'
+				},
+				{
+					title:'密码',
+					type:'password',
+					defaultValue:'',
+					align:'center'
+				}
+			]
+		})
+	})
+</script>
+<title>Insert title here</title>
+</head>
+<body>
+
+</body>
+</html>
