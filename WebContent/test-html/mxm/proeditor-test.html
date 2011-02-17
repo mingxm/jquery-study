@@ -15,13 +15,60 @@
 				{
 					title:'用户名',
 					type:'edit',
-					defaultValue:'mxm'
-				},
-				{
+					defaultValue:'mxm',
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							alert(obj.attr("value"));
+						}
+					},{
+						name:'focus',
+						fn:function(e){
+							alert('focus');
+						}
+					}]
+				},{
+					title:'选择',
+					type:'combobox',
+					defaultValue:'bb',
+					options:[{
+						value:1,
+						caption:'aa'
+					},{
+						value:2,
+						caption:'bb'
+					}],
+					events:[{
+						name:'change',
+						fn:function(e){
+							alert('change');
+						}
+					},{
+						name:'focus',
+						fn:function(e){
+							alert('focus');
+						}
+					}]
+				},{
 					title:'密码',
 					type:'password',
 					defaultValue:'',
 					align:'center'
+				},{
+					title:'选择吗',
+					type:'checkbox',
+					defaultValue:false,
+				},{
+					title:'点击',
+					type:'button',
+					defaultValue:'…',
+					events:[{
+						name:'click',
+						fn:function(e){
+							alert('点击了我一下！');
+						}
+					}]
 				}
 			]
 		})
