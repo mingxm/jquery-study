@@ -1,0 +1,42 @@
+HTML 元素指的是从开始标签（start tag）到结束标签（end tag）的所有代码。
+jQuery 库包含以下特性：
+•HTML 元素选取
+•HTML 元素操作
+•CSS 操作
+•HTML 事件函数
+•JavaScript 特效和动画
+•HTML DOM 遍历和修改  HTML DOM 定义了访问和操作HTML文档的标准方法。HTML DOM 把 HTML 文档呈现为带有元素、属性和文本的树结构（节点树）。
+•AJAX
+•Utilities
+
+通过 jQuery，您可以选取（查询，query） HTML 元素，并对它们执行“操作”（actions）。
+
+jquery的元素选择方法有哪些？
+$("p") 选取 <p> 元素。
+
+$("p.intro") 选取所有 class="intro" 的 <p> 元素。
+
+$("p#demo") 选取 id="demo" 的第一个 <p> 元素。
+jQuery 属性选择器
+
+jQuery 使用 XPath 表达式来选择带有给定属性的元素。
+
+$("[href]") 选取所有带有 href 属性的元素。
+
+$("[href='#']") 选取所有带有 href 值等于 "#" 的元素。
+
+$("[href!='#']") 选取所有带有 href 值不等于 "#" 的元素。
+
+$("[href$='.jpg']") 选取所有 href 值以 ".jpg" 结尾的元素。
+jQuery CSS 选择器
+
+jQuery CSS 选择器可用于改变 HTML 元素的 CSS 属性。
+
+jQuery 语法是为 HTML 元素的选取编制，可以对元素执行某些操作。
+
+基础语法是：$(selector).action()
+
+•美元符号定义 jQuery
+•选择符（selector）“查询”和“查找” HTML 元素
+•jQuery action() 执行对元素的操作
+

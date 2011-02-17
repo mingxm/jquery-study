@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../../js/jquery/jquery-1.5.js"></script>
+<script type="text/javascript" src="../../myplugin/wyg/study-wyg.js""></script>
+<script type="text/javascript">
+/*
+ * $(document)将document对象转化为jquery对象，这样就可以对其用jquery函数进行操作,
+ * 另外ready函数可以防止文档在完全加载（就绪）之前运行 jQuery 代码。 
+ */
+  $(document).ready(function(){
+/*
+ * $("p")用jquery的元素选择器选择所有标签为<p>的html元素
+ */
+	 $("p").click(function(){
+/*
+ * $(this)将当前选择的对象转化为jquery对象
+ */
+	 $(this).hide();
+	 });
+/*
+ * $("button")用来选择或查新到html中的所有buttion元素
+ */
+     $("button").click(function(){
+/*
+ * $("#test")用来选取id=“test”的所有元素 ，id 在HTML中的作用是给一个单元(元素,标签)
+ * 一个独一无二的标识或标记，让流览器在分析处理网页时找到id所在的地方 
+ */
+    	 $("#test").hide();
+/*
+ * $(".t1")用来选取所有类名=t1的html元素，并使其隐藏起来，class用来指定html元素的样
+ * 式这个样式是在样式表中定义的自定义样式。 
+ */
+         $(".test").hide();
+     });
+  }); 
+</script> 
+<title>Insert title here</title>
+</head>
+<body>  
+  <h1 id="test"> this will hide if you click the button hide</h1>
+  <p> if you click here,I will disappered</p>
+  <button type="button"> hide </button> 
+  <br>
+  <h3 class="test">wangyg</h3>      
+</body>
+</html>
