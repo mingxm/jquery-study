@@ -20,8 +20,8 @@ html,body {
  */
 ul.succez_menu {
 	position: absolute;
-	width: 120px;
-	padding: 0 0 0 33px;
+	width: 180px;
+	padding: 0;
 	margin: 0;
 	white-space: nowrap;
 	display: block;
@@ -35,11 +35,32 @@ ul.succez_menu {
  */
 ul.succez_menu li,ul.succez_menu li.split {
 	list-style-type: none;
-	height: 20px;
 	white-space: nowrap;
+	cursor: pointer;
 }
 
+/**
+ * 菜单项文本区域样式
+ */
+ul.succez_menu li div {
+	height: 22px;
+	line-height: 20px;
+	margin-left: 33px;
+}
+
+/**
+ * 菜单项分割栏样式
+ */
 ul.succez_menu li.split {
 	background: #f1f1f1 url(images/menu_h_split.png) repeat-x left top;
 	height: 4px;
+	margin-left: 33px;
+	cursor: default;
+}
+
+/**
+ * 表示存在子菜单的箭头样式
+ */
+ul.succez_menu li.arrow {
+	background: url(images/arrow.png) no-repeat right center;
 }
