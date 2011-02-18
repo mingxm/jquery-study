@@ -1,0 +1,60 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>这是我的第一个jquery页面</title>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/jquery-1.5-xh.js"></script>
+<head>
+<body>
+
+
+我想创建一个按钮，点击之后显示jquery对象。
+<input type="button" value="显示jquery对象" onclick="showJQueryObj()"/>
+
+<p/>
+我想看下有名的$函数，跟踪一下它，
+<input type="button" value="运行$函数" onclick="run$()" id="btn1"/><br/>
+（跟踪的结论：$是一个函数，也是一个类，它的真名叫jQuery。作函数用时，它的原型是function( selector, context ) ，通常的作用是查找符合条件的dom元素。）
+
+<p/>
+<ul>几种选择器的写法：
+<li>$("input")是找出所有input控件<input type="button" value="找出所有input控件" onclick="$_input()"/></li>
+<li>$("#btn1")是找出id为btn1的控件<input type="button" value="找出id=btn1的控件" onclick="$_btn1()"/>
+<br/>（注意：像$("id=btn1")不行，#btn1的写法和css的选择器写法是一致的）
+<li>$("input[value*=找出]")  <input type="button" value="找出所有文字中含“找到”二字的按钮" onclick="$_find()"/>
+</li>
+</ul>
+
+
+</body>
+
+<script type="text/javascript">
+function showJQueryObj(){
+	alert(jQuery);
+}
+
+function run$(){
+	var btns = $("input[id='btn1']");
+	alert("$(\"input[id='btn1']\")可以找到按钮【"+btns[0].value+"】");
+}
+
+function $_input(){
+	var inputs = $("input");
+	
+	var text = "";
+	inputs.each(function(){
+		text+=this.type+",";
+	});
+	alert("有【"+inputs.length+"】个input控件，分别是"+text);
+}
+
+function $_btn1(){
+	var btns = $("#btn1");
+	alert("btn1的文字是【"+btns[0].value+"】控件");
+}
+
+function $_find(){
+	var btns = $('input[value*="找出"]');
+	alert("找到【"+btns.length+"】个文字含“找到”的按钮");
+}
+</script>
+</html>

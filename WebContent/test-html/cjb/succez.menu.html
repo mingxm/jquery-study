@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Succez Menu</title>
+<link rel="stylesheet" type="text/css"
+	href="../../js/jquery/myplugin/cjb/succez.menu.css">
+<style>
+#testbtns li {
+	list-style-type: none;
+	height: 20px;
+	line-height: 18px;
+}
+</style>
+<script type="text/javascript" src="../../js/jquery/jquery-1.4.4.js"></script>
+<script type="text/javascript"
+	src="../../js/jquery/myplugin/cjb/succez.menu.js"></script>
+<script type="text/javascript">
+	(function($) {
+		$(function() {
+			$("#testclick").click(function(e) {
+				$("#testpopupdown").menu().popupDown(e);
+				return false;
+			});
+			$("#testclick2").click(function(e) {
+				$("#testpopupdown2").menu().popupDown(e);
+				return false;
+			});
+			$("#testclick3").click(function(e) {
+				$("#testpopupmenu").menu().popupDown(e);
+				return false;
+			});
+			$("#testclick4").click(function(e) {
+				$("#testpopupdown2").menu().popupDown(e);
+				return false;
+			});
+			$(document).bind("contextmenu", function(e) {
+				$("#testpopupmenu").menu().popup(e);
+				return false;
+			});
+		});
+	})(jQuery);
+</script>
+</head>
+<body>
+<ul id="testbtns">
+	<li>--</li>
+	<li>
+	<h1>Succez Menu</h1>
+	</li>
+	<li>--</li>
+	<li>自动初始化页面中定制的三个浮动菜单组件，你可以分别点击下面的按钮或者链接又或者右键进行测试~</li>
+	<li></li>
+	<li>
+	<ul>
+		<li><a href="##" id="testclick">点击我</a></li>
+		<li></li>
+		<li><a href="##" id="testclick2">再点击我</a></li>
+		<li></li>
+		<li>
+		<button id="testclick3">点击它</button>
+		<button id="testclick4">再次点击它</button>
+		</li>
+	</ul>
+	</li>
+</ul>
+
+<ul id="testpopupdown" data-role="menu">
+	<li>Setup</li>
+	<li>--</li>
+	<li>Exit</li>
+</ul>
+
+<ul id="testpopupdown2" data-role="menu">
+	<li>Move...</li>
+	<li>Rename...</li>
+	<li>Refresh</li>
+	<li>--</li>
+	<li>Exit</li>
+</ul>
+
+<ul id="testpopupmenu" data-role="menu">
+	<li>New
+	<ul>
+		<li>Project</li>
+		<li>--</li>
+		<li>Package
+		<ul>
+			<li>org.zero.test</li>
+			<li>--</li>
+			<li>com.esensoft.web</li>
+			<li>com.esensoft.server</li>
+		</ul>
+		</li>
+		<li>Class</li>
+		<li>Folder</li>
+		<li>File</li>
+		<li>--</li>
+		<li>Other</li>
+	</ul>
+	</li>
+	<li>Open File</li>
+	<li>--</li>
+	<li>Close</li>
+	<li>Close All</li>
+	<li>--</li>
+	<li>Save</li>
+	<li>Save As...</li>
+	<li>Save All</li>
+	<li>--</li>
+	<li>Move...</li>
+	<li>Rename...</li>
+	<li>Refresh</li>
+	<li>Convert Line Delimiters To
+	<ul>
+		<li>Windows</li>
+		<li>Unix</li>
+		<li>MacOS</li>
+	</ul>
+	</li>
+	<li>--</li>
+	<li>Print</li>
+	<li>--</li>
+	<li>Import</li>
+	<li>Export</li>
+	<li>--</li>
+	<li>Exit</li>
+</ul>
+</body>
+</html>

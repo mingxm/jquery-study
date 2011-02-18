@@ -1,0 +1,66 @@
+/**
+ * menu - Succez Menu Component
+ * 
+ * @author chenpw@gmail.com
+ */
+* {
+	font-size: 12px;
+}
+
+html,body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+/**
+ * 菜单的主体背景设置
+ */
+ul.succez_menu {
+	position: absolute;
+	width: 180px;
+	padding: 0;
+	margin: 0;
+	white-space: nowrap;
+	display: block;
+	background: #f1f1f1 url(images/menu_v_bg.png) repeat-y left top;
+	border: 1px solid #979797;
+	cursor: default;
+}
+
+/**
+ * 菜单栏样式
+ */
+ul.succez_menu li,ul.succez_menu li.split {
+	list-style-type: none;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+/**
+ * 菜单项文本区域样式
+ */
+ul.succez_menu li div {
+	height: 22px;
+	line-height: 20px;
+	margin-left: 33px;
+}
+
+/**
+ * 菜单项分割栏样式
+ */
+ul.succez_menu li.split {
+	background: #f1f1f1 url(images/menu_h_split.png) repeat-x left top;
+	height: 4px;
+	margin-left: 33px;
+	cursor: default;
+}
+
+/**
+ * 表示存在子菜单的箭头样式
+ */
+ul.succez_menu li.arrow {
+	background: url(images/arrow.png) no-repeat right center;
+}
