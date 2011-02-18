@@ -40,3 +40,13 @@ jQuery 语法是为 HTML 元素的选取编制，可以对元素执行某些操�
 •选择符（selector）“查询”和“查找” HTML 元素
 •jQuery action() 执行对元素的操作
 
+注意：
+text不要写成test
+.ex .hide中间有空格，否则就会认为ex.hide是一个class名
+
+HTML 元素默认是静态定位，且无法移动。
+
+如需使元素可以移动，把 CSS 的 position 设置为 relative 或 absolute
+
+
+

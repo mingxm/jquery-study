@@ -34,15 +34,41 @@
  */
          $(".test").hide();
      });
+/*
+ * $(".ex.hide")是指的class为ex的html元素中包含的class为hide的html元素 
+ */
+
+
+     $(".ex.hide").click(function(){
+/*
+ * parent是找当前元素的第一个父节点，parents是找当前元素的所有父节点 
+ */
+     $(this).parents(".ex").hide("slow");
+
+
+     })
   }); 
 </script> 
-<title>Insert title here</title>
+<style type="test/css">
+  div.ex
+  {
+    background-color:#e5eecc;
+    padding:7px;
+    border:solid 1px #c3c3c3;
+  }
+</style>
 </head>
 <body>  
   <h1 id="test"> this will hide if you click the button hide</h1>
   <p> if you click here,I will disappered</p>
   <button type="button"> hide </button> 
-  <br>
-  <h3 class="test">wangyg</h3>      
+  <br/>
+  <h3 class="test">wangyg</h3>  
+  <div class="ex">
+    <button  class="hide" type="button"> hideme </button>
+    <p>dhicehcioehcioheicoh<br/>
+      djcioejioej<br/>
+    </p>
+  </div>      
 </body>
 </html>
