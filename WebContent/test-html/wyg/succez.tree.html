@@ -3,11 +3,64 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="../../js/jquery/jquery-1.5.js"></script>
-<script type="text/javascript" src="../../myplugin/wyg/scccez.restree.js""></script>
-
+<script type="text/javascript" src="../../js/jquery/myplugin/wyg/scccez.restree.js""></script>
+<style type="text/css">
+body{
+  font-size:15px;
+  margin:0px;  
+}
+ul{
+  list-style:none outside none;
+  margin-left:20px;
+  margin-top:8px;
+  display:block;
+}
+li{
+  background:url(../../js/jquery/myplugin/wyg/img/wyg-vbar.gif);
+  background-position:left top;
+  background-repeat:no-repeat;   
+}
+span{
+  padding-left:15px;
+  background:url(../../js/jquery/myplugin/wyg/img/wyg-folder.gif) no-repeat;
+  cursor:pointer;
+}
+.ts{
+  background-image:url(../../js/jquery/myplugin/wyg/img/wyg-add.gif);
+}
+div.clickeara{
+  cursor:pointer;
+  margin-left:-15px;
+  width:15px;
+  height:15px;
+  float:left;
+}
+</style>
 <title>Insert title here</title>
 </head>
 <body>
-
+  <div style="width:200px;border:1px solid #482562">
+    <ul>
+      <li class="ts">
+        <div class="clickeara"></div>
+        <span style="margin:15px">this is the first item!</span>
+      <ul>
+        <li>
+           <span>this is the child item!</span>
+        </li>
+      </ul>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <span>thie is the second item!</span>
+        <ul>
+          <li>
+            <span>this is the child item!</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </body>
 </html>

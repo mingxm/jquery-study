@@ -1,7 +1,12 @@
 (function($){
 	$.fn.extend({
-		resTree:function(){
-			
+		initTree:function(option){
+		var option=option || {};
+	    var datalist=option;
+	    
+	    
+	    
+	    
 		}
 	})
 
