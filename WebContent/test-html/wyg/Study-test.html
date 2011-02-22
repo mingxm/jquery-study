@@ -49,12 +49,17 @@
      })
   }); 
 </script> 
-<style type="test/css">
+<style type="text/css">
   div.ex
   {
     background-color:#e5eecc;
     padding:7px;
     border:solid 1px #c3c3c3;
+  }
+  div.ex2
+  {
+    background-color:#FF0000;
+    border:solid 2px #c3c3c3;    
   }
 </style>
 </head>
@@ -69,6 +74,17 @@
     <p>dhicehcioehcioheicoh<br/>
       djcioejioej<br/>
     </p>
-  </div>      
+  </div> 
+  <script type="text/javascript">
+    $.fn.ready(
+    	function(){
+    		alert($("#test")[0].innerHTML);
+    		$("<div style=\"border:solid 1px #FF0000\">动态创建的 div</div>").insertAfter(".ex");
+    	    alert($(".ex").prev().html());
+    	    $("div").attr("class","ex2");
+    	    $("p").css({ color: "#ff0011", background: "blue" }); 
+    	}
+    )
+  </script>
 </body>
 </html>

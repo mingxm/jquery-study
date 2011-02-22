@@ -6,34 +6,38 @@
 <script type="text/javascript" src="../../js/jquery/myplugin/wyg/scccez.restree.js""></script>
 <style type="text/css">
 body{
-  font-size:15px;
-  margin:0px;  
+  font-size:12px;
+  color:#FF0000;
+  margin:0px;
+  padding:0px;
+  height:100%;
 }
 ul{
   list-style:none outside none;
-  margin-left:20px;
-  margin-top:8px;
   display:block;
+  margin:0px;
+  padding-left:12px;
+  margin-top:0px;
+  margin-bottom:3px;
 }
 li{
   background:url(../../js/jquery/myplugin/wyg/img/wyg-vbar.gif);
   background-position:left top;
-  background-repeat:no-repeat;   
+  background-repeat:no-repeat;
 }
 span{
-  padding-left:15px;
-  background:url(../../js/jquery/myplugin/wyg/img/wyg-folder.gif) no-repeat;
-  cursor:pointer;
-}
-.ts{
-  background-image:url(../../js/jquery/myplugin/wyg/img/wyg-add.gif);
+  background-image:url(../../js/jquery/myplugin/wyg/img/wyg-folder.gif);
+  background-repeat:no-repeat;
+  padding-left:15px; 
+  margin-left:0px; 
 }
 div.clickeara{
   cursor:pointer;
-  margin-left:-15px;
+  padding-left:0px;
   width:15px;
   height:15px;
   float:left;
+  background-image:url(../../js/jquery/myplugin/wyg/img/wyg-add.gif);  
 }
 </style>
 <title>Insert title here</title>
@@ -41,11 +45,12 @@ div.clickeara{
 <body>
   <div style="width:200px;border:1px solid #482562">
     <ul>
-      <li class="ts">
+      <li>
         <div class="clickeara"></div>
-        <span style="margin:15px">this is the first item!</span>
+        <span>this is the first item!</span>
       <ul>
         <li>
+           <div class="clickeara"></div>
            <span>this is the child item!</span>
         </li>
       </ul>
@@ -53,14 +58,19 @@ div.clickeara{
     </ul>
     <ul>
       <li>
+        <div class="clickeara"></div>
         <span>thie is the second item!</span>
         <ul>
           <li>
+            <div class="clickeara"></div>
             <span>this is the child item!</span>
           </li>
         </ul>
       </li>
     </ul>
   </div>
+  <script type="text/javascript">
+    
+  </script>
 </body>
 </html>
