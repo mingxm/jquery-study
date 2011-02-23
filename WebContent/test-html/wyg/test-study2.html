@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../../js/jquery/jquery-1.5.js"></script>
+<style type="text/css">
+h1,h3{
+  color:red;
+  font-size:14px;
+}
+li strong{
+  font-style:italic;
+  font-weight:normal;
+}
+#green{
+  color:green;
+}
+#sidebar p {
+	font-style: italic;
+	text-align: right;
+	margin-top: 0.5em;
+	background-color: gray; 
+	padding: 20px;
+}
+
+#sidebar h2 {
+	font-size: 1em;
+	font-weight: normal;
+	color:red;
+	margin: 0;
+	line-height: 2;
+	text-align: right;
+}
+.center{
+  text-align:center;
+}
+[tile]{
+  font-size:33px;
+  color:#FF5555;
+}
+[tilo='hun']{
+  color:#858585;
+}
+
+</style>
+</head>
+<body>
+<div id="sidebar">
+<h2>这是处理后的标题</h2>
+<p>这是处理后的段落</p>
+</div>
+<h1 class="center">h1：红色14号字体的h1</h1>
+<h3 class="center">h3：有了样式表h1和h3的大小竟然可以一样！</h3>
+<p><strong>这是粗体，不是斜体，因为该strong标签不是位于li标签的上下文之中</strong></p>
+<ol>
+<li><strong>这是斜体因为位于li标签中，注意有序列表和无序列表的区别</strong></li>
+</ol>
+<strong id="green">这是正常的字体,id在文档中只能出现一次，不允许同名</strong>
+<p tile="hello">hello</p>
+<p tilo="hun">hellodh</p>
+</body>

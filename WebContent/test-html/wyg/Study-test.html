@@ -75,14 +75,23 @@
       djcioejioej<br/>
     </p>
   </div> 
+  <div id="pad">学习使用data函数</div>
+  <div id="m_event">学习使用事件，点击查看效果！</div>
   <script type="text/javascript">
     $.fn.ready(
-    	function(){
+    	function($){
     		alert($("#test")[0].innerHTML);
     		$("<div style=\"border:solid 1px #FF0000\">动态创建的 div</div>").insertAfter(".ex");
     	    alert($(".ex").prev().html());
     	    $("div").attr("class","ex2");
     	    $("p").css({ color: "#ff0011", background: "blue" }); 
+    	    $("#pad").data("a","123");
+    	    $("#m_event").bind("click",function(){
+    	    	alert("click");
+    	    })  
+    	    $("#m_event").bind("click",function(){
+    	    	alert("bind 函数关联事件为多播时间，新绑定的事件处理函数不会冲掉原来的事件处理函数 ！")
+    	    })
     	}
     )
   </script>
