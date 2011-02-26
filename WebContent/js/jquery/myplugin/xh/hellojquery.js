@@ -42,4 +42,4 @@ $(function(){
 	if($("body").attr("autoScrollToBottom")){
 		$.sys.scrollToBottom();
 	}
-});
+}); 
