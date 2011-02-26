@@ -1,0 +1,162 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>源码列表</title>
+<script type="text/javascript" src="../../js/jquery/jquery-1.5.1rc1.js"></script>
+<style>
+body{font-size:14px}
+.file{color:blue;font-size:14pt}
+.fileShow{color:blue;font-size:20pt}
+</style>
+<head>
+<body>
+
+<p/>
+现在jquery-test工程下面有很多测试页面，有必要把它们整理到一个页面中，方便查看页面效果和代码。文件列表如下：
+<div id="testpanel">
+</div>
+
+<input type="button" value="全部隐藏" id="hiddenAll"/>
+<div id="codepanel">
+</div>
+</body>
+
+<script type="text/javascript">
+$(function(){
+	function showData(xmldoc){
+		var html = showNode(xmldoc.documentElement);
+		$("#testpanel").append(html);
+	};
+	
+	function showNode(node){
+		if(!node || (node.nodeType!=1)) return;
+		
+		var html = "<ul>";
+		
+		$(node).children().each(function(i, child){
+			var fileName = (child.getAttribute("name") || "");
+			html+="<li>";
+			html+="<span>"+fileName+"</span>";
+			if(child.tagName == "file"){
+				if(fileName.indexOf(".html")!=-1){
+					var title = (child.getAttribute("title") || "");
+					if(title.length>0){
+						html+="<span>（"+title+"）</span>";
+					}
+					html+=('&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../'+fileName+'" target="_blank">浏览</a>');
+				}
+				
+				html+=('&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../'+fileName+'" func="viewcode">查看代码</a>');
+			}
+			
+			html+=showNode(child);
+			
+			html+="</li>";
+		});
+		
+		html += "</ul>";
+		return html;
+	};
+
+	//隐藏所有的代码
+	function hiddenAllCode(){
+		$("#codepanel > textarea").hide();
+		$("#codepanel > textarea").prev().val("显示");
+		$("#codepanel > textarea").prev().prev().attr("class", "file");
+	}
+	
+	//显示指定url的代码。
+	function viewcode(url, urlElem){
+		hiddenAllCode();
+		
+		function postProcess(codeElem){
+			$(codeElem).prev().val("隐藏");
+			$(codeElem).prev().prev().attr("class", "fileShow");
+		}
+		
+		//判断代码是否已经显示
+		var codeElem = $(urlElem).data("code");
+		if(codeElem){
+			$(codeElem).show();
+			postProcess(codeElem);
+		}else{
+			$.ajax({url:url, 
+				success:function(code){
+					$("#codepanel").append('<span class="filename">'+url+'</span><input type="button" value="隐藏"/><textarea rows="20" cols="150" wrap="off" style="overflow:hidden"></textarea><br/>');
+					var t = $("#codepanel > textarea").last();
+					t.val(code);
+					t.css({width:t[0].scrollWidth+50, height:t[0].scrollHeight});
+					
+					//将显示代码的textarea和链接绑定，后面会根据这个判断该代码是否已经显示
+					codeElem=t[0];
+					$(urlElem).data("code", t[0]);
+	
+					postProcess(codeElem);
+				},
+				error:function(jXHR, status, msg){
+					alert(status+":"+msg+"(url="+url+")");
+				}
+			});
+		}
+	}
+	
+	function loadTreeFromServer(){
+		$.ajax({
+			url: ".testajax",
+			success:function(data){
+				showData(data);
+			},
+			error:function(jXHR, statusText, msg){
+				alert(statusText+"\r\n"+msg+"\r\n从服务器端动态获取源文件列表失败，可能服务器没有启动。改成从静态xml获取。");
+				loadTreeFromLocal();
+			},
+			dataType:"xml"
+		});
+	}
+	
+	function loadTreeFromLocal(){
+		$.ajax({
+			url: "codeviewer.xml",
+			success:function(data){
+				data=data||{};
+				if(!data.documentElement){
+					data=$.parseXML(data);
+				}
+				showData(data);
+			},
+			error:function(jXHR, statusText, msg){
+				alert(statusText+"\r\n"+msg);
+			},
+			dataType:"text"
+		});
+	}
+	
+	function _addEventHandler(){
+		//给所有链接绑定事件
+		$("a[func=viewcode]").live("click", function(event){
+			var url = $(this).attr("href");
+			viewcode(url, this);
+			event.preventDefault();
+		});
+		
+		//给所有显示代码的按钮绑定事件处理函数
+		$("#codepanel").delegate(":button", "click", function(event){
+			var v = $(this).val();
+			$(this).next().toggle();
+			var visible = $(this).val()=="显示";
+			$(this).val(visible?"隐藏":"显示");
+			$(this).prev().attr("class", visible?"fileShow":"file");
+		});
+		
+		//给"隐藏所有"按钮绑定事件处理函数
+		$("#hiddenAll").click(function(event){
+			hiddenAllCode();
+		});
+	}
+	
+	loadTreeFromServer();
+	_addEventHandler();
+});
+
+</script>
+</html>

@@ -1,0 +1,108 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>动态加载多个js</title>
+<link rel="stylesheet" type="text/css"
+	href="../../js/jquery/myplugin/cjb/succez.menu.css">
+<script type="text/javascript" src="../../js/jquery/jquery-1.5.1rc1.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/hellojquery.js"></script>
+<style type="text/css">
+	@import "../../js/jquery/myplugin/xh/hellojquery.css";
+	*{font-size:14px}
+</style>
+<head>
+<body autoScrollToBottom="true">
+
+<p>
+写个最简单的加载js的方法
+<input type="button" value="运行" role="run"/><span id="span1" style="color:blue"></span><br/>
+<textarea rows="10" cols="100">
+function loadJs(jsfile, callback){//加载js
+	$.getScript(jsfile, callback); 
+}
+
+function addContextMenu(){
+	$(document).bind("contextmenu", function(){
+		$("#testpopupdown2").succezMenu("popup", e);
+		return false;
+	});
+	$("#span1").text("js加载完毕，页面的右键菜单设置好了！");
+}
+
+function test(){
+	loadJs("../../js/jquery/myplugin/cjb/succez.menu.js", addContextMenu);
+}
+
+test();
+</textarea>
+
+<ul id="testpopupdown2" data-role="menu" style="display:none">
+	<li>Move...</li>
+	<li>Rename...</li>
+	<li>Refresh</li>
+	<li>--</li>
+	<li>Exit</li>
+</ul>
+</p>
+
+<p>
+加载多个js：
+<input type="button" value="运行" role="run"/><span id="span2" style="color:blue"></span><br/>
+<textarea rows="10" cols="100">
+function loadJs(jsfile, callback){//加载js
+	if(!jsfile) return callback();
+	var array = jsfile.split(",");
+	for(var i = 0;i < array.length; i++){
+		$.get(array[i], i, function(){
+			if(i==array.length-1){
+				callback();
+			}
+		}, "script");
+	}
+}
+
+function addContextMenu(){
+	$(document).bind("contextmenu", function(){
+		$("#testpopupdown3").succezMenu("popup", e);
+		return false;
+	});
+	
+	function showUploadFile(){
+		$.fn.jUploadFile({
+			
+		})
+	}
+	
+	$("#testpopupdown3").delegate("li:first", "click", function(){
+		alert($(this).html());
+		showUploadFile();
+		return false;
+	});
+	
+	$("#span2").text("js加载完毕，页面的右键菜单设置好了！");
+}
+
+function test(){
+	loadJs("../../js/jquery/myplugin/cjb/succez.menu.js,../../js/jquery/myplugin/mxm/jquery.uploadfile.js", addContextMenu);
+}
+
+test();
+</textarea>
+<ul id="testpopupdown3" data-role="menu" style="display:none">
+	<li>Move...</li>
+	<li>Rename...</li>
+	<li>Refresh</li>
+	<li>--</li>
+	<li>Exit</li>
+</ul>
+</p>
+ 
+</body>
+<script type="text/javascript">
+$(function(){
+	$(":button[role=run]").click(function(e){
+		window.eval($(this).nextAll("textarea").val());
+	});
+});
+</script>
+</html>
