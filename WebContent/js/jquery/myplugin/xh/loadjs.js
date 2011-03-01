@@ -156,7 +156,7 @@ $.include = function(jsfiles, callback){
 				if(loadedNum == jsfiles.length){
 					config.callback();
 				}
-			}
+			} 
 			,load:function(jsfile){
 				debug3("$.ajax载入"+jsfile+"中...");
 				$.ajax({ url:jsfile
