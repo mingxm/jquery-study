@@ -66,6 +66,7 @@
   <p id="testpage"></p>
   <script type="text/javascript">
     $(function(){
+    	$("document").initTreeByXml("../../../js/jquery/myplugin/wyg/XML/m_tree.xml");
     	$("div").treeFoldOrNot();
     	$("#m_drag").TreeMoveEvent();
     });

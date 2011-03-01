@@ -7,14 +7,20 @@
 <body>
 <p id="m_xml">加载xml:</p>
 <script type="text/javascript">
-	$(function(){
-	   alert("ok");
-	   $.ajax({
-		   url:"D:/Documents and Settings/wangyg/jquery-study/WebContent/js/jquery/myplugin/wyg/XML/study.xml",
+function initxml(xmlpath){
+	//貌似ajax函数只能放到服务器上才能执行成功 。
+	$.ajax({
+		   type:"GET",
+		   url:xmlpath,
 		   dataType:"xml",
+		   timeout:1000,
+		   cache:false,
 		   error:function(xml){alert("error!");},
 		   success:function(xml){alert("success!");}
-	   });
+	});	
+}
+	$(function(){
+		initxml("study.xml");
 	});
 </script>
 </body>
