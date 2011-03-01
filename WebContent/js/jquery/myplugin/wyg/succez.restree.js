@@ -18,18 +18,48 @@
 	    xmlDoc.async=false;
 	    xmlDoc.load(xmlpath);
 	    return xmlDoc;
-	};	
+	};
+/*
+ * 根据传入的xml路径去初始化一颗资源树
+ * @xmlpath:xml文件的路径
+ * @id：xml文件中根节点的id
+ * @element：将要动态添加新创建元素的元素
+ */		
+	function initTree(xmlpath,id,element){
+		var xmlDoc=loadTreeXML(xmlpath);
+		if(xmlDoc){
+			$(xmlDoc).find("#"+id).each(function(){
+				$(this).find("> rootnode").each(function(){
+					var id=$(this).attr("id");
+					var m_div=$('<div class="clickPlusErea" loaded="false"></div>');
+					m_div.attr("id",id);
+					var temp=$("<ul/>");
+					temp.append(m_div).append($('<li class="roottree">'+$(this).attr("text")+'</li>'));		   	
+			   		element.append(temp);
+				});
+				$(this).find("> leafnode").each(function(){
+					element.append($('<ul><li><span class="treefile">'+$(this).text()+"</span></li></ul>"));	
+				});				
+			});
+		}		
+	}
 	/*
 	* 处理节点的展开和收起事件
 	*/	
 	$.fn.treeFoldOrNot = function(){
-		$(this).bind("click",function(event){
-		//如果节点是展开的，收起该节点 
+		$(this).live("click",function(event){			
+			if ($(this).attr("loaded")!="true")
+			{
+    			$(this).attr("loaded","true");
+    			var id=$(this).attr("id");
+    		    initTree("../../../js/jquery/myplugin/wyg/XML/m_tree.xml",id,$(this).next());
+			} 
+		   //如果节点是展开的，收起该节点 			
 			if ($(this).hasClass("clickSubErea")){
     			$(this).next().find(">ul").hide("fast");
     	  		$(this).removeClass();
     	  		$(this).addClass("clickPlusErea");
-    		} 
+			}
     		//如果节点是收起的，展开该节点 
     		else if ($(this).hasClass("clickPlusErea")){
     			var childelememt=$(this).next().find(">ul");
@@ -39,9 +69,9 @@
     	    		$(this).removeClass();
     	    		$(this).addClass("clickSubErea");
     			}    
-    			else
-    				alert("No childNode");
-    		};
+    		else
+    			alert("No childNode");
+    		}
     		event.stopPropagation();//阻止click事件起泡  
     	});
 	};
@@ -73,18 +103,10 @@
     	});
 	};
 /*
- * 根据传入的xml路径去初始化一颗资源树
- */	
-	$.fn.initTreeByXml=function(xmlpath){
-		var xmlDoc=loadTreeXML(xmlpath);
-		if (xmlDoc){		
-		$(xmlDoc).find("nodes > rootnode").each(function(){
-			var temp=$(this).find(">leafnode").text();
-			alert(temp);
-			var temp=$(this).find(">rootnode").attr("text");
-			alert(temp);
-		});
-		}; 	
+ * 留给外部调用的接口
+ */
+	$.fn.initTreeByXml=function(xmlpath,id,element){
+		initTree(xmlpath,id,element);
 	};
 })(jQuery);
 

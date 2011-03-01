@@ -14,59 +14,11 @@
 <body>
   <p>鼠标位于坐标： <span id="testpage"></span></p>
   <div id="m_drag">
-  <ul>
-    <li><span class="treefile">about succizBI</span></li>
-    <div class="clickSubErea" id="test"></div>   
-    <li>succezBI总体设计
-    	<ul> 
-    	    <div class="clickSubErea" id="test"></div>  
-    	    <li>jquery函数
-    	    	<ul>
-        			<li><span class="treefile">SuccezBi界面的总体设计</span></li>
-        			<li><span class="treefile">多语言支持</span></li>
-        			<li><span class="treefile">客户端js框架选型</span></li>
-        			<li><span class="treefile">插件机制</span></li>
-        			<li><span class="treefile">集群支持设计</span></li>
-        			<li><span class="treefile">SuccezBi界面的总体设计</span></li>
-        			<li><span class="treefile">多语言支持</span></li>
-        			<li><span class="treefile">客户端js框架选型</span></li>    	    	
-    	    	</ul>
-    	    </li>
-        	<li><span class="treefile">SuccezBi界面的总体设计</span></li>
-        	<li><span class="treefile">多语言支持</span></li>
-        	<li><span class="treefile">客户端js框架选型</span></li>
-        	<li><span class="treefile">插件机制</span></li>
-        	<li><span class="treefile">集群支持设计</span></li>
-        	<li><span class="treefile">SuccezBi界面的总体设计</span></li>
-        	<li><span class="treefile">多语言支持</span></li>
-        	<li><span class="treefile">客户端js框架选型</span></li>
-        	<li><span class="treefile">插件机制</span></li>
-        	<li><span class="treefile">集群支持设计</span></li>
-        	<li><span class="treefile">SuccezBi界面的总体设计</span></li>
-        	<li><span class="treefile">多语言支持</span></li>
-        	<li><span class="treefile">客户端js框架选型</span></li>
-        	<li><span class="treefile">插件机制</span></li>
-        	<li><span class="treefile">集群支持设计</span></li>        	        	
-  		</ul>
-  	</li>
-  </ul>
-  <ul>
-     <div class="clickSubErea" ></div>
-     <li>SuccezBI各模块设计
-     	<ul>
-        	<li><span class="treefile">SuccezBi界面的总体设计</span></li>
-        	<li><span class="treefile">多语言支持</span></li>
-        	<li><span class="treefile">客户端js框架选型</span></li>
-        	<li><span class="treefile">插件机制</span></li>
-        	<li><span class="treefile">集群支持设计</span></li>
-     	</ul>
-     </li>
-  </ul>
   </div>
   <p id="testpage"></p>
   <script type="text/javascript">
     $(function(){
-    	$("document").initTreeByXml("../../../js/jquery/myplugin/wyg/XML/m_tree.xml");
+    	$("#m_drag").initTreeByXml("../../../js/jquery/myplugin/wyg/XML/m_tree.xml","0",$("#m_drag"));
     	$("div").treeFoldOrNot();
     	$("#m_drag").TreeMoveEvent();
     });

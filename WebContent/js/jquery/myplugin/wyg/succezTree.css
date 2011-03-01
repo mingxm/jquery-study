@@ -42,8 +42,11 @@ span{
   background-repeat:no-repeat;  
 }
 #m_drag{
-  width:200px;
+  width:300px;
   background-color:#D8D8D8;
   border:2px solid #848484;
   position:absolute;
+}
+.roottree{
+  margin-left:15px;
 }

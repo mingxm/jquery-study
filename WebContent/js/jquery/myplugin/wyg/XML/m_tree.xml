@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nodes>
-	<rootnode childID='10' text="succezBI总体设计" ID='1'>
-		<rootnode childID='11' text="树的二级节点" ID='2'>
+<rootnode id='0'>
+	<rootnode text="succezBI总体设计1" id='1'>
+		<rootnode text="树的二级节点" id='3'>
 			<leafnode>二级节点SuccezBi界面的总体设计</leafnode>
 			<leafnode>二级节点多语言支持</leafnode>
 			<leafnode>二级节点客户端js框架选型</leafnode>
@@ -18,4 +18,20 @@
 		<leafnode>SuccezBi界面的总体设计</leafnode>
 		<leafnode>SuccezBi界面的总体设计</leafnode>			
 	</rootnode>
-</nodes>
+	<rootnode text="succezBI总体设计2" id='2'>
+		<leafnode>SuccezBi界面的总体设计3</leafnode>  
+		<leafnode>多语言支持3</leafnode> 
+		<leafnode>客户端js框架选型3</leafnode>
+		<leafnode>插件机制3</leafnode>
+		<leafnode>集群支持设计3</leafnode>
+		<leafnode>SuccezBi界面的总体设计3</leafnode>
+		<leafnode>SuccezBi界面的总体设计3</leafnode>			
+	</rootnode>	
+	<leafnode>SuccezBi界面的总体设计31</leafnode>  
+	<leafnode>多语言支持31</leafnode> 
+	<leafnode>客户端js框架选型31</leafnode>
+	<leafnode>插件机制31</leafnode>
+	<leafnode>集群支持设计31</leafnode>
+	<leafnode>SuccezBi界面的总体设计31</leafnode>
+	<leafnode>SuccezBi界面的总体设计31</leafnode>		
+</rootnode>
