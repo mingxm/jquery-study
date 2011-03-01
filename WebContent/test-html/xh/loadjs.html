@@ -2,107 +2,215 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>动态加载多个js</title>
-<link rel="stylesheet" type="text/css"
-	href="../../js/jquery/myplugin/cjb/succez.menu.css">
-<script type="text/javascript" src="../../js/jquery/jquery-1.5.1rc1.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/jquery-1.5-xh.js"></script>
 <script type="text/javascript" src="../../js/jquery/myplugin/xh/hellojquery.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/loadjs.js"></script>
+<!-- 
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/codeviewer.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/coderunner.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/debugger.js"></script> -->
 <style type="text/css">
 	@import "../../js/jquery/myplugin/xh/hellojquery.css";
 	*{font-size:14px}
 </style>
 <head>
-<body autoScrollToBottom="true">
+<body autoScrollToBottom="true" margin="200px">
 
 <p>
-写个最简单的加载js的方法
-<input type="button" value="运行" role="run"/><span id="span1" style="color:blue"></span><br/>
-<textarea rows="10" cols="100">
-function loadJs(jsfile, callback){//加载js
+写个最简单的加载js的方法<input type="button" value="运行" onclick="test()"/><span id="span1" style="color:blue"></span><br/>
+<pre>
+function loadJs(jsfile, callback){//加载单个js
 	$.getScript(jsfile, callback); 
 }
 
-function addContextMenu(){
-	$(document).bind("contextmenu", function(){
-		$("#testpopupdown2").succezMenu("popup", e);
-		return false;
-	});
-	$("#span1").text("js加载完毕，页面的右键菜单设置好了！");
-}
-
 function test(){
-	loadJs("../../js/jquery/myplugin/cjb/succez.menu.js", addContextMenu);
-}
+	loadJs("../../js/jquery/myplugin/xh/debugger.js", function(){
+		$('#span1').text("debugger.js加载完毕！");
+		$('#debuggerPanel').debuger();
+		$("input[role=debugbtn]").show();
+	});
+};
 
-test();
-</textarea>
-
-<ul id="testpopupdown2" data-role="menu" style="display:none">
-	<li>Move...</li>
-	<li>Rename...</li>
-	<li>Refresh</li>
-	<li>--</li>
-	<li>Exit</li>
-</ul>
+</pre>
+<input role="debugbtn" style="display:none" type="button" value="测试调试窗口" onclick="$('#debuggerPanel').data('debugger').debug('do somethings...')">
+<input role="debugbtn" style="display:none" type="button" value="隐藏调试窗口" onclick="$('#debuggerPanel').data('debugger').hide()">
+<input role="debugbtn" style="display:none" type="button" value="显示调试窗口" onclick="$('#debuggerPanel').data('debugger').show()">
+<p id="debuggerPanel"></p>
 </p>
-
+<hr/>
 <p>
-加载多个js：
-<input type="button" value="运行" role="run"/><span id="span2" style="color:blue"></span><br/>
-<textarea rows="10" cols="100">
-function loadJs(jsfile, callback){//加载js
-	if(!jsfile) return callback();
-	var array = jsfile.split(",");
+加载多个js：<input type="button" value="运行" onclick="test2()"/><span id="span2" style="color:blue"></span><br/>
+<pre>
+
+function loadJsMulti(jsfiles, callback){//加载单个js
+	if(!jsfiles) return callback();
+	var array = jsfiles.split(",");
+	
+	var jsstatus = [];
+	function do_complete(){
+		jsstatus[this.index] = true;
+		for(var i = 0;i < array.length; i++){
+			if(!jsstatus[i]) return;
+		}
+		
+		//所有的js都加载完毕，调用回调函数
+		callback();
+	}
+	
+	//依次加载每个函数
 	for(var i = 0;i < array.length; i++){
-		$.get(array[i], i, function(){
-			if(i==array.length-1){
-				callback();
-			}
-		}, "script");
+		$.ajax({ url:array[i]
+			,context:{index:i, js:array[i]}
+			,complete:do_complete
+			,dataType:"script"
+		});
 	}
 }
 
-function addContextMenu(){
-	$(document).bind("contextmenu", function(){
-		$("#testpopupdown3").succezMenu("popup", e);
-		return false;
+function test2(){
+	loadJsMulti("../../js/jquery/myplugin/xh/debugger.js,../../js/jquery/myplugin/xh/coderunner.js", function(){
+		$('#span2').text("debugger.js和coderunner.js都已经加载完毕！");
+		
+		$('#coderunnerPanel2').debuger();
+		$('#coderunnerPanel2').codeRunner();
 	});
-	
-	function showUploadFile(){
-		$.fn.jUploadFile({
-			
-		})
-	}
-	
-	$("#testpopupdown3").delegate("li:first", "click", function(){
-		alert($(this).html());
-		showUploadFile();
-		return false;
-	});
-	
-	$("#span2").text("js加载完毕，页面的右键菜单设置好了！");
-}
-
-function test(){
-	loadJs("../../js/jquery/myplugin/cjb/succez.menu.js,../../js/jquery/myplugin/mxm/jquery.uploadfile.js", addContextMenu);
-}
-
-test();
-</textarea>
-<ul id="testpopupdown3" data-role="menu" style="display:none">
-	<li>Move...</li>
-	<li>Rename...</li>
-	<li>Refresh</li>
-	<li>--</li>
-	<li>Exit</li>
-</ul>
+};
+</pre>
+<p id="coderunnerPanel2"></p>
 </p>
- 
+
+<textarea style="display:none" id="testcode">
+function debug2(msg){
+	$("#coderunnerPanel2").data("debugger").debug(msg);
+}
+debug2("begin run code...");
+debug2("...end");
+</textarea>
+</p>
+
+<hr/>
+<p>
+<ul>
+BI原来的实现考虑了下面的各种情况：
+<li>1、当http请求发生错误时，要抛异常：throwError("当请求js:"+jsuri+" 时服务器返回错误状态:"+http.status+" "+http.statusText);</li>
+<li>2、执行js文件的内容时可能会发生js错误，要抛异常：var errMsg = (e.description ? e.description : e.message) + " \n脚本'" + jsuri + "'加载失败!";</li>
+<li>3、当加载多个js文件时，加载过程中可能发生多个错误，不能每个错误都报一遍错，应该总地报一个错。在bi中的做法是 设置一个记数，在util.js中的_onWindowError函数中判定这个计数，如果大于0直接return，不然当脚本执行有异常时总是会有提示对话框</li>
+<li>4、门户文件的htm可能是GBK编码的,如果在这样的htm中引用utf8编码的js文件则必须设置这个属性,否则没法加载.</li>
+<li>5、如果js已经加载，不要再重复加载</li>
+</ul>
+最终的实现效果：<input type="button" value="运行" onclick="test3()"/><span id="span3" style="color:blue"></span><br/>
+<p id="coderunnerPanel3"></p>
+</p>
+</p>
+
+
+<hr/>
+<p>
+<ul>下面测试include方法：
+	<li>1、加载debugger.js和coderunner.js<input type="button" value="运行" onclick="testInclude1()"/></li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;1.1、再加载这2个js<input type="button" value="运行" onclick="testInclude1()"/></li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;1.2、再加载这2个js和一个新的message.js<input type="button" value="运行" onclick="testInclude1_2()"/></li>
+	<li>2、加载一个不存在的js——notexist.js<input type="button" value="运行" onclick="testInclude2()"/></li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;2.1、加载3个不存在的js——1.js、2.js、3.js<input type="button" value="运行" onclick="testInclude('1.js,2.js,3.js')"/></li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;2.2、再次include不存在的js时，会重新加载这个js<input type="button" value="运行" onclick="testInclude('1.js,2.js,3.js')"/></li>
+	<li>3、加载notexist.js和debugger.js<input type="button" value="运行" onclick="testInclude('notexist.js;../../js/jquery/myplugin/xh/debugger.js')"/>
+	<li>4、加载一个内容有错误的js——errorcontent.js<input type="button" value="运行" onclick="testInclude('../../js/jquery/myplugin/xh/errorcontent.js')"/>（TODO：尚未实现，js内容有错时，仍认为它成功加载）
+	<li>5、加载errorcontent.js和debugger.js<input type="button" value="运行" onclick="testInclude('../../js/jquery/myplugin/xh/errorcontent.js;../../js/jquery/myplugin/xh/debugger.js')"/>
+	<li>6、加载errorcontent.js和notexist.js<input type="button" value="运行" onclick="testInclude('notexist.js;../js/jquery/myplugin/xh/errorcontent.js')"/>
+	<li>7、include空字符串<input type="button" value="运行" onclick="testInclude7()"/></li>
+	<li>8、include时不指定回调函数<input type="button" value="运行" onclick="testInclude7()"/></li>
+</ul>
+<textarea rows="15" cols="150" id="it">
+==debugger console==
+</textarea>
+</p>
 </body>
 <script type="text/javascript">
-$(function(){
-	$(":button[role=run]").click(function(e){
-		window.eval($(this).nextAll("textarea").val());
+function test(){
+	$.loadJs("../../js/jquery/myplugin/xh/debugger.js", function(){
+		$('#debuggerPanel').debuger();
+		$("input[role=debugbtn]").show();
 	});
+};
+
+function test2(){
+	$.loadJsMulti("../../js/jquery/myplugin/xh/debugger.js,../../js/jquery/myplugin/xh/coderunner.js", function(){
+		$('#span2').text("debugger.js和coderunner.js都已经加载完毕！");
+		
+		$('#coderunnerPanel2').debuger();
+		$('#coderunnerPanel2').codeRunner();
+		
+		//for test
+		$('#coderunnerPanel2').data("coderunner").writeln($('#testcode').val());
+	});
+};
+
+function test3(){
+	$.include("../../js/jquery/myplugin/xh/debugger.js,../../js/jquery/myplugin/xh/coderunner.js,../../js/jquery/myplugin/xh/codeviewer.js", function(){
+		$('#span3').text("debugger.js、coderunner.js、codeviewer.js都已经加载完毕！");
+		
+		$('#coderunnerPanel3').debuger();
+		$('#coderunnerPanel3').codeRunner();
+		$('#coderunnerPanel3').codeViewer();
+		
+		//for test
+		$('#coderunnerPanel3').data("coderunner").writeln('$("#coderunnerPanel3").data("debugger").debug("begin run code...");\r\n$("#coderunnerPanel3").data("debugger").debug("...end");');
+		$('#coderunnerPanel3').data("codeviewer").showCode("../../js/jquery/myplugin/xh/loadjs.js");
+	});
+};
+
+function debug3(msg){
+	var it = $("#it");
+	it.val(it.val()+"\r\n"+$.nowstr()+"\t"+msg);
+}
+
+function testInclude1(){
+	debug3("");
+	debug3("");
+	debug3(">>>>测试加载debugger.js和coderunner.js");
+	$.include("../../js/jquery/myplugin/xh/debugger.js,../../js/jquery/myplugin/xh/coderunner.js", function(){
+		debug3("debugger.js和coderunner.js都已经加载完毕！");
+	});
+};
+
+function testInclude1_2(){
+	debug3("");
+	debug3("");
+	debug3(">>>>测试加载debugger.js、coderunner.js、codeviewer.js");
+	$.include("../../js/jquery/myplugin/xh/debugger.js,../../js/jquery/myplugin/xh/coderunner.js,../../js/jquery/myplugin/xh/codeviewer.js", function(){
+		debug3("debugger.js、coderunner.js、codeviewer.js都已经加载完毕！");
+	});
+};
+
+function testInclude2(){
+	debug3("");
+	debug3("");
+	debug3(">>>>测试加载notexist.js");
+	$.include("../../js/jquery/myplugin/xh/notexist.js", function(){
+		debug3("notexist.js都已经加载完毕！");
+	});
+};
+
+function testInclude(js){
+	debug3("");
+	debug3("");
+	debug3(">>>>测试加载"+js);
+	$.include(js, function(){
+		debug3(js+"都已经加载完毕！");
+	});
+};
+
+$(function(){
+	window.onerror = function(msg, url, line){
+		debug3("window.onerror截获到异常："+msg);
+		alert("window.onerror截获到异常："+msg);
+		
+		var jsloader = $(document).data("_jsloader");
+		if(jsloader.isExecing()){
+			jsloader.setExecFailed(msg);
+		}
+	}
 });
+
 </script>
 </html>

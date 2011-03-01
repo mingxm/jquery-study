@@ -19,6 +19,7 @@ body{font-size:14px}
 <input type="button" value="全部隐藏" id="hiddenAll"/>
 <div id="codepanel">
 </div>
+
 </body>
 
 <script type="text/javascript">
@@ -102,7 +103,7 @@ $(function(){
 	
 	function loadTreeFromServer(){
 		$.ajax({
-			url: ".testajax",
+			url: ".testajax?action=getcodes",
 			success:function(data){
 				showData(data);
 			},

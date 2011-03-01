@@ -12,44 +12,123 @@ body{font-size:14px}
 <body>
 
 下面是最简单的访问服务器的方法：
-$.ajax({url:"data.xml", success:function(dataxml){alert(dataxml.xml)}});
+$.ajax({url:"helloajax.xml", success:function(dataxml){alert("data.xml文件的内容为：\r\n"+dataxml.xml)}});
 回调函数success的原型是: function(arra)
 <input type="button" value="点击获取data.xml的内容" onclick="getDataXml();"/>
 
-<p/>
+<p>
 看下访问地址不存在时的现象：
 $.ajax({url:"data_xx.xml", error:function(resp){alert(resp.responseText);}});
 <input type="button" value="点击获取data.xml的内容" onclick="getDataXml_error();"/>
+</p>
 
-<p/>
-怎么样简单地展示树形，请看下面的效果：
-<ul>
-	<li>a
-		<ul>
-		<li>a1
-			<ul>
-				<li>a11</li>
-				<li>a12</li>
-				<li>a13</li>
-			</ul>
-		</li>
-		<li>a2</li>
-		<li>a3</li>
-		</ul>
-	</li>
-	<li>b</li>
-	<li>c</li>
-</ul>
+<p>
+给服务器端传参数：<input type="button" value="获取用户名" onclick="getParam('username');"/><input type="button" value="获取jdk版本号" onclick="getParam('java.version');"/>
+<pre>
+$.ajax({url:".testajax"
+		,data:"action=getparam&name="+paramName //用字符串传参数
+		,success:function(paramValue){alert(paramName+"="+paramValue);}
+		,error:function(jXHR, statusText, errorMsg){ alert(jXHR.responseText); }
+	});
+</pre>
+另外一种写法：
+<input type="button" value="获取用户名" onclick="getParam2('username');"/><input type="button" value="获取jdk版本号" onclick="getParam2('java.version');"/>
+<pre>
+	$.ajax({url:".testajax"
+		,data:{action:"getparam", name:paramName} //用json对象传参数
+		,success:function(paramValue){alert(paramName+"="+paramValue);}
+		,error:function(jXHR, statusText, errorMsg){ alert(jXHR.responseText); }
+	});
+</pre>
+</p>
+
+<p>
+当用json对象作为参数时，如果属性又是另外一个对象会怎么样：<input type="button" value="获取user.age" onclick="getAttrOfUser({name:'xh', age:100}, 'age');"/><input type="button" value="获取user.name" onclick="getAttrOfUser({name:'xh', age:100}, 'name');"/>
+<pre>
+	function getAttrOfUser(testUser, attrNameToGet){
+		$.ajax({url:".testajax"
+			,data:{action:"getparam", name:"user["+attrNameToGet+"]", user:testUser} //用json对象传参数，user参数的值是另外一个对象，那么到服务器端取参数要用user[age]的方式，这里age是user对象的属性。
+			,success:function(attrValue){alert("user["+attrNameToGet+"]"+"="+attrValue);}
+			,error:function(jXHR, statusText, errorMsg){ alert(jXHR.responseText); }
+		});
+	}
+	
+	调用：
+	getAttrOfUser({name:'xh', age:100}, 'age');
+	getAttrOfUser({name:'xh', age:100}, 'name');
+</pre>
+</p>
+
+<p>
+BI中QueryObj的原型是QueryObj(actionurl, params, onfinish, userdata, autodispose)，这里参数userdata很有用，它会传给onfinish。<br/>
+jquery里面是怎么样传userdata给回调函数呢？<input type="button" value="获取userdata" onclick="testUserdata(['a', 'b', 'c']);"/>
+<pre>
+	function testUserdata(array){
+		for(var i = 0;i < array.length; i++){
+			$.ajax({url:".testajax"
+				,data:{action:"getparam", name:"elem", elem:array[i]}
+				,context:{elemIndex:i} //context是ajax()函数的一个参数，在回调函数中可以用this取到它
+				,success:function(respData){
+					var i = this.elemIndex; //this.elemIndex取到上面的context.elemIndex的值
+					alert("第"+i+"个元素是="+respData);
+				}
+				,error:function(jXHR, statusText, errorMsg){ alert(jXHR.responseText); }
+			});
+		}
+	}
+	
+	调用：
+	testUserdata(['a', 'b', 'c']);
+</pre>
+</p>
+
 </body>
 
 <script type="text/javascript">
 function getDataXml(){
-	$.ajax({url:"data.xml", success:function(dataxml){alert("data.xml文件的内容为：\r\n"+dataxml.xml)}});
+	$.ajax({url:"helloajax.xml", success:function(dataxml){alert("data.xml文件的内容为：\r\n"+dataxml.xml)}});
 }
 
 function getDataXml_error(){
-	$.ajax({url:"data_xx.xml", error:function(resp){alert(resp.responseText);}});
+	$.ajax({url:"helloajax_xx.xml", error:function(resp){alert(resp.responseText);}});
 }
 
+function getParam(paramName){
+	$.ajax({url:".testajax"
+		,data:"action=getparam&name="+paramName //用字符串传参数
+		,success:function(paramValue){alert(paramName+"="+paramValue);}
+		,error:function(jXHR, statusText, errorMsg){ alert(jXHR.responseText); }
+	});
+}
+
+function getParam2(paramName){
+	$.ajax({url:".testajax"
+		,data:{action:"getparam", name:paramName} //用json对象传参数
+		,success:function(paramValue){alert(paramName+"="+paramValue);}
+		,error:function(jXHR, statusText, errorMsg){ alert(jXHR.responseText); }
+	});
+}
+
+function getAttrOfUser(testUser, attrNameToGet){
+	$.ajax({url:".testajax"
+		,data:{action:"getparam", name:"user["+attrNameToGet+"]", user:testUser} //用json对象传参数，user参数的值是另外一个对象，那么到服务器端取参数要用user[age]的方式，这里age是user对象的属性。
+		,success:function(attrValue){alert("user["+attrNameToGet+"]"+"="+attrValue);}
+		,error:function(jXHR, statusText, errorMsg){ alert(jXHR.responseText); }
+	});
+}
+
+function testUserdata(array){
+	for(var i = 0;i < array.length; i++){
+		$.ajax({url:".testajax"
+			,data:{action:"getparam", name:"elem", elem:array[i]}
+			,context:{elemIndex:i} //context是ajax()函数的一个参数，在回调函数中可以用this取到它
+			,success:function(respData){
+				var i = this.elemIndex; //this.elemIndex取到上面的context.elemIndex的值
+				alert("第"+i+"个元素是="+respData);
+			}
+			,error:function(jXHR, statusText, errorMsg){ alert(jXHR.responseText); }
+		});
+	}
+}
 </script>
 </html>
