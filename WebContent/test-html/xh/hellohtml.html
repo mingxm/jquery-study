@@ -1,0 +1,45 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>看下如何访问服务器</title>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/jquery-1.5-xh.js"></script>
+<style>
+body{font-size:14px}
+.file{color:blue;font-size:14pt}
+.fileShow{color:blue;font-size:20pt}
+</style>
+<head>
+<body>
+
+<p/>
+怎么样简单地展示树形，请看下面的效果：
+<ul>
+	<li>a
+		<ul>
+		<li>a1
+			<ul>
+				<li>a11</li>
+				<li>a12</li>
+				<li>a13</li>
+			</ul>
+		</li>
+		<li>a2</li>
+		<li>a3</li>
+		</ul>
+	</li>
+	<li>b</li>
+	<li>c</li>
+</ul>
+</body>
+
+<script type="text/javascript">
+function getDataXml(){
+	$.ajax({url:"data.xml", success:function(dataxml){alert("data.xml文件的内容为：\r\n"+dataxml.xml)}});
+}
+
+function getDataXml_error(){
+	$.ajax({url:"data_xx.xml", error:function(resp){alert(resp.responseText);}});
+}
+
+</script>
+</html>

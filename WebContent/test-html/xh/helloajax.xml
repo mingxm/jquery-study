@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- 本xml的地址是test-html/xh/helloajax.xml，作用是给helloajax.html测试用 -->
+<files>
+	<file name="index.html" title="Insert title here"/>
+	<fold name="js">
+		<fold name="jquery">
+			<fold name="download-plugin"/>
+			<file name="js/jquery/jquery-1.4.4.js"/>
+			<file name="js/jquery/jquery-1.5.js"/>
+			<file name="js/jquery/jquery-1.5.min.js"/>
+		</fold>
+	</fold>
+	<fold name="WEB-INF"/>
+</files>

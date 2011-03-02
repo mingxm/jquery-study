@@ -447,6 +447,7 @@ jQuery.extend = jQuery.fn.extend = function() {
  * 23、merge(first,second):合并second到first中去，返回first
  * 24、grep(elems,callback,inv):在数组elems找查找符合条件的元素，返回一个新数组。callback是检查器，其原型是callback(elem,i)，inv为true或者false，如果callback返回的值和inv相同，表示符合条件。
  * 25、map(elems, callback):处理elems数组中的每个元素，处理的结果放到一个新的数组中，返回新数组。注意1：如果某个元素的处理的结果是null，那么null不会放到新数组中；注意2：如果处理的结果是一个数组，那么把这个数组中的元素放到结果数组中，即这个数组本身不会放到结果数组中。
+ * 							callback的原型是callback(elem,i)
  * 26、guid:这是一个全局的计数器，jquery内部用它产生一个类似bi的guid。它是一个自增的数值。主要用于给事件处理函数编号。
  * 27、proxy(function, obj)：类似bi的bind函数，用于将成员方法作为事件处理函数。在bi里面的做法是：div.onclick = this.stop.bind(this);，jquery的做法是div.onclick = $.proxy(this.stop, this)。
  * 28、access：? 很偏的函数，好像是jquery内部使用的函数，只被jQuery.fn.attr和jQuery.fn.css调用
@@ -687,8 +688,15 @@ jQuery.extend({
 
 			// Use insertBefore instead of appendChild to circumvent an IE6 bug.
 			// This arises when a base node is used (#2709).
-			head.insertBefore( script, head.firstChild );
-			head.removeChild( script );
+			try{debugger;
+				debug3("head.insertBefore( script, head.firstChild )");
+				head.insertBefore( script, head.firstChild );
+				debug3("head.removeChild( script)");
+				head.removeChild( script );
+				debug3("head.removeChild( script) end");
+			}catch(e){
+				alert("script error:"+e);
+			}
 		}
 	},
 
@@ -6409,7 +6417,8 @@ function inspectPrefiltersOrTransports( structure, options, originalOptions, jXH
  * 下面还绑定了静态方法到jQuery：
  * 1、get(url,data,callback,type)：
  * 		data：发送给服务器的数据，用Key/value的形式，比如{action:"delete", id:"1321"}
- * 		callback:载入成功时回调函数(只有当Response的返回状态是success才是调用该方法)。callback的原型是callback(responseData, statusText, jXHR)
+ * 		callback:载入成功时回调函数(只有当Response的返回状态是success才是调用该方法)。
+ * 				 callback的原型是callback(responseData, statusText, jXHR)，这里responseData可能是字符串、xml doc、json对象。在callback中可以引用this，this就是传入的
  * 		type的值是返回值的类似，有xml、html、text、json、script、jsonp等等可选值。
  * 2、post(url,data,callback,type):和get类似
  * 这2个方法是jQuery.ajax()方法的简化形式。
@@ -6423,10 +6432,11 @@ function inspectPrefiltersOrTransports( structure, options, originalOptions, jXH
  * 		global：是否触发全局事件。默认是触发
  * 		type：有get和post两种，默认是get
  * 		contenttype:
+ * 		context:在调用success、error等回调函数时的上下文对象，可以通过this取到它。
  * 		processData:是否处理数据。默认是true ？
  * 		async:是否异步执行。默认是异步
  * 		timeout:设置请求超时时间（毫秒）。此设置将覆盖全局设置。
- * 		data:
+ * 		data: 
  * 		dataType:返回值的数据类型，有xml、html、text、json、script、jsonp等等可选值。如果指定成xml，那么给回调函数的是一个document对象，而不是字符串。
  * 		username：用户名
  * 		password：密码
@@ -6435,12 +6445,18 @@ function inspectPrefiltersOrTransports( structure, options, originalOptions, jXH
  * 		headers：{} ？
  * 		crossDomain:
  * 		beforeSend：当一个Ajax请求开始时触发。如果需要，你可以在这里设置XHR对象。
- * 		success:请求成功时触发。即服务器没有返回错误，返回的数据也没有错误。success事件处理函数的原型是callback(responseData, statusText, jXHR)
+ * 		success:请求成功时触发。即服务器没有返回错误，返回的数据也没有错误。success事件处理函数的原型是callback(responseData, statusText, jXHR)。
+ * 				
  * 		error：仅当发生错误时触发。你无法同时执行success和error两个回调函数。error事件处理函数的原型是callback(jXHR, statusText, errorMessage)
  * 		complete:不管你请求成功还是失败，即便是同步请求，你都能在请求完成时触发这个事件。
+ * 		converters:转换器，默认是：{"* text": window.String, "text html": true, "text json": jQuery.parseJSON, "text xml": jQuery.parseXML, "text script":一个jquery自己定义的转换器}
  * 5、ajaxPrefilter
  * 6、ajaxTransport
- * 7、ajax(url, settings)：这是主要的ajax函数，第一个参数是url地址，settings是参数，有哪些参数可以参考ajaxSettings对象
+ * 7、ajax(url, options)：这是主要的ajax函数，第一个参数是url地址，options是参数，有哪些参数可以参考ajaxSettings对象。
+ * 		在调用ajax时，通常会在options里面指定下面的参数：
+ * 			1、success：success是访问成功之后回调的函数，其原型是callback(responseData, statusText, jXHR)，这里responseData可能是字符串、xml doc、json对象。在success函数中可以引用this，this就是传入的options对象。比如this.data就是传入数据。
+ * 			2、error：error是访问失败之后回调的函数
+ * 			3、data：
  * 8、param(a, traditional)
  */
 jQuery.fn.extend({
@@ -7001,6 +7017,7 @@ jQuery.extend({
 				}
 
 				try {
+					//在这发送请求
 					transport.send( requestHeaders, done );
 				} catch (e) {
 					// Propagate exception as error if not done
@@ -7346,7 +7363,7 @@ jQuery.ajaxSetup({
 		script: /javascript/
 	},
 	converters: {
-		"text script": function( text ) {
+		"text script": function( text ) { //如果返回值是script，那么就执行它
 			jQuery.globalEval( text );
 			return text;
 		}
@@ -7510,6 +7527,7 @@ if ( jQuery.support.ajax ) {
 					var xhr = s.xhr(),
 						handle;
 
+					//在这里访问服务器，调用XMLHttp对象的open方法。
 					// Open the socket
 					// Passing null username, generates a login popup on Opera (#2865)
 					if ( s.username ) {
