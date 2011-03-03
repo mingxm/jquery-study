@@ -39,7 +39,9 @@
 			 * 属性编辑器内部布局为了整齐还是用table进行布局。下面是生成布局table并且生成属性编辑器
 			 * 标题的代码
 			 */
-			var tableObj = $('<table></table>').appendTo(config.renderTo);
+			var tableObj = $('<table></table>')
+				.attr("frame","border")
+				.attr("rules","all").appendTo(config.renderTo);
 			var row = $('<tr></tr>').appendTo(tableObj);
 			tableObj.css('width',config.width);
 			$('<td colspan=2>'+config.caption+'</td>')
@@ -49,8 +51,7 @@
 			 * 以下是建立属性编辑器中的各编辑器项目，每个编辑器项目的配置信息必须至少包括以下2个：标题、
 			 * 类型
 			 */
-			for(var i=0;i<config.items.length;i++){
-				var item = config.items[i];
+			$.each(config.items,function(i,item){
 				row = $('<tr></tr>').appendTo(tableObj);
 				var title = $('<td>'+item.title+'</td>').appendTo(row);
 				title.css('width',config.titleWidth*config.width);
@@ -76,36 +77,76 @@
 				}else if(type == 'combobox'){
 					obj = $('<select></select>').appendTo(editor);
 					var ops = info.options;
-					for(var j=0;ops && j<ops.length;j++){
-						var op = ops[j];
-						var option = $('<option value="'+op.value+'"'+((info.defaultValue==op.caption)?' selected="selected"':"")
-									+'>'+op.caption+'</option>').appendTo(obj); 
+					if(ops){
+						$.each(ops,function(index,item){
+							var op = $('<option></option>').appendTo(obj);
+							$.each(item,function(key,val){
+								if(key == "caption"){
+									op.text(item[key]);
+								}else if(key == "selected" && val){
+									op.attr(key,true);
+								}else {
+									op.attr(key,val);
+								}
+							});
+						})
 					}
 				}else if(type == 'radio'){
-					
+					var name = info.name?info.name:"new_radio";
+					var items = info.items;
+					if(!items || items.length == 0){
+						return;
+					}
+					var selectName = items[0].value;
+					for(var j=0;j<items.length;j++){
+						var item = items[j];
+						if(item.checked){
+							selectName = item.value;
+						}
+						$('<input type="radio" name="'+name+'" value="'+item.value+'">'+item.caption+'<br>')
+							.appendTo(editor);
+					}
+					var rs = $('input:[name='+name+']:radio');
+					rs.each(function(index,item){
+						$item = $(item);
+						if($item.attr('value') == selectName){
+							$item.attr('checked',true);
+						}
+						$.each(info.events,function(j,event){
+							$item.bind(event.name,$item,event.fn);
+						})
+					});
 				}else if(type == 'editCanPick'){
-					
+					var obj = $('<table></table>').appendTo(editor);
+					var r = $('<tr></tr>').appendTo(obj);
+					var o1 = $('<td></td>').appendTo(r);
+					var t = $('<input type="text" value="'+info.defaultValue+'"/>')
+						.css('width',(1-config.titleWidth)*config.width-30).appendTo(o1);
+					var o2 = $('<td></td>').appendTo(r);
+					var b = $('<input type="button" value="."/>').appendTo(o2);
 				}else if(type == 'file'){
-					
+					obj = $.fn.jUploadFile({
+						renderTo:editor,
+						width:(1-config.titleWidth)*config.width
+					});
 				}else if(type == 'button'){
 					obj = $('<input type="button" value="'+info.defaultValue+'"/>').css('align','center').appendTo(editor);
 				}else if(type == 'password'){
 					obj = $('<input type="password" value="'+info.defaultValue+'"/>')
 						.css('text-align',info.align).appendTo(editor);
 				}
-				if(type != 'button'){
-					obj.css('width',(1-config.titleWidth)*config.width);
-				}
+				editor.css('width',(1-config.titleWidth)*config.width);
 				
 				/**
 				 * 绑定消息的处理函数
 				 */
-				var events = info.events;
-				for(var j=0;events && j<events.length;j++){
-					var event = events[j];
-					obj.bind(event.name,obj,event.fn);
+				if(obj){
+					var events = info.events?info.events:[];
+					$.each(events,function(index,item){
+						obj.bind(item.name,obj,item.fn);
+					})
 				}
-			}
+			});
 			
 			/**
 			 * TODO

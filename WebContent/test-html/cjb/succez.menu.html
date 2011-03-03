@@ -19,23 +19,27 @@
 	(function($) {
 		$(function() {
 			$("#testclick").click(function(e) {
-				$("#testpopupdown").menu().popupDown(e);
+				$("#testpopupdown").succezMenu().popdown();
 				return false;
 			});
 			$("#testclick2").click(function(e) {
-				$("#testpopupdown2").menu().popupDown(e);
+				$("#testpopupdown2").succezMenu("popupDown", e);
+				return false;
+			});
+			$("#testclick21").click(function(e) {
+				$("#testpopupmenu").succezMenu("popupDown", $("#testclick3"));
 				return false;
 			});
 			$("#testclick3").click(function(e) {
-				$("#testpopupmenu").menu().popupDown(e);
+				$("#testpopupmenu").succezMenu("popupDown", e);
 				return false;
 			});
 			$("#testclick4").click(function(e) {
-				$("#testpopupdown2").menu().popupDown(e);
+				$("#testpopupdown2").succezMenu("popupDown", e);
 				return false;
 			});
 			$(document).bind("contextmenu", function(e) {
-				$("#testpopupmenu").menu().popup(e);
+				$("#testpopupmenu").succezMenu("popup", e);
 				return false;
 			});
 		});
@@ -44,11 +48,9 @@
 </head>
 <body>
 <ul id="testbtns">
-	<li>--</li>
 	<li>
 	<h1>Succez Menu</h1>
 	</li>
-	<li>--</li>
 	<li>自动初始化页面中定制的三个浮动菜单组件，你可以分别点击下面的按钮或者链接又或者右键进行测试~</li>
 	<li></li>
 	<li>
@@ -56,6 +58,8 @@
 		<li><a href="##" id="testclick">点击我</a></li>
 		<li></li>
 		<li><a href="##" id="testclick2">再点击我</a></li>
+		<li></li>
+		<li><a href="##" id="testclick21">再点击我，能够在下面的按钮下显示哦</a></li>
 		<li></li>
 		<li>
 		<button id="testclick3">点击它</button>

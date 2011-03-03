@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../../js/jquery/jquery-1.5.js"></script>
+<style type="text/css">
+body{
+  font-size:13px;
+  height:100%;
+  font-family:cambria;
+}
+ul{
+  list-style:none;
+  padding-left:15px;
+  margin-top:3px;
+}
+/*加号样式 */
+div.clickPlusErea{
+  width:15px;
+  height:15px;
+  cursor:pointer;
+  float:left;
+  background-image:url(../../js/jquery/myplugin/wyg/img/tree_plus.gif);
+  background-repeat:no-repeat;
+  background-position:center bottom;  
+}
+/*减号样式 */
+div.clickSubErea{
+  width:15px;
+  height:15px;
+  cursor:pointer;
+  float:left;
+  background-image:url(../../js/jquery/myplugin/wyg/img/tree_sub.gif);
+  background-repeat:no-repeat;
+  background-position:center bottom; 
+}
+span{
+  padding-left:15px;
+  cursor:pointer;
+} 
+/*叶子节点样式*/
+.treefile{
+  background-image:url(../../js/jquery/myplugin/wyg/img/tree_file.gif);
+  background-repeat:no-repeat;  
+}
+</style>
+<title>tree</title>
+</head>
+<body>
+  <div style="width:200px;hegiht:768px;background-color:#D8D8D8;border:2px solid #848484">
+  <ul>
+    <li><span class="treefile">about succizBI</span></li>
+    <div class="clickSubErea" id="test"></div>   
+    <li>succezBI总体设计
+    	<ul> 
+    	    <div class="clickSubErea" id="test"></div>  
+    	    <li>jquery函数
+    	    	<ul>
+        			<li><span class="treefile">SuccezBi界面的总体设计</span></li>
+        			<li><span class="treefile">多语言支持</span></li>
+        			<li><span class="treefile">客户端js框架选型</span></li>
+        			<li><span class="treefile">插件机制</span></li>
+        			<li><span class="treefile">集群支持设计</span></li>
+        			<li><span class="treefile">SuccezBi界面的总体设计</span></li>
+        			<li><span class="treefile">多语言支持</span></li>
+        			<li><span class="treefile">客户端js框架选型</span></li>    	    	
+    	    	</ul>
+    	    </li>
+        	<li><span class="treefile">SuccezBi界面的总体设计</span></li>
+        	<li><span class="treefile">多语言支持</span></li>
+        	<li><span class="treefile">客户端js框架选型</span></li>
+        	<li><span class="treefile">插件机制</span></li>
+        	<li><span class="treefile">集群支持设计</span></li>
+        	<li><span class="treefile">SuccezBi界面的总体设计</span></li>
+        	<li><span class="treefile">多语言支持</span></li>
+        	<li><span class="treefile">客户端js框架选型</span></li>
+        	<li><span class="treefile">插件机制</span></li>
+        	<li><span class="treefile">集群支持设计</span></li>
+        	<li><span class="treefile">SuccezBi界面的总体设计</span></li>
+        	<li><span class="treefile">多语言支持</span></li>
+        	<li><span class="treefile">客户端js框架选型</span></li>
+        	<li><span class="treefile">插件机制</span></li>
+        	<li><span class="treefile">集群支持设计</span></li>        	        	
+  		</ul>
+  	</li>
+  </ul>
+  <ul>
+     <div class="clickSubErea" ></div>
+     <li>SuccezBI各模块设计
+     	<ul>
+        	<li><span class="treefile">SuccezBi界面的总体设计</span></li>
+        	<li><span class="treefile">多语言支持</span></li>
+        	<li><span class="treefile">客户端js框架选型</span></li>
+        	<li><span class="treefile">插件机制</span></li>
+        	<li><span class="treefile">集群支持设计</span></li>
+     	</ul>
+     </li>
+  </ul>
+  </div>
+  <script type="text/javascript">
+    $(function(){
+    	/* data描述的 树形结构如下图所示
+    	       111                 222
+             ___|___ 	         ___|___
+    	    |       |           |       |
+    	   333     444         555     666
+    	    |					|
+    	   777 				   888
+    	*/
+/*    	Var data=[{"childNodeID":"10","value":"111","parentNodeID":"0"},
+    	          {"childNodeID":"11","value":"222","parentNodeID":"0"},
+    	          {"childNodeID":"12","value":"333","parentNodeID":"10"},
+    	          {"chilidNodeID":"0","value":"444","parentNodeID":"10"},
+    	          {"childNodeID":"13","value":"555","parentNodeID":"11"},
+    	          {"childNodeID":"0","value":"666","parentNodeID":"11"},
+    	          {"childNodeID":"0";"value":"777","parentNodeID":"12"},
+    	          {"childNodeID":"0","value":"888","parentNodeID":"13"}];*/
+    	/*
+    	 *初始化，一开始只显示parentNodeID=0的两个根节点 
+    	*/
+/*        $("div").initTree(data,0){
+    		//To-do:
+    	}*/
+    	/*
+    	 *根据用户点击的节点ID初始化节点的若干zijiedian
+    	*/
+/*    	function(option)addTree(){
+    		//To-do:    		
+    	};
+*/    	
+    	/*
+    	 * 测试： 绑定div的click事件 
+    	*/
+    	$("div").bind("click",function(event){
+    		//如果节点是展开的，收起该节点 
+    		if ($(this).hasClass("clickSubErea")){
+    	  		$(this).next().find(">ul").hide("fast");
+    	  		$(this).removeClass();
+    	  		$(this).addClass("clickPlusErea");
+    		} 
+    		//如果节点是收起的，展开该节点 
+    		else if ($(this).hasClass("clickPlusErea")){
+    			var childelememt=$(this).next().find(">ul");
+    			//判断节点的是否含有子节点 
+    			if (childelememt.length>0){
+    				childelememt.show("slow");
+    	  		    $(this).removeClass();
+    	  		    $(this).addClass("clickSubErea")
+    			}    
+    			else
+    				alert("No childNode");
+    		}
+    		event.stopPropagation();//阻止click事件起泡  
+    	});
+    })
+  </script>
+</body>
+</html>

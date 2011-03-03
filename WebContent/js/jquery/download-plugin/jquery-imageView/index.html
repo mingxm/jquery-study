@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Demo / jQuery imageView plugin v 0.04</title>
+
+		<!-- Including jQuery -->
+        <script type="text/javascript" src="js/jquery.js"></script>
+
+		<!-- Including imageView jQuery plugin -->
+        <script type="text/javascript" src="js/jquery.imageView.js"></script>
+
+        <script type="text/javascript">
+            $(function() {
+                $('#imageView_container').imageView({width: 800, height:500});
+            });
+        </script>
+
+        <style type="text/css">
+            body {
+                background-color: #555;
+                color: #fff;
+            }
+            a {
+                color: #fff;
+                text-decoration: none;
+                outline: none;
+            }
+            a:hover {
+                color: #fff;
+                text-decoration: underline;
+            }
+            a img{
+                border: none;
+            }
+
+            #imageView_container {
+                border: 2px solid #000;
+            }
+            #imageView_container.iv-loading {
+                border: 2px solid #f00;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1><a href="http://4coder.info/en/imageview-jquery-plugin/">jQuery / imageView plugin v 0.04</a></h1>
+
+        <div id="imageView_container">
+            <img id="imageView" src="photos/image-800x500.jpg" rel="photos/image-1680x1050.jpg" alt="" />
+        </div>
+		
+		<br/>
+        <div id="copy">
+            Copyright &copy; <a href="http://4coder.info">4Coder.Info</a> | <a href="http://4coder.info/en/imageview-jquery-plugin/">More about jQuery.imageView</a>
+        </div>
+    </body>
+</html>

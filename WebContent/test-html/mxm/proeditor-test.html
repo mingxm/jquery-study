@@ -2,81 +2,179 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="../../js/jquery/myplugin/mxm/jquery.uploadfile.css">
+<link rel="stylesheet" type="text/css"
+	href="../../js/jquery/download-plugin/jquery.collapser/style.css">
 <script type="text/javascript" src="../../js/jquery/jquery-1.4.4.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/mxm/jquery.uploadfile.js"></script>
 <script type="text/javascript" src="../../js/jquery/myplugin/mxm/jquery.properies.editor.js"></script>
+<script type="text/javascript" src="../../js/jquery/download-plugin/jquery.collapser/jquery.collapser.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$.fn.jproeditor({
-			caption:'编辑器',
-			width:200,
+			renderTo:$("#propanel"),
+			caption:'报表属性',
+			width:250,
 			titleWidth:0.35,
 			defaultType:'type',
 			items:[
 				{
-					title:'用户名',
+					title:'报表代号',
 					type:'edit',
-					defaultValue:'mxm',
+					defaultValue:$("#rptid").text(),
 					events:[{
 						name:'change',
 						fn:function(e){
 							var obj = e.data;
-							alert(obj.attr("value"));
-						}
-					},{
-						name:'focus',
-						fn:function(e){
-							alert('focus');
+							$("#rptid").text(obj.attr("value"));
 						}
 					}]
 				},{
-					title:'选择',
+					title:'报表名称',
+					type:'edit',
+					defaultValue:$("#rptnm").text(),
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							$("#rptnm").text(obj.attr("value"));
+						}
+					}]
+				},{
+					title:'隐藏表格',
+					type:'checkbox',
+					defaultValue:$("#showgrid").text()=="是",
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							$("#showgrid").text(obj.attr("checked")?"是":"否");
+						}
+					}]
+				},{
+					title:'报表参数',
+					type:'editCanPick',
+					defaultValue:$("#rptparam").text(),
+					align:'center'
+				},{
+					title:'报表风格',
 					type:'combobox',
-					defaultValue:'bb',
+					defaultValue:$("#rptstyle").text(),
 					options:[{
-						value:1,
-						caption:'aa'
+						caption:'缺省',
+						value:'#B6CADD'
 					},{
-						value:2,
-						caption:'bb'
+						caption:'橘黄',
+						value:'#E0C491'
+					},{
+						caption:'橘红',
+						value:'#DEBDDE'
+					},{
+						caption:'淡蓝',
+						value:'#AFD0A0'
+					},{
+						caption:'经典',
+						value:'#C0C0C0'
+					},{
+						caption:'红色',
+						value:'#FF0000'
+					},{
+						caption:'绿色',
+						value:'00FF00'
+					},{
+						caption:'蓝色',
+						value:'0000FF'
 					}],
 					events:[{
 						name:'change',
 						fn:function(e){
-							alert('change');
-						}
-					},{
-						name:'focus',
-						fn:function(e){
-							alert('focus');
+							var obj = e.data;
+							$("#rptstyle").text(obj.attr("value"));
+							$("#resulttable tr td").each(function(index,item){
+								$(item).css("border-color",obj.attr("value"));
+							});
+							$("#resulttable").css("border-color",obj.attr("value"));
 						}
 					}]
 				},{
-					title:'密码',
-					type:'password',
-					defaultValue:'',
-					align:'center'
+					title:'每页行数',
+					type:'edit',
+					defaultValue:$("#rows").text(),
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							$("#rows").text(obj.attr("value"))
+						}
+					}]
 				},{
-					title:'选择吗',
-					type:'checkbox',
-					defaultValue:false,
+					title:'上传文件',
+					type:'file',
+					defaultValue:'1.test'
 				},{
-					title:'点击',
-					type:'button',
-					defaultValue:'…',
+					title:'报表类型',
+					type:'radio',
+					name:'report_type',
+					items:[{
+						value:'ana_document',
+						caption:'分析报告',
+						checked:true
+					},{
+						value:'ana_report',
+						caption:'分析表',
+					},{
+						caption:'主题表',
+						value:'dwsubject',
+					}],
 					events:[{
 						name:'click',
 						fn:function(e){
-							alert('点击了我一下！');
+							$("#rpttype").text(e.data.attr("value"));
 						}
 					}]
 				}
 			]
 		})
+		$('.collapsePara').collapser({
+			target: 'next',
+			effect: 'slide',
+			changeText: 1,
+			expandHtml: '展开',
+			collapseHtml: '收起',
+			expandClass: 'expArrow',
+			collapseClass: 'collArrow'
+		});
 	})
 </script>
 <title>Insert title here</title>
 </head>
 <body>
-
+	<a href="#" class="collapsePara">收起 </a>
+	<div id="propanel"></div>
+	<div style="position:absolute;left:300px;top:100px">
+	<table id="resulttable" frame="border" rules="all">
+		<tr>
+			<td>报表代号</td>
+			<td>报表名称</td>
+			<td>隐藏表格</td>
+			<td>报表参数</td>
+			<td>报表风格</td>
+			<td>每页行数</td>
+			<td>上传文件</td>
+			<td>报表类型</td>
+		</tr>
+		<tr>
+			<td id="rptid">xxb</td>
+			<td id="rptnm">信息表</td>
+			<td id="showgrid">是</td>
+			<td id="rptparam">@bbq</td>
+			<td id="rptstyle">#111111</td>
+			<td id="rows">1000</td>
+			<td id="upload"></td>
+			<td id="rpttype"></td>
+		</tr>
+	</table>
+	</div>
 </body>
 </html>

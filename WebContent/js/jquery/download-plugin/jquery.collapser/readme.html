@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>ReadMe - jQuery Collapser plugin</title>
+<script src="../../jquery-1.4.4.js" type="text/javascript"></script>
+<script src="jquery.collapser.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#demo').hide();
+	$('.collapsePara').collapser({
+		target: 'next',
+		effect: 'fade',
+		changeText: 1,
+		expandHtml: 'Expand Paragraph',
+		collapseHtml: 'Collapse Paragraph',
+		expandClass: 'expand',
+		collapseClass:'collapse'
+	});
+});
+</script>
+<style>
+body{
+	font: 13px/2em Arial, Helvetica, sans-serif;
+	background: #DDF1FF;
+}
+#wrap{
+	margin: 0px auto;
+	padding: 10px;
+	width: 750px;
+	background: #FFFFFF;
+	border: 1px solid #0099FF;
+}
+h1, h2{
+	font-weight: normal;
+	border-bottom: 1px solid #E0E0E0;
+}
+</style>
+</head> 
+<body>
+<div id="wrap">
+	<h1>jQuery - Collapser  - ReadMe</h1>
+	<p> Jquery collapser is a multi purpose collapser plugin made for expanding and collapsing elements. Can create a accordion, list collapser using this plugin. </p>
+	<ul>
+	  <li>Usage, Documentation and Demo : <a href="http://www.aakashweb.com/jquery-plugins/collapser/">See here </a></li>
+  </ul>
+  
+  	<h2>Details</h2>
+	
+	<ul>
+		<li>Version: <a href="http://www.aakashweb.com/jquery-plugins/collapser/" rel="follow">1.0</a></li>
+	    <li>Author: <a href="http://www.aakashweb.com/" target="_blank" rel="follow">Aakash Chakravarthy</a></li>
+	    <li>License: <a href="http://en.wikipedia.org/wiki/MIT_License">MIT License</a> </li>
+	    <li>Copyright: <a href="http://www.aakashweb.com/">Aakash Chakravarthy 2010</a></li>
+    </ul>
+	
+	<h2>Requirements</h2>
+	<ul>
+	  <li>jQuery 1.4 + </li>
+  </ul>
+	<h2>Demo</h2>
+	<div id="demo" style="color: red;">jquery.js is not present. You must install jQuery in this folder for the demo to work.</div>
+	<a href="#" class="collapsePara">Collapse Paragraph </a>
+	<p>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>
+	<h2>Change Log </h2>
+	<ul>
+	  <li>Initial Version - 1.0</li>
+  </ul>
+    <h2>Contact Author </h2>
+    <ul>
+      <li>Website: <a href="http://www.aakashweb.com/" rel="follow">Aakash Web</a></li>
+      <li>Support: <a href="http://www.aakashweb.com/forum/">Forum</a> </li>
+      <li>Email: aakash.19493 AT gmail DOT com</li>
+      <li>Twitter: <a href="http://twitter.com/vaakash">vaakash</a></li>
+  </ul>
+</div>
+</body>
+</html>

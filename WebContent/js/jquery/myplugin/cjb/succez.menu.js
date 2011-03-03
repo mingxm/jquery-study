@@ -3,47 +3,25 @@
  * 
  * @author chenpw@gmail.com
  * 
- * @param{str} options 菜单配置选项，例如：{left:100, top:100}
+ * @param{obj} container 菜单容器，该参数是必需的
+ * @param{obj} options 菜单配置选项，可选。例如：{left:100, top:100}
  * 
- * @example $("#test").menu();
- * @example $("#test").menu({left:100,top:10}).show();
- * @example $("#test").menu().hide();
  * @example
- * $("a").click(function(e){$("#test").menu().popupDown(e);));
+ * $("#test").succezMenu("popupDown", $("#btn"));
  * @example
- * $(document).bind("contextmenu", function(e){$("#test").menu().popup(e);});
+ * $("#test").succezMenu("popup", {pageX:100,pageY:200});
+ * @example
+ * $("a").click(function(e){
+ * 	$("#test").menu("popupDown", e);
+ * });
+ * @example
+ * $(document).bind("contextmenu", function(e){
+ * 	$("#test").succezMenu("popup", e);
+ * });
  */
 (function($) {
-	/**
-	 * @param{dom} p
-	 * @private
-	 */
-	function _init(p) {
-		// 找到菜单组件中所有的子菜单项
-		var allsubmenus = $(p).find("ul");
-		// 为子菜单项与菜单组件设置外观
-		var allmenus = allsubmenus.andSelf();
-		allmenus.addClass("succez_menu").hide();
-
-		var items = $(p).find("li");
-		items.wrapInner("<div/>");
-		items.filter(_filterSplitItems).empty().addClass("split");
-		$(p).find("li>div").each(_eachBindMenuItemEvent);
-		$("li:has('ul')").each(function() {
-			$(this).addClass("arrow");
-			  // $(this).find("ul").each(function(){
-			  // $(this).insertAfter(p);
-			  // });
-			  // TODO
-		  });
-
-		// 绑定页面的点击事件，使菜单组件在点击到组件外时能够隐藏起来
-		$(document).bind("click", function() {
-			allmenus.hide();
-			  // TODO
-		  });
-		// TODO
-	};
+	// 可能会存在其它的菜单组件也叫menu，这里通过创建succez命名空间来避免出现问题
+	$.succez = $.succez || {};
 
 	/**
 	 * 过滤出分割栏的菜单项，分割栏以“--”标识
@@ -59,11 +37,13 @@
 
 	/**
 	 * 为菜单项进行事件的绑定
+	 * @param{obj} p 菜单容器
+	 * @param{obj} slf 当前菜单项
 	 * @private
 	 */
-	function _eachBindMenuItemEvent() {
+	function _eachBindMenuItemEvent(p, slf) {
 		// li
-		var rs = $(this).parent();
+		var rs = $(slf).parent();
 		rs.hover(function(e) {
 			rs.css("background-color", "#C7DFFC");
 
@@ -77,10 +57,11 @@
 				// var top = rs.offset().top - 3;
 				$.data(subm[0], "pos.top", subm.position().top);
 				subm.css({
-					    left	: subm.outerWidth() - 6,// TODO:临界处理
-					    top		: subm.position().top - 16
+					    left	: rs.outerWidth() - 6,// TODO:临界处理
+					    // 子菜单的顶轴显示向相对于菜单项的上面调整一些，这样显示出来的子菜单效果也会好些
+					    top		: subm.position().top - 24
 				    });
-				$.extend($.fn.menu.options, {
+				$.extend($.data(p, "succez-menu"), {
 					    current	: subm
 				    });
 			}
@@ -88,7 +69,8 @@
 		  }, function() {
 			  rs.css("background-color", "");
 			  var subm = rs.children().children("ul");
-			  if ($.fn.menu.options.current != subm) {
+			  var smdata = $.data(p, "succez-menu");
+			  if (smdata.current != subm) {
 				  subm.hide();
 				  var top = $.data(subm[0], "pos.top");
 				  if (top) {
@@ -99,79 +81,136 @@
 		  });
 	};
 
-	$.fn.menu = function(options) {
-		options = options || {};
+	// 浮动菜单组件
+	$.succez.menu = function(container, options) {
+		this.options = options = $.extend({}, $.succez.menu.defaults, options);
+		this.container = container;
+		var p = $(container);
+		p.addClass("succez-menu");
+		// 找到菜单组件中所有的子菜单项
+		var allsubmenus = p.find("ul");
+		allsubmenus.addClass("succez-menu sub");
+		// 为子菜单项与菜单组件设置外观
+		var allmenus = allsubmenus.andSelf();
+		allmenus.hide();
 
-		return this.each(function() {
-			    // 这里的this是组件最外层的DOM对象
-			    var rs = $.data(this, "menu");
-			    if (rs) {
-				    // 如果此附加数据是已经绑定好了的，就将用户指定的options参数设置到附加数据中
-				    $.extend(rs.options, options);
-			    }
-			    else {
-				    // 如没有附加数据则需要将用户指定的options参数与组件默认的参数合在一起绑定到组件上
-				    rs = $.data(this, "menu", {
-					        options	: $.extend({}, $.fn.menu.options, options)
-				        });
-				    _init(this);
-			    }
-
-			    $(this).css({
-				        left	: rs.options.left,
-				        top		: rs.options.top
-			        });
+		var items = p.find("li");
+		items.wrapInner("<div/>");
+		items.filter(_filterSplitItems).empty().addClass("split");
+		p.find("li>div").each(function() {
+			    _eachBindMenuItemEvent(container, this);
 		    });
+		$("li:has('ul')").each(function() {
+			$(this).addClass("arrow");
+			  // $(this).find("ul").each(function(){
+			  // $(this).insertAfter(p);
+			  // });
+			  // TODO
+		  });
+
+		// 绑定页面的点击事件，使菜单组件在点击到组件外时能够隐藏起来
+		$(document).bind("click", function() {
+			allmenus.hide();
+			  // TODO
+		  });
+
+		// TODO
 	};
 
 	/**
+	 * 缺省配置
 	 * @private
 	 */
-	$.fn.menu.options = {
+	$.succez.menu.defaults = {
 		zIndex	: 99999,
-		left		: 100,
-		top		 : 100
+		left		: 0,
+		top		 : 0
+	};
+
+	$.succez.menu.prototype = {
+		/**
+		 * 将浮动菜单显示在指定的位置
+		 * @param{obj} e Event对象
+		 * @example
+		 * $("#test").succezMenu("popup", {pageX:100,pageY:200});
+		 * @example
+		 * $(document).bind("contextmenu", function(e){
+		 *   $("#test").succezMenu("popup", e);
+		 * });
+		 */
+		popup		  : function(e) {
+			$("ul[active=active]").hide();
+			var rs = e || {};
+			var slf = $(this.container);
+
+			if (!$.isEmptyObject(rs)) {
+				document.title = rs.pageX + slf.outerWidth()
+				slf.css({
+					    left	: rs.pageX,
+					    top		: rs.pageY
+				    });
+			}
+			slf.show();
+			slf.attr("active", "active");
+		},
+		/**
+		 * 将浮动菜单显示在元素的下面
+		 * @param{obj} e Event对象
+		 * @example
+		 * $("#test").succezMenu("popupDown", $("#test2"));
+		 * @example
+		 * $("a").click(function(e){
+		 *   $("#test").succezMenu("popupDown", e);
+		 * });
+		 */
+		popupDown	: function(e) {
+			var rs = e || {};
+			if ($.isEmptyObject(rs))
+				return;
+
+			var target = $.isEmptyObject(rs.target) ? rs : $(rs.target);
+			this.popup({
+				    pageX	: target.offset().left,
+				    pageY	: target.offset().top + target.outerHeight()
+			    });
+		}
 	};
 
 	/**
-	 * 将浮动菜单显示在元素的下面
-	 * @param{obj} e Event对象
+	 * @param{str,obj} options
 	 * @example
-	 * $("a").click(function(e){$("#test").menu().popupDown(e);));
+	 * $("#test").succezMenu("popupDown", $("#btn"));
+	 * @example
+	 * $("#test").succezMenu("popup", {pageX:100,pageY:200});
+	 * @example
+	 * $("a").click(function(e){
+	 * 	$("#test").menu("popupDown", e);
+	 * });
+	 * @example
+	 * $(document).bind("contextmenu", function(e){
+	 * 	$("#test").succezMenu("popup", e);
+	 * });
 	 */
-	$.fn.popupDown = function(e) {
-		$("ul[active=active]").hide();
-		var rs = e || {};
-		if (!$.isEmptyObject(rs)) {
-			var target = $(rs.target);
-			this.css({
-				    left	: target.offset().left,
-				    top		: target.offset().top + target.outerHeight()
-			    });
-		}
-		this.attr("active", "active");
-		this.show();
-	};
-
-	/**
-	 * 将浮动菜单显示在指定的位置
-	 * @param{obj} e Event对象
-	 * @example
-	 * $("#test").menu().popup({pageX:100,pageY:200});
-	 * @example
-	 * $(document).bind("contextmenu", function(e){$("#test").menu().popup(e);});
-	 */
-	$.fn.popup = function(e) {
-		$("ul[active=active]").hide();
-		var rs = e || {};
-		if (!$.isEmptyObject(rs)) {
-			this.css({
-				    left	: rs.pageX,
-				    top		: rs.pageY
-			    });
-		}
-		this.attr("active", "active");
-		this.show();
+	$.fn.succezMenu = function(options) {
+		var args = Array.prototype.slice.call(arguments, 1);
+		return this.each(function() {
+			    if (typeof(options) == "string") {
+				    /**
+				     * 用来执行菜单组件中定义的方法，
+				     * 例如：
+				     * 要显示在指定的位置
+				     * $("#test").succezMenu("popup", {pageX:100,pageY:100});
+				     */
+				    var rs = $.data(this, "succez-menu");
+				    if (rs) {
+					    // $.succez.menu
+					    rs[options].apply(rs, args);
+				    }
+			    }
+			    else if (!$(this).is(".succez-menu")) {
+				    $.data(this, "succez-menu", new $.succez.menu(this, options));
+			    }
+		    });
 	};
 
 	/**
@@ -179,7 +218,7 @@
 	 * @private
 	 */
 	$(function() {
-		    $("ul[data-role='menu']").menu();
+		    $("ul[data-role='menu']").succezMenu();
 	    });
 
 })(jQuery);

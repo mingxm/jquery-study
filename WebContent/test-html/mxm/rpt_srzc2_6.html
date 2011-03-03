@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="css/rpt_srzc2_6.css">
+<script type="text/javascript" src="../../js/jquery/jquery-1.4.4.js"></script>
+<script type="text/javascript" src="../../js/jquery/download-plugin/jquery.layout.all-1.2.0/jquery.layout-latest.js"></script>
+<script type="text/javascript" src="../../js/jquery/download-plugin/jquery.layout.all-1.2.0/jquery-ui-1.8.10.custom.min.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/mxm/jquery.uploadfile.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/mxm/jquery.properies.editor.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var defaultOption = { 
+				north__size:23,
+				spacing_open:2,
+				spacing_closed:2,
+				west__onresize:function(){accor.accordion("resize")}
+			};
+		var l = $('body').layout(defaultOption);
+		var toolbar = $(".coolbar").appendTo(l.panes.north);
+		toolbar.find("img").bind("click",function(){
+			var fn = $(this).attr("cmd");
+			if(fn){
+				eval(fn);
+			}else {
+				alert("没有绑定单击处理函数");
+			}
+		})
+		var westDiv = $(l.panes.west);
+		var accor = $("<div></div>").addClass("basic").appendTo(westDiv);
+		$("<h3>报表结构</h3>").appendTo(accor);
+		var rptStructContent = $("<div></div>").appendTo(accor);
+		$("#rptStruct").appendTo(rptStructContent);
+		$("<h3>组件列表</h3>").appendTo(accor);
+		$("<div></div>").appendTo(accor);
+		accor.accordion({fillSpace:true});
+		
+		var tableObj = $("<div></div>").addClass("tableContainer").appendTo(l.panes.center);
+		tableObj.draggable({containment: "parent"});
+		
+		$("li").bind("click",function(e){
+			if(e.target != this) return;
+			var $this = $(this);
+			if($this.hasClass("collapse")){
+				$this.removeClass("collapse");
+				$this.find(">ul").hide("fast");
+				$this.addClass("expand");
+			}else if($this.hasClass("expand")){
+				$this.removeClass("expand");
+				$this.find(">ul").show("slow");
+				$this.addClass("collapse");
+			}else if($this.children().length == 0){
+				$(".selected_node").removeClass("selected_node");
+				$this.addClass("selected_node");
+			}
+		});
+		
+		$.fn.jproeditor({
+			renderTo:l.panes.east,
+			caption:'报表属性',
+			width:300,
+			titleWidth:0.35,
+			defaultType:'type',
+			items:[
+				{
+					title:'报表代号',
+					type:'edit',
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							$("#rptid").text(obj.attr("value"));
+						}
+					}]
+				},{
+					title:'报表名称',
+					type:'edit',
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							$("#rptnm").text(obj.attr("value"));
+						}
+					}]
+				},{
+					title:'隐藏表格',
+					type:'checkbox',
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							$("#showgrid").text(obj.attr("checked")?"是":"否");
+						}
+					}]
+				},{
+					title:'报表参数',
+					type:'editCanPick',
+					align:'center'
+				},{
+					title:'报表风格',
+					type:'combobox',
+					options:[{
+						caption:'缺省',
+						value:'#B6CADD'
+					},{
+						caption:'橘黄',
+						value:'#E0C491'
+					},{
+						caption:'橘红',
+						value:'#DEBDDE'
+					},{
+						caption:'淡蓝',
+						value:'#AFD0A0'
+					},{
+						caption:'经典',
+						value:'#C0C0C0'
+					},{
+						caption:'红色',
+						value:'#FF0000'
+					},{
+						caption:'绿色',
+						value:'00FF00'
+					},{
+						caption:'蓝色',
+						value:'0000FF'
+					}],
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							$("#rptstyle").text(obj.attr("value"));
+							$("#resulttable tr td").each(function(index,item){
+								$(item).css("border-color",obj.attr("value"));
+							});
+							$("#resulttable").css("border-color",obj.attr("value"));
+						}
+					}]
+				},{
+					title:'每页行数',
+					type:'edit',
+					events:[{
+						name:'change',
+						fn:function(e){
+							var obj = e.data;
+							$("#rows").text(obj.attr("value"))
+						}
+					}]
+				},{
+					title:'上传文件',
+					type:'file',
+					defaultValue:'1.test'
+				},{
+					title:'报表类型',
+					type:'radio',
+					name:'report_type',
+					items:[{
+						value:'ana_document',
+						caption:'分析报告',
+						checked:true
+					},{
+						value:'ana_report',
+						caption:'分析表',
+					},{
+						caption:'主题表',
+						value:'dwsubject',
+					}],
+					events:[{
+						name:'click',
+						fn:function(e){
+							$("#rpttype").text(e.data.attr("value"));
+						}
+					}]
+				}
+			]
+		})
+		
+	})
+</script>
+<title>Insert title here</title>
+</head>
+<body>
+<div class="ui-layout-west"></div>
+<div class="ui-layout-north"></div>
+<div class="ui-layout-center"></div>
+<div class="ui-layout-east"></div>
+
+<ul id="rptStruct">
+	<li class="collapse">报表结构
+		<ul>
+		<li class="collapse">表头
+			<ul>
+				<li>HHH0</li>
+				<li>HHH1</li>
+				<li>HHH2</li>
+				<li>HHH3</li>
+			</ul>
+		</li>
+		<li class="collapse">表格
+			<ul>
+				<li>A1</li>
+				<li>A2</li>
+				<li>A3</li>
+				<li>A4</li>
+				<li>A5</li>
+				<li>A6</li>
+				<li>A7</li>
+				<li>A8</li>
+				<li>A9</li>
+			</ul>
+		</li>
+		<li class="collapse">参数
+			<ul>
+				<li>@bbq</li>
+				<li>@xzqh</li>
+			</ul>
+		</li>
+		<li class="collapse">统计图
+			<ul>
+				<li>chart1</li>
+				<li>chart2</li>
+				<li>chart3</li>
+			</ul>
+		</li>
+		<li class="collapse">其它</li>
+		</ul>
+	</li>
+</ul>
+<table class = "coolbar">
+	<tr>
+		<td><img src="image/more.gif" title="更多" cmd="alert('click')"></img></td>
+		<td><img src="image/new.gif"></img></td>
+		<td><img src="image/save-d.gif"></img></td>
+		<td><img src="image/fixfloat.gif"></img></td>
+		<td><img src="image/fixcell2.gif"></img></td>
+		<td><img src="image/brush.gif"></img></td>
+		<td><img src="image/eraser.gif"></img></td>
+		<td><img src="image/fxq.gif"></img></td>
+		<td><img src="image/table.gif"></img></td>
+		<td><img src="image/clear.gif"></img></td>
+	</tr>
+</table>
+</body>
+</html>

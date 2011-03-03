@@ -688,18 +688,15 @@ jQuery.extend({
 
 			// Use insertBefore instead of appendChild to circumvent an IE6 bug.
 			// This arises when a base node is used (#2709).
-			try{debugger;
-				debug3("head.insertBefore( script, head.firstChild )");
-				head.insertBefore( script, head.firstChild );
-				debug3("head.removeChild( script)");
-				head.removeChild( script );
-				debug3("head.removeChild( script) end");
-			}catch(e){
-				alert("script error:"+e);
-			}
+			head.insertBefore( script, head.firstChild );
+			head.removeChild( script );
 		}
 	},
 
+	/**
+	 * 判定dom元素的名字
+	 * eg: jQuery.nodeName(dom, 'div');
+	 */
 	/**
 	 * 判定dom元素的名字
 	 * eg: jQuery.nodeName(dom, 'div');
@@ -708,6 +705,10 @@ jQuery.extend({
 		return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
 	},
 
+	/**
+	 * each函数的回调函数的原型是：callback(i, element)。比如可以这样调用：
+	 * 		$("#div1").children().each(function(i, element){ .. })
+	 */
 	/**
 	 * each函数的回调函数的原型是：callback(i, element)。比如可以这样调用：
 	 * 		$("#div1").children().each(function(i, element){ .. })
@@ -5266,9 +5267,9 @@ if ( !jQuery.support.htmlSerialize ) {
  * 15、detach
  * 16、domManip
  * 17、appendTo
- * 18、prependTo
- * 19、insertBefore
- * 20、insertAfter
+ * 18、prependTo:等于prepend
+ * 19、insertBefore:等于before
+ * 20、insertAfter:等于after
  * 21、replaceAll
  */
 jQuery.fn.extend({
@@ -5351,6 +5352,10 @@ jQuery.fn.extend({
 		}).end();
 	},
 
+	/**
+	 * 往dom中新增元素。
+	 * eg: $(dom).append("<div>new dom</div><br/>");
+	 */
 	/**
 	 * 往dom中新增元素。
 	 * eg: $(dom).append("<div>new dom</div><br/>");
@@ -6838,6 +6843,18 @@ jQuery.extend({
 			jXHR.status = status;
 			jXHR.statusText = statusText;
 
+			/**
+			 * 处理ajax响应，
+			 * 成功则调用success(successText, statusText, jXHR)：
+			 * 		successText：服务器端返回的文字内容，如果返回的是xml，那么successText是xml的doc对象。
+			 * 		statusText: 通常就是"success"
+			 * 		jXHR: 类似HttpReponse对象
+			 * 失败则调用error(jXHR, statusText, errorMessage)：
+			 * 		jXHR: 类似HttpReponse对象
+			 * 		statusText: 通常就是"error"
+			 * 		errorMessage: 如果是url不存在，那么错误信息是"Not Found"
+			 * 这里的error和success是在调用ajax函数时传入进来的参数，比如：$.ajax(url:"xx.html", error:function(){}, success:function(){})
+			 */
 			/**
 			 * 处理ajax响应，
 			 * 成功则调用success(successText, statusText, jXHR)：

@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<title>Simple Layout Demo</title>
+
+	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="jquery-ui-1.8.10.custom.min.js"></script>
+	<script type="text/javascript" src="jquery.layout-latest.js"></script>
+	<script type="text/javascript">
+
+	var myLayout; // a var is required because this page utilizes: myLayout.allowOverflow() method
+
+	$(function () {
+		myLayout = $('body').layout({applyDefaultStyles: true});
+ 	});
+
+	</script>
+</head>
+<body>
+<div class="ui-layout-west"></div>
+<div class="ui-layout-north"></div>
+<div class="ui-layout-center"></div>
+<div class="ui-layout-east"></div>
+</body>
+</html>

@@ -43,14 +43,25 @@ $.include = function(jsfiles, callback){
 	}
 	if(jsfiles.indexOf(",")>0) jsfiles = jsfiles.split(",");
 	else jsfiles = jsfiles.split(";");
-	jsfiles = $.map(jsfiles, function(jsfile){return jsfile.trim();});
+	jsfiles = $.map(jsfiles, function(jsfile, i){
+		jsfile = jsfile.trim();
+		if(jsfile.length==0) return null; //删除空文件
+		
+		for(var j = 0;j<i; j++){
+			if(jsfiles[j].trim() == jsfile){
+				debug3("删除重复的js："+jsfile);
+				return null; //删除重复的
+			}
+		}
+		return jsfile;
+	});
 
 	var jsloader = $(document).data("_jsloader");
 	if(jsloader){
 		var ret;
 		for(var i = 0;i < jsfiles.length; i++){
 			var jsfile = jsfiles[i];
-			if(!jsloader.jsloaded[jsfile]){ //加载过，成功了
+			if(!jsloader.jsloaded[jsfile]){ //过滤掉已成功加载的
 				ret=ret||[];
 				ret[ret.length++]=jsfile;
 			}
@@ -61,7 +72,7 @@ $.include = function(jsfiles, callback){
 		}
 		
 		if(jsfiles.length>ret.length){
-			debug3("要加载的js文件有些已经加载，需要加载的是："+jsfiles.join(","));
+			debug3("要加载的js文件有些已经加载，需要加载的是："+ret.join(","));
 		}
 		
 		jsfiles = ret;
@@ -72,9 +83,9 @@ $.include = function(jsfiles, callback){
 		,jsfiles:jsfiles
 		,callback:callback
 		,completed:false
-		,checkComplete:function(jsloader){debugger;
+		,checkComplete:function(jsloader){
 			if(this.completed){
-				debug3("\tjs已经全部加载完毕（按道理不应该执行到这里，可能的原因是在调用include方法时，参数js中有重复的js，比如include('1.js,1.js')）");
+				debug3("\tjs已经全部加载完毕（按道理不应该执行到这里，可能的原因是代码有错误。）");
 				return;
 			}
 			
@@ -164,21 +175,24 @@ $.include = function(jsfiles, callback){
 					,success:this.do_success
 					,error:this.do_error
 					,dataType:"script"
-					,converts:{"text script":function(text){
+					,converters:{"text script":function(text){
 						$(document).data("_jsloader").setExecing();
+						debug3("...成功从服务器获取"+jsfile+"内容，开始执行js文件");
 						jQuery.globalEval( text );
+						debug3("...js文件执行完毕");
 						return text;
 					}}
 				});
 			}
 			,do_success:function(){
 				var jsloader = this._self;
-				if(this.isExecFailed()){
-					jsloader.do_execError.apply(this, jsloader.execErrorMsg);
+				if(jsloader.isExecFailed()){
+					jsloader.do_execError.apply(this, [jsloader.execErrorMsg]);
 					return;
 				}
 				
 				debug3("...$.ajax返回成功信息："+this.js+"");
+				jsloader.setExecSuccess();
 				jsloader.jsloaded[this.js]=true;
 				
 				var configWaiting = jsloader.jsloading[this.js];
@@ -191,6 +205,7 @@ $.include = function(jsfiles, callback){
 			,do_error:function(jXHR, status, errorMsg){
 				debug3("...$.ajax返回失败信息："+status+" "+errorMsg+"（"+this.js+"）");
 				var jsloader = this._self;
+				jsloader.setAjaxError();
 				jsloader.jserror[this.js]={status:status, errorMsg:errorMsg, js:this.js};
 				
 				var configWaiting = jsloader.jsloading[this.js];
@@ -210,21 +225,24 @@ $.include = function(jsfiles, callback){
 					configWaiting[i].checkComplete(jsloader);
 				}
 			}
-			,setExecStatus:function(status){ //正常的状态变化流程是execing-execComplete，如果执行过程中有错误发生，则流程是execing-execFail
-				this.execStatus = status;
+			,setAjaxError:function(){ //从服务器端下载脚本时可能出错，比如js文件找不到。此时设置状态为“ajaxError”
+				this.execStatus = "ajaxError";
 			}
-			,setExecFailed:function(errorMsg){ //从服务器端加载脚本之后会执行它，执行时可能出现js错误。这个js错误可以在window.onerror中截获，截获之后调用本方法通知loader。
-				this.execStatus = "failed";
-				this.execErrorMsg = errorMsg;
-			}
-			,setExecing:function(){ //从服务器端加载脚本之后会执行它，执行时可能出现js错误。这个js错误可以在window.onerror中截获，截获之后调用本方法通知loader。
+			,setExecing:function(){ //从服务器端下载脚本之后会执行它，在开始执行之前将状态设置成“execing”
 				this.execStatus = "execing";
 			}
-			,isExecFailed:function(){ //从服务器端加载脚本之后会执行它，执行时可能出现js错误。这个js错误可以在window.onerror中截获，截获之后调用本方法通知loader。
-				return this.execStatus = "failed";
+			,setExecFailed:function(errorMsg){ //脚本的内容可能有错，执行脚本时可能出现js错误，此时设置状态为“execFailed”。js错误用普通的try-catch是捕获不到的，可以在window.onerror中截获，截获之后调用本方法通知jsloader。
+				this.execStatus = "execFailed";
+				this.execErrorMsg = errorMsg;
 			}
-			,isExecing:function(){ //从服务器端加载脚本之后会执行它，执行时可能出现js错误。这个js错误可以在window.onerror中截获，截获之后调用本方法通知loader。
-				return this.execStatus = "execing";
+			,setExecSuccess:function(){ //脚本成功执行之后设置状态为“execSuccess”
+				this.execStatus = "execSuccess";
+			}
+			,isExecFailed:function(){ //判定脚本是否执行失败。这个状态表示js已从服务器端下载，但是执行js的过程中发生了错误。
+				return this.execStatus == "execFailed";
+			}
+			,isExecing:function(){ //判断脚本是否是在执行中。由于window.onerror可以截获各种js异常，通过本方法可以判断是否是在执行脚本的过程中。如果是，那么要告诉jsloader，脚本执行有问题。
+				return this.execStatus == "execing";
 			}
 		};
 		

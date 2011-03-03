@@ -3,11 +3,4 @@
   <groupId>jquery-study</groupId>
   <artifactId>jquery-study</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <dependencies>
-  	<dependency>
-  		<groupId>dom4j</groupId>
-  		<artifactId>dom4j</artifactId>
-  		<version>1.6.1</version>
-  	</dependency>
-  </dependencies>
 </project>

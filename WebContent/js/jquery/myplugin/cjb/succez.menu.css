@@ -18,9 +18,10 @@ html,body {
 /**
  * 菜单的主体背景设置
  */
-ul.succez_menu {
+ul.succez-menu {
 	position: absolute;
-	width: 180px;
+	/*不指定菜单的宽度可以使得菜单项能够自动适应菜单标题的长度*/
+	/*width: 180px;*/
 	padding: 0;
 	margin: 0;
 	white-space: nowrap;
@@ -33,7 +34,7 @@ ul.succez_menu {
 /**
  * 菜单栏样式
  */
-ul.succez_menu li,ul.succez_menu li.split {
+ul.succez-menu li,ul.succez-menu li.split {
 	list-style-type: none;
 	white-space: nowrap;
 	cursor: pointer;
@@ -42,16 +43,17 @@ ul.succez_menu li,ul.succez_menu li.split {
 /**
  * 菜单项文本区域样式
  */
-ul.succez_menu li div {
+ul.succez-menu li div {
 	height: 22px;
 	line-height: 20px;
-	margin-left: 33px;
+	white-space: nowrap;
+	margin: 0 40px 0 33px;
 }
 
 /**
  * 菜单项分割栏样式
  */
-ul.succez_menu li.split {
+ul.succez-menu li.split {
 	background: #f1f1f1 url(images/menu_h_split.png) repeat-x left top;
 	height: 4px;
 	margin-left: 33px;
@@ -61,6 +63,19 @@ ul.succez_menu li.split {
 /**
  * 表示存在子菜单的箭头样式
  */
-ul.succez_menu li.arrow {
+ul.succez-menu li.arrow {
 	background: url(images/arrow.png) no-repeat right center;
+}
+
+.succez-shadow {
+	position: absolute;
+	background: #ddd;
+	z-index: -1;
+	left: 0;
+	top: 0;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	filter: progid:DXImageTransform.Microsoft.Blur (pixelRadius=2,MakeShadow=false,ShadowOpacity=0.2);
 }

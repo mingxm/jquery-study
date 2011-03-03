@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.expArrow{
+	padding-left: 20px;
+	background: url(arrow-down.png) no-repeat 0px 4px;
+}
+.collArrow{
+	padding-left: 20px;
+	background: url(arrow-up.png) no-repeat 0px 4px;
+}
