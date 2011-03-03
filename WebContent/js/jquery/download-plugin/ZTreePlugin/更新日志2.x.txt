@@ -1,0 +1,131 @@
+=ZTree v2.x (JQuery Tree插件) 更新日志=
+
+<font color="red">由于发现之前部分方法的命名规则不太利于今后的拓展，并且容易引起歧义，故在全面修正方法命名规则后，将 zTree 版本升级为2.0。</font>
+<font color="red">具体修改内容可参考API文档。</font>
+
+<font color=#041594>
+*v2.0 - v2.x 计划*
+  * 近期功能扩展：
+   # 兼容 jQuery 1.5 在Firefox上的问题
+      
+  * 远期功能扩展：
+   # 可以支持 tab 还有 4个方向键，而不是必须通过鼠标点击
+   # 增加Ctrl + 鼠标左键  进行多节点选中的功能
+   # 增加 selectNodes([]) 和 getSelectedNodes() 方法，允许用户选中多个节点 并获取 选中的多个节点   
+   # 支持自定义鼠标右键菜单
+             目前用户完全可以根据接口按照自己的需求制作右键菜单   
+   # 【修改】css中样式导致虚线相差一个像素的问题
+   # 【增加】建立扩展函数库，方便大家转换数据等使用
+		目前的情况看来是暂且不需要扩展函数库了，大家需要的功能基本都增加到了核心代码中。以后再看情况而定了
+   # 【修改】支持JQuery 1.3.2 的问题
+		这个问题简单处理了一下，因为JQuery 1.3.2不支持detach()方法，换成使用clone方法对节点进行移动，会牵扯很多深层复制的问题，或者引起一些多层节点的事件问题，由于时间关系，暂且放弃，还是从JQuery v1.4.2开始支持吧。不好意思了。
+  * 增加皮肤
+</font>
+
+*2011.02.10* v2.4
+   * 【增加】setting.fontCss 参数，可以自定义设置节点样式
+   * 【增加】nodeCreated 事件，即每个节点渲染完毕后发出通知
+   * 【修改】asyncParamOther 参数，允许其支持Json对象
+   * 【修改】addNodes 方法，允许 newNodes 参数是单个的Json数据，而不限定必须为Array
+   * 【修改】checkAllNodes 方法针对父节点没有被check，但子节点被check的情况下，全部取消check状态后，无法将父节点的灰色背景去掉的Bug
+   * 【修改】不存在子节点的父节点展开后，无法显示新增加的子节点的Bug
+   * 【修改】expandNode方法针对展开节点时，无法将节点移到可视区域的Bug
+   * 【修改】expandSpeed=""时，无法正常触发expand / collapse 事件的Bug
+   * 【修改】在 beforeExpand / beforeCollapse 事件中通过 expandNode 方法展开、折叠节点时，会导致 before 事件对应的 expand / collapse 事件丢失的Bug
+   * 【修改】在AJAX方式下，如果下级没有数据，只能允许[] 不支持空字符串的Bug
+
+*2011.01.04* v2.3
+   * 【修改】拖拽节点时，当叶子节点变为父节点后，无法正常展开、折叠的Bug。
+   * 【修改】selectNode方法会将treeNode自己展开的Bug。
+   * 【修改】当父节点的子节点为空时，无法打开节点的问题。
+   * 【修改】简单数据模式下不需要用户对节点进行排序的问题，简化用户操作。
+   * 【修改】IE6下编辑状态回车键无效的Bug
+   * 【修改】编辑、删除按钮偶尔无法自动隐藏的bug、修改按钮显示逻辑避免由于处于边缘时无法点击按钮的bug
+		增加 ishover 参数
+   * 【修改】拖拽节点时鼠标在zTree之外移动也可以影响zTree滚动条的Bug
+   * 【修改】拖拽节点时横向滚动条无法自动滚动的bug
+   * 【修改】在出现滚动条后，拖拽节点时 moveType 图标显示异常的Bug
+   * 【修改】拖拽节点时目标节点的获取规则
+       	只有移动到节点超链接内才当做目标节点，只有移动到zTree边缘才当做移动到根
+   * 【修改】同一画面下多棵树refresh时，无法清空原先内容的Bug
+   * 【增加】用户添加自定义按钮接口
+		addHoverDom、removeHoverDom、addDiyDom
+   * 【增加】同一 Web 页面内 多棵树之间实现用鼠标拖拽节点的功能
+
+*2010.12.15* v2.2
+   * 【修改】给一个没有子节点的节点添加新节点，连续添加两个以上子节点时连线显示的Bug
+   * 【修改】expandNode方法，展开节点时无动画的Bug
+   * 【修改】异步加载时用户反复点击导致重复加载的bug。
+		增加isAjaxing内部参数
+   * 【修改】cancleSelectedNode 修正为 cancelSelectedNode ，但同时保留原有的cancleSelectedNode方法
+   * 【修改】把asyncUrl 扩展为 function 的引用，可以根据节点任意修改异步加载的url了。当然依然支持以前的String方式
+   * 【修改】把edit_renameBtn、edit_removeBtn 扩展为 function 的引用，可以根据节点控制是否显示相应按钮
+   * 【修改】给叶子节点增加子节点后，再删除其子节点，然后再增加子节点时zTree不显示的Bug
+   * 【修改】updateNode方法不改变 checkbox / radio 状态的Bug。
+		为了便于用户修改checked的状态，将原先的checkedNew修改为checkedOld，并且保留初始化时的checked状态，当前check状态以checked为准，如果有涉及这部分开发的朋友需要注意一下了。
+		重新整理了updateNode方法，可针对name、target、 url、icon、iconSkin这几个用于显示效果的参数进行更新，其他用于zTree的node参数请不要随意更新，对于展开节点，还请调用 expandNode方法，因此请勿随意修改open属性。
+		增加一个输入参数 checkTypeFlag ，由用户决定是否按照setting.checkType属性进行父子节点的选中状态联动
+		增加了IDMark_Check内部常量
+   * 【修改】checked 属性允许用户自定义
+		增加 setting.checkedCol 属性，默认值为 checked   
+   * 【修改】编辑状态 输入框内 回车键可以触发onRename事件
+   * 【修改】.net环境下ajax直接返回JSON对象时无法正常加载的Bug
+   * 【增加】change事件中 关于自动转换打钩状态的节点是否触发change事件的开关
+		经过考虑，还是取消了这个开关，主要是自动转换状态的节点会因数据结构的复杂而变得很多，如果再触发change事件就太恐怖了，
+		觉得需要获取被自动转换的需求无非就是想知道哪些节点的check状态被修改过而已，所以增加了getChangeCheckedNodes()方法用来获取当前zTree中被修改check状态的节点集合，返回值是Array类型的。
+		（补充一下，这个就是利用了上面说的checkedOld属性来查找的，如果想在不刷新 zTree的情况下，获取zTree每次点击后被转换的节点集合的话，可以在每次change事件后，使用 getChangeCheckedNodes()方法，然后将所有节点的checked属性值赋给checkedOld属性即可。）
+   * 【增加】鼠标右键 事件 以及 MouseUp 和 MouseDown 事件
+		增加了rightClick 和 beforeRightClick 两个callback事件回调函数。注意：只要将 function 的引用赋给 rightClick 属性，则右键点击zTree时，将屏蔽浏览器的右键菜单。
+		增加 MouseUp 和 MouseDown 事件主要是为了用户能够更灵活的制作自定义的功能。
+   * 【增加】js触发指定节点异步加载子节点 或 重新异步加载 的接口
+		增加了 reAsyncChildNodes(parentNode, reloadType) 接口，可以通过js随意指定任意节点异步加载子节点数据，并且reloadType 参数可以指定是完全刷新还是追加子节点；parentNode=null时，相当于从Root端进行重新异步加载。
+   * 【增加】针对checkBox的全部取消或选择的接口，便于用户使用
+		增加 checkAllNodes(checked) 方法，实现此功能。
+   * 【增加】异步加载时loading状态，拖拽节点时，滚动条能自动滚动；停留一段时间后，能展开节点；
+   * 【增加】节点同级内上下排序的接口和功能(修改了moveNode方法/beforeDrop、drop事件，move节点时可以更加灵活)
+		增加内部常量MoveType_Inner、MoveType_Before、MoveType_After
+		moveNode方法/beforeDrop、drop事件callback函数增加  moveType 参数
+   * 【增加】根据任意属性获取treeNode节点数据的接口
+		增加 getNodeByParam和 getNodesByParam 两个方法，一个只返回第一个符合要求的结果，另一个返回符合要求的节点Array集合。
+   * 【增加】简单Array数据支持，不需要用户再把数据库中取出的List强行转换为复杂的JSON嵌套格式
+		增加 isSimpleData、treeNodeKey、treeNodeParentKey 属性设置
+		增加 transformTozTreeNodes 和 transformToArray 接口便于用户进行数据转换
+
+*2010.10.12* v2.1
+  * 【修改】展开节点和图标的html，避免zTree放到Form下点击图标或展开按钮时导致Form提交的bug（特别感谢：神马9527）
+  * 【修改】zTree绑定事件代码，避免初始化异步加载时IE与FireFox的不同
+  
+*2010.09.26* v2.1
+  * 【修改】内部函数 switchNode() 方法，解决 window.event 造成的 firefox 兼容问题。
+  * 【修改】asyncSuccess 和 asyncError 两个 callback 事件，增加 treeNode，用于帮助用户获取当前异步操作的目标节点。
+  * 【修改】addNodes 方法，增加 isSilent 参数，用户在增加节点时，可以根据需要决定是否展开相应的父节点。
+  * 【修改】checkBox 在特殊情况下状态显示错误的Bug。
+  * 【增加】展开（expand）、折叠（ collapse） 两个事件以及对应的before方法，让用户可以更灵活的去控制。
+  * 【增加】在 setting 内增加 nodesCol 属性，用户可自定义子节点数据的属性名称，不用再固定使用 nodes 字段。
+  * 【增加】getSetting、updateSetting 方法，用户可随时获取 zTree 的内部配置信息并且根据需求更新适当的配置信息。
+
+*2010.09.06* v2.0
+  * 【修改】内部函数 switchNode() 方法，解决 .net 中异步加载导致页面刷新的Bug（特别感谢：zsy619）。
+
+*2010.08.06* v2.0
+  * 【增加】cancleSelectedNode() 方法，允许用户将 zTree 内被选中节点设置为未被选中状态。
+
+*2010.08.03* v2.0
+      这次2.0修改的内容很多，如果原先使用了 v1.x 版本的朋友，还望仔细查看一下 v2.0 的 API 文档进行核对。
+      
+  * 【删除】ZTREE_CHECK_MAX_ERROR 常量; zTreeOnCheckMaxError 事件; setting.checkRadioMaxNum 属性;
+  * 【更名】getCurNode() 方法为 getSelectedNode() 方法。
+  * 【更名】getSelectedNodes(selected) 方法为 getCheckedNodes(checked) 方法。
+  * 【更名】checkbox、radio的 onCheck 事件更名为 onChange 事件。
+  * 【增加】在 setting 内增加 nameCol 属性，用户可自定义节点名称的数据，不用固定使用 name 字段。
+  * 【增加】在 setting 内增加 expandSpeed 属性，用户可自行设置动画速度或取消动画，输入值同 JQuery 动画效果中 speed 参数，默认"fast"。
+  * 【增加】getNodeIndex(treeNode) 方法，获取某节点在同一层级节点中的序号（从0开始）。
+  * 【增加】updateNode(treeNode) 方法，允许用户将节点数据修改后，直接更新该节点，避免由于修改一个节点儿刷新整棵树。
+  * 【增加】在 editable=true 状态时，能够点击编辑、删除按钮，实现名称编辑 和 快速删除节点。
+  * 【增加】针对Click、Check、Drag、Drop、Rename、Remove等事件都提供 before方法，让用户根据自己的需求确定是否中断改事件。
+  * 【增加】用 js 控制选中或展开节点的操作后，能自动将该节点进行 focus 定位，保证节点在当前可视区域出现。
+  * 【修改】radio只能选择单个节点，并且自动选中最新节点，完全满足radio标准，删除最大数量限制功能。
+  * 【修改】对于节点名称的显示方法，不用再担心<>等特殊字符影响效果，尤其是 js 注入。
+  * 【修改】callback 回调函数结构，允许用户通过配置自定义各种回调函数。
+  * 【修改】zTree 全部展开、折叠时，对于有特效的情况进行了适当优化。
+  * 【修改】当 iconSkin 属性没有定义时，节点的 class 会出现 "undefined" 的Bug。
