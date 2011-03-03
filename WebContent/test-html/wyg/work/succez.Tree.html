@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../../../js/jquery/jquery-1.5.js"></script>
+<script type="text/javascript" src="../../../js/jquery/myplugin/wyg/succez.restree.js"></script>
+<link rel="stylesheet" type="text/css"	href="../../../js/jquery/myplugin/wyg/succezTree.css"/>
+<title>tree</title></head><body>  
+<p>鼠标位于坐标： <span id="testpage"></span></p>  
+<div id="m_drag">  </div>
+<p id="testpage"></p>  
+<script type="text/javascript">    
+  $(function(){
+	  $("#m_drag").initTreeByXml("../../../js/jquery/myplugin/wyg/XML/m_tree.xml","0",$("#m_drag"));
+	  $("div").treeFoldOrNot();
+	  $("#m_drag").TreeMoveEvent();
+	});
+</script>
+</body>
+</html> 
