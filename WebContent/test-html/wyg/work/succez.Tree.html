@@ -2,19 +2,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script type="text/javascript" src="../../../js/jquery/jquery-1.5.js"></script>
-<script type="text/javascript" src="../../../js/jquery/myplugin/wyg/succez.restree.js"></script>
+<script type="text/javascript" src="../../../js/jquery/jquery-1.5.1rc1.js"></script>
+<script type="text/javascript" src="../../../js/jquery/myplugin/wyg/succezBI_Tree.js"></script>
 <link rel="stylesheet" type="text/css"	href="../../../js/jquery/myplugin/wyg/succezTree.css"/>
-<title>tree</title></head><body>  
-<p>鼠标位于坐标： <span id="testpage"></span></p>  
-<div id="m_drag">  </div>
-<p id="testpage"></p>  
+<title>tree</title>
+</head>
+<body>   
+<div id="m_drag"></div>
 <script type="text/javascript">    
   $(function(){
-	  $("#m_drag").initTreeByXml("../../../js/jquery/myplugin/wyg/XML/m_tree.xml","0",$("#m_drag"));
-	  $("div").treeFoldOrNot();
-	  $("#m_drag").TreeMoveEvent();
-	});
+	  $("#m_drag").sussez_Tree({xmlPath:"m_tree.xml"});
+   });
 </script>
 </body>
 </html> 

@@ -4,7 +4,7 @@ body{
 	height:100%;
 	font-family:cambria;  
 	font-color:#DF1515;}
-ul{  
+ul,li{  
 	list-style:none;  
 	padding-left:15px;  
 	margin-top:3px;}
@@ -37,6 +37,10 @@ span{
 	background-image:url(img/tree_file.gif);  
 	background-repeat:no-repeat;  
 	}
+.treefolder{
+    background-image:url(img/wyg-folder.gif);
+    background-repeat:no-repeat;
+}	
 #m_drag{  
 	width:300px;  
 	background-color:#D8D8D8;  
@@ -45,4 +49,4 @@ span{
 	}
 .roottree{  
 	margin-left:15px;
-    } 
+}
