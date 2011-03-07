@@ -14,9 +14,14 @@ function initxml(xmlpath){
 		   url:xmlpath,
 		   dataType:"xml",
 		   timeout:1000,
-		   cache:false,
 		   error:function(xml){alert("error!");},
-		   success:function(xml){alert("success!");}
+		   success:function(xml){
+			   alert("success!");
+			   var m_html=$(xml).find("nodes").find("> node").each(function(){
+				   alert($(this).text());
+				   alert($(this).find("> node").length.toString());
+			   });
+			   }
 	});	
 }
 	$(function(){

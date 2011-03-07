@@ -1864,6 +1864,16 @@
 		}
 		return r;
 	}
+	
+	function f(){}
+	f.prototype.method = {};
+	{
+		method:function(){},
+		v:"aa",
+		method1:function(){}
+	}
+	var obj = new f();
+	f.method
 
 	function zTreePlugin(){
 		//返回的是一个json对象，差不多相当于是一个数组
