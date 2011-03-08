@@ -9,9 +9,34 @@
 </head>
 <body>   
 <div id="m_drag"></div>
-<script type="text/javascript">    
+<script type="text/javascript">
+  var rightMenu={
+		  newfile:{
+			  name:"新建",
+			  event:function(){
+				  alert("新建");
+			  }
+		  },
+		  rename:{
+			  name:"修改节点名称",
+			  event:function(){
+				  alert("修改节点名称");
+			  }
+		  },
+		  deletefile:{
+			  name:"删除",
+			  event:function(){
+				  alert("删除");
+			  }
+		  }
+  }
   $(function(){
-	  $("#m_drag").sussez_Tree({xmlPath:"m_tree.xml"});
+	  $("#m_drag").sussez_Tree({xmlPath:"m_tree.xml",
+		  						preNodeClick:function(event){
+		  							alert("preNodeClick function has been triggered!");
+	  						   	},
+	  							rightMenu:rightMenu
+	  						   });
    });
 </script>
 </body>
