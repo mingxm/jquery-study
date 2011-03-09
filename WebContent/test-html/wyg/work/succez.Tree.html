@@ -9,35 +9,22 @@
 </head>
 <body>   
 <div id="m_drag"></div>
+<ul id="m_menu" style="cursor:pointer;padding-left:0px;background-color:#F1F1F1;border:1px solid #000000;position:absolute;display:none;width:50px">
+	<li id="bi_edit">编辑</li>
+	<li id="bi_delete">删除</li>
+	<li id="bi_new">新增</li>
+</ul>
 <script type="text/javascript">
-  var rightMenu={
-		  newfile:{
-			  name:"新建",
-			  event:function(){
-				  alert("新建");
-			  }
-		  },
-		  rename:{
-			  name:"修改节点名称",
-			  event:function(){
-				  alert("修改节点名称");
-			  }
-		  },
-		  deletefile:{
-			  name:"删除",
-			  event:function(){
-				  alert("删除");
-			  }
-		  }
-  }
   $(function(){
-	  $("#m_drag").sussez_Tree({xmlPath:"m_tree.xml",
-		  						preNodeClick:function(event){
-		  							alert("preNodeClick function has been triggered!");
-	  						   	},
-	  							rightMenu:rightMenu
-	  						   });
-   });
+	  var biTreeplugin=$("#m_drag").sussez_Tree({
+		  										  xmlPath:"m_tree.xml",
+		  										  rightMenuId:"#m_menu",
+ 		    									  newNode:'#bi_new',
+   		    									  nodeEdit:'#bi_edit',
+   		    									  nodeDelete:'#bi_delete'		  
+	  											});
+	  biTreeplugin.bindrightClick(); 
+  });
 </script>
 </body>
 </html> 

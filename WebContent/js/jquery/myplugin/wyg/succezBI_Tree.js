@@ -20,13 +20,15 @@
    		  //叶子节点的图标样式
    		  fileNode_class:"treefile",
    		  //节点被点击之前发生的用户自定义事件
-   		  preNodeCilck:undefined,
-   		  rightMenu:{}
+   		  preNodeCilck:null,
+   		  //右键菜单的id
+   		  rightMenuId:'',
+   		  //下面三个都是子菜单的ID
+   		  newNode:'',
+   		  nodeEdit:'',
+   		  nodeDelete:''
    		};
-   		var m_rightMenu = option.rightMenu;
-   		option.rightMenu = undefined;
-   		$.extend(defaultSetting,option);
-   		$.extend(defaultSetting.rightMenu,m_rightMenu);
+   		$.extend(true,defaultSetting,option);
    		
    		//绑定用户自定义的节点点击之前发生的事件
    		$(this).live(PRENODECLICK,function(event){
@@ -34,7 +36,44 @@
    		      defaultSetting.preNodeClick(event);
    		  });
    		//静态初始化
-   		showTree($(this),defaultSetting.xmlPath,defaultSetting);		
+   		showTree($(this),defaultSetting.xmlPath,defaultSetting);	
+   		
+   		var biTreePlugin={};
+   		//设置
+   		biTreePlugin.Setting=this.defaultSetting;
+   		biTreePlugin.parent=this;
+   		//鼠标右键点击的当前节点
+   		biTreePlugin.currentNode={};
+   		biTreePlugin.test=function() {
+   			alert("test");
+   		};
+   		biTreePlugin.bindrightClick=function(){
+   			$("."+defaultSetting.fileNode_class).live("contextmenu",function(event){
+   				this.currentNode=event.target;
+   				var menu=$(defaultSetting.rightMenuId);
+   				menu.css("display","block");
+   				menu.css("left",event.pageX);
+   				menu.css("top",event.pageY);
+   				return false;
+   			});
+   			//绑定右键菜单的新建节点子菜单项
+   			$(defaultSetting.newNode).live("click",function(event){
+   			
+   			});
+   			//绑定右键菜单的编辑节点菜单项
+   			$(defaultSetting.nodeEdit).live("click",function(event){
+ 				var value=$(this).text();
+				var m_width=$(this).width();
+				//将<a>节点元素替换为文本输入框，供用户编辑，在页面点击事件中将用户输入后的内容还原成<a>元素内容
+				$(this).replace($("<input type='text' style='overflow:visible;width:"+m_width+"px' value="+value+">"));					
+   			});
+   			//绑定右键菜单的删除节点菜单项
+   			$(defaultSetting.nodeDelete).live("click",function(event){
+   			
+   			});
+   		};
+   		return biTreePlugin;
+   
    };   
    //根据传入的xml文件路径，全量初始化所有的节点
    function showTree(item,xmlPath,Setting){
@@ -62,16 +101,24 @@
    		//绑定加减号按钮的click事件
    		$("."+Setting.plus_Ico_class).live("click",function(e){
    			treeUnfold(e);
+   			return false;
    		});
    		$("."+Setting.sub_Ico_class).live("click",function(e){
    			treeFold(e);
+   			return false;
    		});
    		//绑定根节点的展开和收缩事件
    		$("."+Setting.root_Ico_class).live("dblclick",function(e){
    			$(this).trigger(PRENODECLICK);
    			var m_element=$(this).parent().prev();
    				//触发加减号的点击事件
-   				m_element.trigger("click"); 
+   				m_element.trigger("click");
+   		});
+   		/*绑定整个文档的点击事件，如果文档的其他地方被点击，那么要做的事情是：
+   		* 1、收起右键菜单
+   		*/
+   		$(document).bind("click",function(){
+   			$(Setting.rightMenuId).css("display","none");
    		});
    }
 /*
@@ -86,7 +133,7 @@
 					var node=$("<ul/>");
    				}else
    				{
-   					var node=$("<ul style='display:none'></ul>")
+   					var node=$("<ul style='display:none'></ul>");
    				}
    				var nodeText=$(this).attr("text");
    				if (nodeText && nodeText!='')
@@ -100,12 +147,14 @@
    		        htmlDoc.append(node);   				
    			}else{
    				var m_text = $(this).text();
-   		    	//初始化叶子节点
-   				if (level==1){
-   					htmlDoc.append($("<li><span class="+Setting.fileNode_class+">"+m_text+"</span></li>"));
-   				}else{
-   					htmlDoc.append($("<li style='display:none'><span class="+Setting.fileNode_class+">"+m_text+"</span></li>"));	
-   				}   			
+   				var m_href = $(this).attr("href");
+   				if (level==1)
+   				{
+   					htmlDoc.append($("<li><span class="+Setting.fileNode_class+"><a href="+m_href+">"+m_text+"</a></span></li>"));   				   			
+   				}else
+   				{
+   					htmlDoc.append($("<li style='display:none'><span class="+Setting.fileNode_class+"><a href="+m_href+">"+m_text+"</a></span></li>"));   				   			   				    
+   				}
    			};	
    			
    		});    	
