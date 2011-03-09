@@ -24,17 +24,7 @@
 </li>
 <li>$("input:first")  <input type="button" value="找出第一个input控件" onclick="$_findFirstInput()"/>
 </li>
-<li>$("input:first")  <input type="button" value="找出第一个input控件" onclick="$_findFirstInput()"/>
-</li>
 </ul>
-
-<p/>
-下面我要写一个简单的js调试器，包括一个输入框和一个运行按钮
-<br/><textarea rows="10" cols="100" id="code1">
-//input you code here, and click run button
-</textarea>
-<input type="button" value="运行" id="runbtn1"/>
-
 
 <p/>
 下面我要写一个简单的js调试器，包括一个输入框和一个运行按钮
@@ -123,9 +113,6 @@
 <li>var a1 = $("#position").height();<input type="button" value="执行" onclick='var a1 = $("#position").height();alert("a1=【"+a1+"】");'/></li>
 <li>var a1 = $("#position").width();<input type="button" value="执行" onclick='var a1 = $("#position").width();alert("a1=【"+a1+"】");'/></li>
 
-<p>
-下面我想动态创建一个js调试器， <input type="button" value="创建js调试器" id="debugBtn1"/>
-</p>
 </ul>
 
 <div id="bottom"></div>
@@ -160,35 +147,6 @@ function $_find(){
 	var btns = $('input[value*="找出"]');
 	alert("找到【"+btns.length+"】个文字含“找到”的按钮");
 }
-
-function $_findFirstInput(){
-	var btns = $('input:first');
-	alert("第一个按钮的文字是【"+btns[0].value+"】");
-}
-
-function createDebugger(e){
-	var btn = e.target;
-	$(btn).parent().append('<br/><textarea rows="10" cols="120" id="code2"></textarea><input type="button" value="运行" id="runbtn2" onclick="runCode2();"/>');
-}
-
-function runCode2(){
-	var code=$("#code2")[0].value;
-	window.eval(code);
-}
-
-$(function(){
-	//给调试器增加事件
-	$("#runbtn1").click(function(e){
-		var code = $("#code1")[0].value;
-		window.eval(code);
-	});
-	
-	//给创建调试器的按钮增加事件
-	$("#debugBtn1").click(function(e){
-		createDebugger(e);
-	});
-});
-
 
 function $_findFirstInput(){
 	var btns = $('input:first');
