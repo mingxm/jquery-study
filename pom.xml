@@ -3,4 +3,24 @@
   <groupId>jquery-study</groupId>
   <artifactId>jquery-study</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+
+  
+	<repositories>
+		<repository>
+			<id>esenSnapshots</id>
+			<name>esenSnapshots</name>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<url>http://cc:8081/nexus/content/groups/public</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 </project>
