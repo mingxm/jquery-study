@@ -1,0 +1,48 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="D:\esendev\study\jquery-ui\external\qunit.css"></style>
+<script src="../../../js/jquery/jquery-1.5.1rc1.js"></script>
+<script src="../../../js/jquery/myplugin/xh/qunit/qunit.js"></script>
+<title>看下qunit的运行机制</title>
+</head>
+<body>
+
+<p>
+用qunit运行一个简单的测试用例：
+<pre>
+test("firsttest", function(){
+	ok(true);
+});
+</pre>
+qunit的运行过程如下：
+1、调用test方法增加测试用例，所有测试用例都是一个函数，它们会被放在一个队列中。如果执行test时document已经加载完毕，那么测试用例会立即开始执行。
+2、在document加载完毕后调用自动执行队列中的测试用例执行顺序是QUnit.init()、QUnit.start()
+3、QUnit.start()会遍历队列挨个执行测试用例，测试用例可能会很多，为了不让浏览器失去响应，测试用例执行中间会停顿config.updateRate时间，通常是1秒钟。
+4、每个测试用例都是一个Test类，它有run方法，QUnit.start()实际上是执行的这个run方法，而run会调用真正的测试用例函数。
+5、QUnit.start()的执行顺序是test.init()、test.setup()、test.run()、test.tearDown()、test.finish()，其中test.setup会调用module.setup()，test.tearDown会调用module.tearDown()
+6、test.init会在页面上显示正在测试文字，test.finish则负责将测试结果显示在页面上。
+7、QUnit支持测试用例中有异步执行代码，在异步执行之前调用QUnit.stop()让后续的test等待，在异步执行之后调用QUnit.start()重启后续的test。
+8、QUnit支持一些事件，执行顺序是：QUnit.begin() - QUnit.moduleStart() - QUnit.testStart() - QUnit.log() - QUnit.testDone() - QUnit.moduleDone() - QUnit.done()，可以直接设置这些函数为自己的函数。
+
+</p>
+
+<h1 id="qunit-header">jQuery UI Button Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests">
+</ol>
+
+<div id="qunit-fixture">
+</div>
+
+</body>
+<script type="text/javascript">
+$(function(){
+	test("firsttest", function(){
+		ok(true);
+	});
+});
+</script>
+</html>

@@ -1,0 +1,296 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>获取context path</title>
+<script type="text/javascript" src="../../js/jquery/jquery-1.5.1rc1.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/hellojquery.js"></script>
+<script type="text/javascript" src="../../js/jquery/myplugin/xh/loadjs.js"></script>
+<style type="text/css">
+	@import "../../js/jquery/myplugin/xh/hellojquery.css";
+</style>
+<head>
+<body autoScrollToBottom="true">
+
+<p/>
+bi使用jsp获取context path，考虑用js获取，最简单的办法是用下面的代码：
+<input type="button" value="运行" role="run"/><br/>
+<textarea rows="10" cols="100">
+function getContextPath(){
+	return window.location.pathname.split("/")[1];
+}
+alert(getContextPath());
+</textarea>
+
+<p/>
+但是上面的方法有个不足，tomcat支持应用的contextpath是"/"，比如http://localhost:8089/test-html/xh/contextpath.html，此时上面的方法会返回"test-html"，这是错误的。<br/>
+分析：contextpath是服务器端的概念，浏览器不知道，所以必须访问服务器才行，在要获取contextpath时动态获取它。一种方案是增加一个action处理返回contxtpath，划不来；第二种方案是判断contextpath是否为空，如果不为空，则分析url可以得到正确的值。<br/>
+下面是测试的代码：
+<input type="button" value="运行" role="run"/><br/>
+<textarea rows="10" cols="100">
+$.sys  = {
+	getContextPath : function(callback){
+		$.ajax({url:"/contextpath.html",
+			success:function(){
+				callback("/"); //contextpath是空
+			},
+			error:function(){
+				var contextpath = window.location.pathname.split("/")[1];
+				callback(contextpath);
+			}
+		});
+	}
+}
+$.sys.getContextPath(function(cp){
+	alert(cp);
+});
+</textarea>
+<hr width="100%">
+
+<p>
+jquery-easyui里面提供了另外一种实现的思路：在web目录下面放一个核心js——jquery.js，每个页面都要引入它。在js中遍历所有script元素，找到src路径中含jquery.js的那个script，通过分析src就可以知道contentpath了。
+<input type="button" value="运行" role="run"/><br/>
+<textarea rows="10" cols="100">
+$.sys.getContextPath = function(){
+	var scripts = document.getElementsByTagName('script');
+	for(var i=0; i<scripts.length; i++){
+		var src = scripts[i].src;
+		if (!src) continue;
+		var m = src.trim().endsWith("jquery-1.5.1rc1.js");
+		if (m){//jquery.js的地址是：../../js/jquery/jquery-1.5.1rc1.js
+			var a = src.split("/");
+			return a[a.length-4];
+		}
+	}
+}
+alert($.sys.getContextPath());
+</textarea>
+
+</p>
+
+<hr width="100%">
+<p/>
+<h2>关于contextpath的问题做几个测试：</h2>
+<p/>
+1、html用相对地址引用js、html、图片时，都是相对当前html的路径。比如相对路径<a href="helloajax.html">helloajax.html</a>，或者<a href="../cjb/succez.menu.html">../cjb/succez.menu.html</a>。如果想相对根目录，则会出错，比如<a href="test-html/xh/hellojajax.html">test-html/xh/hellojajax.html</a>，会跳转到http://localhost:8089/jquery-study/test-html/xh/test-html/xh/hellojajax.html
+<p/>
+2、html用绝对地址引用其他html时，这个地址是相对于服务器器地址的。当前服务器地址是http://localhost:8089/，比如绝对路径<a href="/jquery-study/test-html/xh/helloajax.html">/jquery-study/test-html/xh/helloajax.html</a>，这里绝对路径要加上contextpath。看下不加的效果:<a href="/test-html/xh/helloajax.html">/test-html/xh/helloajax.html</a>，会跳转到http://localhost:8089/test-html/xh/helloajax.html。
+<p/>
+3、在js中引用图片时有几种情况：
+<table border="1">
+	<tr>
+		<td><input type="button" value="显示图片" role="displayImage" func="setImageSrc1"/></td>
+		<td>js中的写法是：$(img).attr("src", "Tulips.jpg");<br/>
+		Tulips.jpg和js是同一个目录
+		</td>
+		<td>图片地址是js/jquery/myplugin/xh/Tulips.jpg<br />
+		js地址是js/jquery/myplugin/xh/hellojquery.js<br />
+		html地址是test-html/xh/contextpath.html<br />
+		html引用js，在js中引用图片地址</td>
+		<td><img width="100px" height="100px" /></td>
+		<td><span style="color:blue">结论：js中设置的图片地址是相对于html的</span>，<br/>上面js的写法让图片地址是：http://localhost:8089/jquery-study/test-html/xh/Tulips.jpg，而不是http://localhost:8089/jquery-study/js/jquery/myplugin/xh/Tulips.jpg</td>
+	</tr>
+	<tr>
+		<td>看个正确的效果：<br/><input type="button" value="显示图片" role="displayImage" func="setImageSrc2"/></td>
+		<td>js中的写法换成：$(img).attr("src", "../../js/jquery/myplugin/xh/Tulips.jpg");<br/>
+		Tulips.jpg和js是同一个目录
+		</td>
+		<td>还是上面的html、js和图片</td>
+		<td><img width="100px" height="100px" /></td>
+		<td>还是上面的结论。图地址是http://localhost:8089/jquery-study/js/jquery/myplugin/xh/Tulips.jpg，对的。</td>
+	</tr>	
+	<tr>
+		<td>再看一个效果<br/><input type="button" value="显示图片" role="displayImage" func="setImageSrc3"/></td>
+		<td>js中的写法换成：$(img).attr("src", "Desert.jpg");<br/>
+		Desert.jpg和html是同一个目录
+		</td>
+		<td>还是上面的html、js，但是图片地址是test-html/xh/Desert.jpg，和html放在一起</td>
+		<td><img width="100px" height="100px" /></td>
+		<td>还是上面的结论。图地址是http://localhost:8089/jquery-study/test-html/xh/Desert.jpg，对的。</td>
+	</tr>
+</table>
+<p/>
+4、在css中引用图片时有几种情况：
+<table border="1">
+	<tr>
+		<td  width="10%">css中的写法是：.src1{background-image:url(Desert.jpg);}<br/>
+		Desert.jpg和html是同一个目录
+		</td>
+		<td width="40%">
+		css地址是js/jquery/myplugin/xh/hellojquery.css<br />
+		html地址是test-html/xh/contextpath.html<br />
+		<br/>
+		图片1地址是js/jquery/myplugin/xh/Tulips.jpg，与css文件同目录<br/>
+		图片2地址是test-html/xh/contextpath.html/Desert.jpg，与html文件同目录<br/>
+		html引用css，在css中引用图片地址</td>
+		<td width="10%"><div width="100px" height="100px" class="src1">&nbsp;</div></td>
+		<td width="40%">结论：<span style="color:blue">css文件中引用的图片地址是相对于css文件的</span>，<br/>这里的Desert.jpg和html是同一个目录，所以找不到</td>
+	</tr>
+	<tr>
+		<td>css中的写法是：.src2{background-image:url(Tulips.jpg);}<br/>
+		Tulips.jpg和css是同一个目录
+		</td>
+		<td>&nbsp;</td>
+		<td><div width="100px" height="100px" class="src2">&nbsp;</div></td>
+		<td>和上面的结论一样，这里的Tulips.jpg和css是同一个目录，所以找得到</td>
+	</tr>
+	<tr>
+		<td>css中的写法是：.src3{background-image:url(test-html/xh/Desert.jpg);}</td>
+		<td>&nbsp;</td>
+		<td><div width="100px" height="100px" class="src3">&nbsp;</div></td>
+		<td>结论：这里企图用相对于context的路径，行不通</td>
+	</tr>
+	<tr>
+		<td>css中的写法是：.src4{background-image:url(js/jquery/myplugin/xh/Tulips.jpg);}</td>
+		<td>&nbsp;</td>
+		<td><div width="100px" height="100px" class="src4">&nbsp;</div></td>
+		<td>同上</td>
+	</tr>
+	<tr>
+		<td>css中的写法是：.src5{background-image:url(/test-html/xh/Desert.jpg);}</td>
+		<td>&nbsp;</td>
+		<td><div width="100px" height="100px" class="src5">&nbsp;</div></td>
+		<td>结论：这里企图用不带contextpath的绝对路径，行不通</td>
+	</tr>
+	<tr>
+		<td>css中的写法是：.src6{background-image:url(/js/jquery/myplugin/xh/Tulips.jpg);}</td>
+		<td>&nbsp;</td>
+		<td><div width="100px" height="100px" class="src6">&nbsp;</div></td>
+		<td>同上</td>
+	</tr>
+	<tr>
+		<td>css中的写法是：.src7{background-image:url(/jquery-study/test-html/xh/Desert.jpg);}</td>
+		<td>&nbsp;</td>
+		<td><div width="100px" height="100px" class="src7">&nbsp;</div></td>
+		<td>结论：这里使用带contextpath的绝对路径，可以行</td>
+	</tr>
+	<tr>
+		<td>css中的写法是：.src8{background-image:url(/jquery-study/js/jquery/myplugin/xh/Tulips.jpg);}</td>
+		<td>&nbsp;</td>
+		<td><div width="100px" height="100px" class="src8">&nbsp;</div></td>
+		<td>同上</td>
+	</tr>
+</table>
+
+<p/>
+5、验证一个问题：用相对地址访问serlvet时只要servlet的名称写对了就可以正常访问，路径可以不对。看下面的例子：
+<ul>
+	<li><a href=".testajax" target="_blank">.testajax</a>&nbsp;&nbsp;可行</li>
+	<li><a href="xh/.testajax" target="_blank">xh/.testajax</a>&nbsp;&nbsp;可行</li>
+	<li><a href="test-html/xh/.testajax" target="_blank">test-html/xh/.testajax</a>&nbsp;&nbsp;可行</li>
+	<li><a href="/jquery-study/.testajax" target="_blank">/jquery-study/.testajax</a>&nbsp;&nbsp;正确的contextpath，可行</li>
+	<li><a href="/jquery-study/test-html/.testajax" target="_blank">/jquery-study/test-html/.testajax</a>&nbsp;&nbsp;正确的contextpath，可行</li>
+	<li><a href="/jquery-study/test-html/xh/.testajax" target="_blank">/jquery-study/test-html/xh/.testajax</a>&nbsp;&nbsp;正确的contextpath，可行</li>
+	<li><a href="/.testajax" target="_blank">/.testajax</a>&nbsp;&nbsp;错误的contextpath，不可行</li>
+</ul>
+这很好解释，因为tomcat是通过url-pattern（*.testajax）找到正确的servlet的，与路径无关。但是路径会影响跳转之后浏览器的地址。
+<hr width="100%">
+<p/>
+<h2>客户端有地址引用的地方有：</h2>
+<ul>
+<li>1、在js中：
+<ul>
+	<li>1、图片地址，比如设置img1.src="irpt/images/1.gif";
+		<ul>bi里面有关图片地址的处理：
+			<li>bi里面在设置图片地址时很舒服，直接写相对于contextpath的路径即可，因为服务器端对irpt/和sanlib/开头的url做了特殊处理</li>
+			<li>在easyolap中设置预警图片，从图片地址（/bi2.2/irpt/images/misc/23.gif）中分析出图片在web目录中的路径（irpt/images/misc/23.gif），这里面就要用到contextpath</li>
+			<li>在门户中做easyolap时，图片地址还不能是相对的，要是绝对的。要不然没法在客户端分析出图片的路径，比如这个http://localhost:8089/bi2.2/vfs/public/portals/bi21demo/sanlib/images/chart/template/anychart_bar_2d.png。</li>
+		</ul>
+	</li>
+	<li>2、跳转到某页面，比如window.open("irpt/index.html")、iframe.src="irpt/index.html"、链接的地址<a href="irpt/index.html"></a>
+		<ul>bi里面使用contextpath的地方有：
+			<li>[leftxtree.js]注销时跳转到首页：getRootWindow().location.href = sys.getContextPath();</li>
+			<li>[portaltool.js]在新窗口中打开门户页面：wnd.open(sys.getContextPath()+"vfs/public/portals/" + fileName + "/portal.sa?xml=" + xmlName);</li>
+			<li>[vfsexplorer.js]在新窗口中打开资源管理器中的图片：this.imageFileView.src = sys.getContextPath()+"vfs"+filename。图片地址形如：http://192.168.1.100:8080/bi2.2/vfs/sys/ditu/a/a.png</li>
+			<li>[rptprint2.js]生成active插件的codebase：var url = loc.protocol+"//"+loc.host+sys.getContextPath()</li>
+			<li>[exportrpt.js]导出之后点击下载链接，打开地址：openIframeUrl(sys.getContextPath()+this.downloadurl);</li>
+			<li>[util.js]实现openIframeUrl方法使会做一个处理：if(!url.startWith(sys.getContextPath())){ url=sys.getRequestURL()+url; }
+			<li>[util.js]实现getHelp()方法显示帮助页面时做一个处理：rs.setContent((help.indexOf("vfs/") == 0 ? sys.getContextPath() : "") + help, true);</li>
+		</ul>
+	</li>
+	<li>3、访问一个servlet，比如showrpt.sa?rptid=xxx
+		<ul>bi里面访问servlet的地方有：
+			<li>ajax请求：QueryObj.create("js/reqmgr.sa", map, _delresult_onok_onQueryFinish);</li>
+			<li>[xmlhttp.js]对请求的url会做一个处理：return sys.getContextPath() + url;</li>
+		</ul>
+	</li>
+	<li>4、获取web目录下面的xml文件的内容，比如this._loadXML(sys.getContextPath()+"irpt/js/olapchart.xml")</li>
+	<li>5、动态加载js文件，比如sys.lib.include("sanlib/js/chart.js")</li>
+</ul>
+</li>
+
+<li>2、在html中引用：
+<ul>
+	<li>1、图片地址，比如&lt;img src="sanlib/images/null.gif" width="5" height="1"/&gt;</li>
+	<li>2、js地址，比如&lt;script src="sanlib/js/sys.js" type="text/javascript"&gt;&lt;/script&gt;</li>
+	<li>3、css地址，比如&lt;link href="irpt/portal/themes/blue/portal_tabbar.css" rel="stylesheet" type="text/css" /&gt;&lt;/li&gt;
+</ul>
+</li>
+
+<li>3、在css中引用：
+<ul>
+	<li>1、图片地址，比如：background: url( images/bt.gif ) 0 36px;， 或者：background:url(../../images/checkbox.gif</li>
+</ul>
+</li>
+
+<p/>
+extjs没有在js中设置图片地址，都是设置class，然后再css中用相对地址引用图片。比如树控件的"+"和"-"图标，是用下面的技巧实现的：
+<pre>&lt;img unselectable="on" class="x-tree-node-icon" src="../../resources/images/default/s.gif" alt="" id="extdd-5"&gt;</pre>
+而css的定义是这样的：
+<pre>
+.x-tree-node-collapsed .x-tree-node-icon{
+	background-image:url(../images/default/tree/folder.gif);
+}
+</pre>
+
+<h2>结论：</h2>
+提供一个系统函数$.sys.getContextPath(callback)获取contextpath能够满足客户端的需求。如果某个页面中用到这个函数的地方很多，可以在页面加载之初就初始化它，比如：<br/>
+<pre>
+$.sys  = {
+	getContextPath : function(callback){
+		$.ajax({url:"/contextpath.html",
+			success:function(){
+				callback("/"); //contextpath是空
+			},
+			error:function(){
+				var contextpath = window.location.pathname.split("/")[1];
+				callback(contextpath);
+			}
+		});
+	},
+	loadContextPathImmadite : function(){
+		$.getContextPath(function(contextPath){
+			$.contextPath = contextPath;
+		});
+	}
+}
+$(function(){
+	$.sys.loadContextPathImmadite();
+});
+</pre>
+在系统的其他地方直接使用$.contextPath即可。
+
+</body>
+<script type="text/javascript">
+$(function(){
+	$(":button[role=run]").click(function(e){
+		window.eval($(this).nextAll("textarea").val());
+	});
+	
+	$(":button[role=displayImage]").click(function(e){
+		var func = $(this).attr("func");
+		var tr = $(this).parents("tr");
+		var img = tr.find("img:first")[0];
+		$.cptester[func](img);
+	});
+	
+	$(":button[role=displayImage]").trigger("click");	
+	
+	$(":button[role=displayImage2]").click(function(e){
+		var cls = $(this).attr("cls");
+		var tr = $(this).parents("tr");
+		var div = tr.find("div:first")[0];
+		$(div).addClass(cls);
+	});
+});
+</script>
+</html>

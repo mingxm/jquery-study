@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v1.5
+ * jQuery JavaScript Library v1.5.1
  * http://jquery.com/
  *
  * Copyright 2011, John Resig
@@ -11,31 +11,21 @@
  * Copyright 2011, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Jan 31 08:31:29 2011 -0500
- * 
- * 这是我个人的jquery.js，会对jquery中的js技巧、方法功能做些注释
+ * Date: Wed Feb 23 13:55:29 2011 -0500
  */
-
-//(function( window, undefined ) {
+(function( window, undefined ) {
 
 // Use the correct document accordingly with window argument (sandbox)
-//var document = window.document;
+var document = window.document;
 var jQuery = (function() {
 
 // Define a local copy of jQuery
-/**
- * 这是jQuery函数的定义位置，也是$函数的定义位置，$是jQuery的别名。
- * 1、$("#container")这是id选择器，即使有多个id叫container的元素，这里也只会得到第一个元素。这和document.getElementById有点不一样。
- * 2、$("#container > textarea")这是选择container下面的所有textarea，注意只选择直接子节点。这里“>”两边的空格是必须的，省略会出错。
- * 3、$("#container textarea")这是选择container下面的所有textarea，注意选择所有子节点。
- */
 var jQuery = function( selector, context ) {
 		// The jQuery object is actually just the init constructor 'enhanced'
 		return new jQuery.fn.init( selector, context, rootjQuery );
 	},
 
 	// Map over jQuery in case of overwrite
-	/*如果全局作用域上已存在同名的变量，那么将它们放进_jQuery或_$中，以防不测*/
 	_jQuery = window.jQuery,
 
 	// Map over the $ in case of overwrite
@@ -102,32 +92,6 @@ var jQuery = function( selector, context ) {
 	// [[Class]] -> type pairs
 	class2type = {};
 
-/**
- * jQuery.fn是jQuery.prototype的简写，下面的代码块定义了jQuery对象的成员（在jquery-1.5.js中大概有210行代码）。它有如下的成员：
- * 1、constructor()：构造函数，就是jQuery方法自己
- * 2、init()：执行jQuery("body")时就是执行的jQuery.fn.init("body")，init方法就是dom选择函数。
- * 3、selector：内部属性，代表选择表达式，比如"body"
- * 4、jquery：jquery的版本号
- * 5、length：选择的元素个数。比如一个页面中有1个body，那么$("body")返回一个jQuery对象，它的length是1。jQuery对象和数组对象很像，length代表其元素个数，$("body")[0]取第一个元素。
- * 6、size():返回选择的元素个数。
- * 7、toArray()：返回一个数组对象。jQuery对象和数组对象很像，但不是真正的数组，比如$.type($("body"))的值是object, $.type($("body").toArray())的值是array
- * 8、get(i)：返回第i个元素，返回值是一个DOM对象。当i为负数时返回倒数第i个元素
- * 9、pushStack:内部方法，用于实现slice、map、find等方法
- * 10、each(callback)：遍历所有元素，对每个元素调用callback方法，callback的原型是callback(i,elem)。它的实现调用了jQuery.each
- * 11、ready：当我们写$(document).ready( fn )的时候，这里的ready就是本ready。它用来注册页面加载完毕的事件处理函数。
- * 			  它内部的实现是调用jQuery.bindReady()，后者会监听document的onreadystatechange事件，在事件处理函数中会调用jQuery.ready()，后者会调用我们注册的事件函数。
- * 12、eq(i)：返回第i个元素，返回值是一个jQuery对象。当i为负数时返回倒数第i个元素。（eq的实现里面有一点不理解的，return i === -1 ?this.slice( i ) :this.slice( i, +i + 1 );，这里的i===-1是什么意思？估计是为了加快取最后一个元素的速度。还有“+i +1”实际上就是“i+1”
- * 			  eq比get的好处是返回值可以继续用jQuery的方法
- * 13、first()：返回第一个元素，等于eq(0)
- * 14、last():返回最后一个元素，等于eq(-1)
- * 15、slice(i,j)：返回从i到j的子数组。j--exclude
- * 16、map(callback):类似jQuery.map(elems,callback)，用于产生一个新的数组，新数组的元素统统经过callback函数处理过。
- * 17、end():返回最后一个jQuery对象。在jQuery中流行写链式代码，比如qobj.first().append("div").end().last().append("div")这段代码实现将qobj选择的第一个和最后一个元素都增加子元素。在调用first()之后如何再得到qobj对象呢，窍门就是end方法。
- * 18、push():内部方法
- * 19、sort()：内部方法
- * 20、splice()：内部方法
- * 这些方法使jQuery看起来很像一个数组。假设qobj是一个jQuery对象，那么qobj[0]可以取第一个元素。
- */
 jQuery.fn = jQuery.prototype = {
 	constructor: jQuery,
 	init: function( selector, context, rootjQuery ) {
@@ -238,7 +202,7 @@ jQuery.fn = jQuery.prototype = {
 	selector: "",
 
 	// The current version of jQuery being used
-	jquery: "1.5",
+	jquery: "1.5.1",
 
 	// The default length of a jQuery object is 0
 	length: 0,
@@ -348,13 +312,8 @@ jQuery.fn = jQuery.prototype = {
 // Give the init function the jQuery prototype for later instantiation
 jQuery.fn.init.prototype = jQuery.fn;
 
-/**
- * eg: jQuery.extend(obj1, obj2)
- * 说明：让obj1继承obj2，obj2中obj1没有的属性会拷贝过来，obj1有的属性会被覆盖。
- * 疑问：它会像bi里面的extendClass一样继承prototype里面定义的方法吗，比如extendClass(InputDialog, Dialog)？
- */
 jQuery.extend = jQuery.fn.extend = function() {
-	 var options, name, src, copy, copyIsArray, clone,
+	var options, name, src, copy, copyIsArray, clone,
 		target = arguments[0] || {},
 		i = 1,
 		length = arguments.length,
@@ -417,56 +376,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 	return target;
 };
 
-/**
- * 本代码段（指extend函数调用）定义的是全局方法，有几种调用的方式，比如：
- * 1、jQuery.isFunction( ... )
- * 2、$.isFunction( ... )
- * 这里的函数有：
- * 1、noConflict()：主要解决jQuery和prototype的名称冲突问题。本方法解决冲突的办法是让$代表prototype的$，而jQuery自己则使用jQuery。
- * 2、isReady: 内部变量。jQuery.ready函数内部使用
- * 3、readyWait：内部变量。jQuery.ready函数内部使用
- * 4、ready：内部函数。和下面的bindReady一起实现jQuery.fn.ready方法。基本思路是先调用bindReady注册doucment的onreadystatechanged事件，然后再事件处理函数中调用ready方法，ready方法再调用用户自己指定的事件处理函数。
- * 5、bindReady：内部函数。注册document的onreadystatechanged事件处理函数，和ready一起来实现jQuery.fn.ready方法。
- * 6、isFunction：是否是函数
- * 7、isArray:是否是数组
- * 8、isWindow:是否是window对象
- * 9、isNaN：是否是NaN
- * 10、type：返回对象的类型，比如$(jQuery)返回"function"
- * 11、isPlainObject:? 是否是原生对象。这个有点偏，比如像字符串、DOM对象等等都返回false。具体应用场景未知。
- * 12、isEmptyObject:? 空对象。即没有一个属性的对象，比如{}。具体应用场景未知。
- * 13、error(msg)：抛出异常。等于throw msg
- * 14、parseJSON(data): 根据字符串生成json对象。未细究。
- * 15、parseXML(data): 根据字符串生成xml document对象。var xmldoc = parseXML(data); var root = xmldoc.documentElement;
- * 16、noop:空函数
- * 17、globalEval(data)：在全局的上下文中执行脚本。和window.eval(data)有何区别？未细究。
- * 18、nodeName(elem, name):判定元素的名字，比如判定元素是否是div元素：$.nodeName(dom,'div');
- * 19、each( objOrArray, callback )：遍历成员，执行函数。第一个参数可以是对象或者数组。如果是对象，就遍历它的属性；如果是数组，就遍历它的元素。
- * 20、trim(text):类似String.trim()
- * 21、makeArray(array):? 返回一个数组。参数array可以不一定是一个数组，可以是任意一个对象，比如字符串。具体应用场景未知。
- * 22、inArray(elem,array):在数组中查找指定的元素，返回元素所在的index，类似Arrays.indexOf(elem)。
- * 23、merge(first,second):合并second到first中去，返回first
- * 24、grep(elems,callback,inv):在数组elems找查找符合条件的元素，返回一个新数组。callback是检查器，其原型是callback(elem,i)，inv为true或者false，如果callback返回的值和inv相同，表示符合条件。
- * 25、map(elems, callback):处理elems数组中的每个元素，处理的结果放到一个新的数组中，返回新数组。注意1：如果某个元素的处理的结果是null，那么null不会放到新数组中；注意2：如果处理的结果是一个数组，那么把这个数组中的元素放到结果数组中，即这个数组本身不会放到结果数组中。
- * 							callback的原型是callback(elem,i)
- * 26、guid:这是一个全局的计数器，jquery内部用它产生一个类似bi的guid。它是一个自增的数值。主要用于给事件处理函数编号。
- * 27、proxy(function, obj)：类似bi的bind函数，用于将成员方法作为事件处理函数。在bi里面的做法是：div.onclick = this.stop.bind(this);，jquery的做法是div.onclick = $.proxy(this.stop, this)。
- * 28、access：? 很偏的函数，好像是jquery内部使用的函数，只被jQuery.fn.attr和jQuery.fn.css调用
- * 29、now:返回当前时间，比如返回数值1298093713927
- * 30、_Deferred:内部使用的一个类，供Deferred类使用
- * 31、Deferred:? 函数队列，是一个类，通常要new $.Deferred()，使用对象。它有done、resolveWith、resolve、isResolved、cancel、then, fail、rejectWith、reject、isRejected、promise等方法。比如jQuery.ready方法就是基于这个实现的。
- * 				和它相关的一个词是“延迟执行”
- * 32、when:? 与Deferred有关的一个方法
- * 33、uaMatch: jquery内部使用的一个函数，用于判定浏览器类型和版本。浏览器类型有msie、webkit、opera、mozilla
- * 34、sub：把jQuery看着是一个类，那么jQuery.sub()返回这个类的副本。具体的使用帮助是http://api.jquery.com/jQuery.sub/。一个使用场景是为了修改插件的方法，但是又不想修改原始的jQuery对象。
- * 35、browser：浏览器类型对象，比如$.browser.version="8.0"
- */
 jQuery.extend({
-	/**
-	 * 为什么要有noConflict函数？看了这篇文章你就知道了：http://www.d5s.cn/archives/6
-	 * 另外一个js库prototype.js也将$作为自己的函数名，但是意义不一样。比如prototype.js中的$('div1')等价于jquery.js中的$('#div1')，当然，还有另外的区别。
-	 * 为了解决名称冲突，jQuery提供了noConflict函数，如果存在名称冲突，那么只需要执行一下jQuery.noConflict();就可以了，这让$成为prototype的$，使用jQuery则只能用jQuery，不能用$。
-	 * 注意jquery.js要在prototype.js的后面引进来。
-	 */
 	noConflict: function( deep ) {
 		window.$ = _$;
 
@@ -675,10 +585,8 @@ jQuery.extend({
 		if ( data && rnotwhite.test(data) ) {
 			// Inspired by code by Andrea Giammarchi
 			// http://webreflection.blogspot.com/2007/08/global-scope-evaluation-and-dom.html
-			var head = document.getElementsByTagName("head")[0] || document.documentElement,
-				script = document.createElement("script");
-
-			script.type = "text/javascript";
+			var head = document.head || document.getElementsByTagName( "head" )[0] || document.documentElement,
+				script = document.createElement( "script" );
 
 			if ( jQuery.support.scriptEval() ) {
 				script.appendChild( document.createTextNode( data ) );
@@ -693,18 +601,10 @@ jQuery.extend({
 		}
 	},
 
-	/**
-	 * 判定dom元素的名字
-	 * eg: jQuery.nodeName(dom, 'div');
-	 */
 	nodeName: function( elem, name ) {
 		return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
 	},
 
-	/**
-	 * each函数的回调函数的原型是：callback(i, element)。比如可以这样调用：
-	 * 		$("#div1").children().each(function(i, element){ .. })
-	 */
 	// args is for internal usage only
 	each: function( object, callback, args ) {
 		var name, i = 0,
@@ -962,6 +862,12 @@ jQuery.extend({
 								callbacks.shift().apply( context, args );
 							}
 						}
+						// We have to add a catch block for
+						// IE prior to 8 or else the finally
+						// block will never get executed
+						catch (e) {
+							throw e;
+						}
 						finally {
 							fired = [ context, args ];
 							firing = 0;
@@ -1009,22 +915,22 @@ jQuery.extend({
 			isRejected: failDeferred.isResolved,
 			// Get a promise for this deferred
 			// If obj is provided, the promise aspect is added to the object
-			promise: function( obj , i /* internal */ ) {
+			promise: function( obj ) {
 				if ( obj == null ) {
 					if ( promise ) {
 						return promise;
 					}
 					promise = obj = {};
 				}
-				i = promiseMethods.length;
+				var i = promiseMethods.length;
 				while( i-- ) {
-					obj[ promiseMethods[ i ] ] = deferred[ promiseMethods[ i ] ];
+					obj[ promiseMethods[i] ] = deferred[ promiseMethods[i] ];
 				}
 				return obj;
 			}
 		} );
 		// Make sure only one callback list will be used
-		deferred.then( failDeferred.cancel, deferred.cancel );
+		deferred.done( failDeferred.cancel ).fail( deferred.cancel );
 		// Unexpose cancel
 		delete deferred.cancel;
 		// Call given func if any
@@ -1036,24 +942,34 @@ jQuery.extend({
 
 	// Deferred helper
 	when: function( object ) {
-		var args = arguments,
-			length = args.length,
-			deferred = length <= 1 && object && jQuery.isFunction( object.promise ) ?
+		var lastIndex = arguments.length,
+			deferred = lastIndex <= 1 && object && jQuery.isFunction( object.promise ) ?
 				object :
 				jQuery.Deferred(),
-			promise = deferred.promise(),
-			resolveArray;
+			promise = deferred.promise();
 
-		if ( length > 1 ) {
-			resolveArray = new Array( length );
-			jQuery.each( args, function( index, element ) {
-				jQuery.when( element ).then( function( value ) {
-					resolveArray[ index ] = arguments.length > 1 ? slice.call( arguments, 0 ) : value;
-					if( ! --length ) {
-						deferred.resolveWith( promise, resolveArray );
-					}
-				}, deferred.reject );
-			} );
+		if ( lastIndex > 1 ) {
+			var array = slice.call( arguments, 0 ),
+				count = lastIndex,
+				iCallback = function( index ) {
+					return function( value ) {
+						array[ index ] = arguments.length > 1 ? slice.call( arguments, 0 ) : value;
+						if ( !( --count ) ) {
+							deferred.resolveWith( promise, array );
+						}
+					};
+				};
+			while( ( lastIndex-- ) ) {
+				object = array[ lastIndex ];
+				if ( object && jQuery.isFunction( object.promise ) ) {
+					object.promise().then( iCallback(lastIndex), deferred.reject );
+				} else {
+					--count;
+				}
+			}
+			if ( !count ) {
+				deferred.resolveWith( promise, array );
+			}
 		} else if ( deferred !== object ) {
 			deferred.resolve( object );
 		}
@@ -1149,9 +1065,6 @@ if ( document.addEventListener ) {
 	};
 }
 
-/**
- * 内部使用的函数，用于检测ie页面是否加载完毕。用于$(document).ready的实现
- */
 // The DOM ready check for Internet Explorer
 function doScrollCheck() {
 	if ( jQuery.isReady ) {
@@ -1172,14 +1085,11 @@ function doScrollCheck() {
 }
 
 // Expose jQuery to the global object
-return (window.jQuery = window.$ = jQuery);
+return jQuery;
 
 })();
 
-/**
- * 本代码段用于检测浏览器的兼容性，比如在ie中用attachEvent来监听事件，在其他浏览器使用addEventListeners。
- * 所有的兼容性测试都存储在jQuery.support的属性中。
- */
+
 (function() {
 
 	jQuery.support = {};
@@ -1192,7 +1102,8 @@ return (window.jQuery = window.$ = jQuery);
 	var all = div.getElementsByTagName("*"),
 		a = div.getElementsByTagName("a")[0],
 		select = document.createElement("select"),
-		opt = select.appendChild( document.createElement("option") );
+		opt = select.appendChild( document.createElement("option") ),
+		input = div.getElementsByTagName("input")[0];
 
 	// Can't get basic test support
 	if ( !all || !all.length || !a ) {
@@ -1231,7 +1142,7 @@ return (window.jQuery = window.$ = jQuery);
 		// Make sure that if no value is specified for a checkbox
 		// that it defaults to "on".
 		// (WebKit defaults to "" instead)
-		checkOn: div.getElementsByTagName("input")[0].value === "on",
+		checkOn: input.value === "on",
 
 		// Make sure that a selected-by-default option has a working selected property.
 		// (WebKit defaults to false instead of true, IE too, if it's in an optgroup)
@@ -1241,26 +1152,29 @@ return (window.jQuery = window.$ = jQuery);
 		deleteExpando: true,
 		optDisabled: false,
 		checkClone: false,
-		_scriptEval: null,
 		noCloneEvent: true,
+		noCloneChecked: true,
 		boxModel: null,
 		inlineBlockNeedsLayout: false,
 		shrinkWrapBlocks: false,
 		reliableHiddenOffsets: true
 	};
 
+	input.checked = true;
+	jQuery.support.noCloneChecked = input.cloneNode( true ).checked;
+
 	// Make sure that the options inside disabled selects aren't marked as disabled
 	// (WebKit marks them as diabled)
 	select.disabled = true;
 	jQuery.support.optDisabled = !opt.disabled;
 
+	var _scriptEval = null;
 	jQuery.support.scriptEval = function() {
-		if ( jQuery.support._scriptEval === null ) {
+		if ( _scriptEval === null ) {
 			var root = document.documentElement,
 				script = document.createElement("script"),
 				id = "script" + jQuery.now();
 
-			script.type = "text/javascript";
 			try {
 				script.appendChild( document.createTextNode( "window." + id + "=1;" ) );
 			} catch(e) {}
@@ -1271,10 +1185,10 @@ return (window.jQuery = window.$ = jQuery);
 			// tag with appendChild/createTextNode
 			// (IE doesn't support this, fails, and uses .text instead)
 			if ( window[ id ] ) {
-				jQuery.support._scriptEval = true;
+				_scriptEval = true;
 				delete window[ id ];
 			} else {
-				jQuery.support._scriptEval = false;
+				_scriptEval = false;
 			}
 
 			root.removeChild( script );
@@ -1282,12 +1196,11 @@ return (window.jQuery = window.$ = jQuery);
 			root = script = id  = null;
 		}
 
-		return jQuery.support._scriptEval;
+		return _scriptEval;
 	};
 
 	// Test to see if it's possible to delete an expando from an element
 	// Fails in Internet Explorer
-	/*expando是“钥匙”的意思。它用来存储data属性。data属性是一组以data-开头的属性，可以用$("div").data("name")方法取到data-name属性的值。*/
 	try {
 		delete div.test;
 
@@ -1295,7 +1208,7 @@ return (window.jQuery = window.$ = jQuery);
 		jQuery.support.deleteExpando = false;
 	}
 
-	if ( div.attachEvent && div.fireEvent ) {
+	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
 		div.attachEvent("onclick", function click() {
 			// Cloning a node shouldn't copy over any
 			// bound event handlers (IE does this)
@@ -1404,18 +1317,6 @@ return (window.jQuery = window.$ = jQuery);
 
 var rbrace = /^(?:\{.*\}|\[.*\])$/;
 
-/**
- * 这个代码段（extend函数调用）里面定义了一些静态方法：
- * 0、noData：内部变量。有些DOM元素不能有自定义的属性，导致jQuery没法给DOM元素绑定一个uid。比如embed、object、applet，但是flash控件可以。
- * 1、hasData(elem)：DOM元素是否有jQuery数据和它绑定。什么是“jQuery数据”？就是用jQuery.data(elem,name,data)设置的数据。参考data方法
- * 2、data(elem,name,data)：设置DOM元素的自定义属性。其内部实现是给elem分配一个uid，用它可以到jQuery全局的cache中找到它的“钥匙expando”，这个钥匙有很多属性，这些属性就是这个DOM元素的属性。
- * 							注意，数据是不会直接设置到DOM元素对象上的，而是放在jQuery全局的cache中。直接设置DOM元素的属性有很多弊端，比如内存泄露、效率低(?)等。
- * 							如果是js对象，也可以用data方法设置属性。
- * 	  data(elem,name)：返回DOM元素的自定义属性。
- * 3、acceptData(elem)：内部方法。判定DOM元素是否能够持有数据。
- * 4、removeData(elem,name)：删除数据
- * 这些静态方法基本上是内部使用，用于实现jQuery.fn.data和removeData
- */
 jQuery.extend({
 	cache: {},
 
@@ -1424,7 +1325,6 @@ jQuery.extend({
 
 	// Unique for each copy of jQuery on the page
 	// Non-digits removed to match rinlinejQuery
-	/*钥匙，jQuery内部使用的一个属性，用于存放data属性*/
 	expando: "jQuery" + ( jQuery.fn.jquery + Math.random() ).replace( /\D/g, "" ),
 
 	// The following elements throw uncatchable exceptions if you
@@ -1439,7 +1339,7 @@ jQuery.extend({
 	hasData: function( elem ) {
 		elem = elem.nodeType ? jQuery.cache[ elem[jQuery.expando] ] : elem[ jQuery.expando ];
 
-		return !!elem && !jQuery.isEmptyObject(elem);
+		return !!elem && !isEmptyDataObject( elem );
 	},
 
 	data: function( elem, name, data, pvt /* Internal Use Only */ ) {
@@ -1479,11 +1379,18 @@ jQuery.extend({
 
 		if ( !cache[ id ] ) {
 			cache[ id ] = {};
+
+			// TODO: This is a hack for 1.5 ONLY. Avoids exposing jQuery
+			// metadata on plain JS objects when the object is serialized using
+			// JSON.stringify
+			if ( !isNode ) {
+				cache[ id ].toJSON = jQuery.noop;
+			}
 		}
 
 		// An object can be passed to jQuery.data instead of a key/value pair; this gets
 		// shallow copied over onto the existing cache
-		if ( typeof name === "object" ) {
+		if ( typeof name === "object" || typeof name === "function" ) {
 			if ( pvt ) {
 				cache[ id ][ internalKey ] = jQuery.extend(cache[ id ][ internalKey ], name);
 			} else {
@@ -1545,7 +1452,7 @@ jQuery.extend({
 
 				// If there is no data left in the cache, we want to continue
 				// and let the cache object itself get destroyed
-				if ( !jQuery.isEmptyObject(thisCache) ) {
+				if ( !isEmptyDataObject(thisCache) ) {
 					return;
 				}
 			}
@@ -1557,7 +1464,7 @@ jQuery.extend({
 
 			// Don't destroy the parent cache unless the internal data object
 			// had been the only thing left in it
-			if ( !jQuery.isEmptyObject(cache[ id ]) ) {
+			if ( !isEmptyDataObject(cache[ id ]) ) {
 				return;
 			}
 		}
@@ -1578,6 +1485,13 @@ jQuery.extend({
 		// data if it existed
 		if ( internalCache ) {
 			cache[ id ] = {};
+			// TODO: This is a hack for 1.5 ONLY. Avoids exposing jQuery
+			// metadata on plain JS objects when the object is serialized using
+			// JSON.stringify
+			if ( !isNode ) {
+				cache[ id ].toJSON = jQuery.noop;
+			}
+
 			cache[ id ][ internalKey ] = internalCache;
 
 		// Otherwise, we need to eliminate the expando on the node to avoid
@@ -1615,14 +1529,6 @@ jQuery.extend({
 	}
 });
 
-/**
- * 这个代码段(jQuery.fn.extend函数调用）里面定义了一些成员方法：
- * 1、data(key,value)：设置对象的属性
- * 	  data(key)：获取对象的属性
- * 	  data():获取对象的所有属性，返回的是一个对象，这个对象保存了this的所有data
- * 	  data(obj):将obj对象的所有属性作为this的属性。
- * 2、removeData(key):删除自定义属性
- */
 jQuery.fn.extend({
 	data: function( key, value ) {
 		var data = null;
@@ -1687,7 +1593,6 @@ jQuery.fn.extend({
 	}
 });
 
-/*内部使用的函数（对否？），设置DOM元素的属性。没有仔细看这个函数，具体功能是做啥？*/
 function dataAttr( elem, key, data ) {
 	// If nothing was found internally, try to fetch any
 	// data from the HTML5 data-* attribute
@@ -1715,13 +1620,22 @@ function dataAttr( elem, key, data ) {
 	return data;
 }
 
+// TODO: This is a hack for 1.5 ONLY to allow objects with a single toJSON
+// property to be considered empty objects; this property always exists in
+// order to make sure JSON.stringify does not expose internal metadata
+function isEmptyDataObject( obj ) {
+	for ( var name in obj ) {
+		if ( name !== "toJSON" ) {
+			return false;
+		}
+	}
+
+	return true;
+}
 
 
-/**
- * 下面的extend代码段定义了2个静态方法：
- * 1、queue：入队列
- * 2、dequeue：出队列
- */
+
+
 jQuery.extend({
 	queue: function( elem, type, data ) {
 		if ( !elem ) {
@@ -1775,13 +1689,6 @@ jQuery.extend({
 	}
 });
 
-/**
- * 这里面定义了3个成员方法：
- * 1、queue：入队列
- * 2、dequeue：出队列
- * 3、delay：延迟执行。
- * 这3个方法通常内部使用，用作实现动画效果。
- */
 jQuery.fn.extend({
 	queue: function( type, data ) {
 		if ( typeof type !== "string" ) {
@@ -1850,24 +1757,6 @@ jQuery.props = {
 	frameborder: "frameBorder"
 };
 
-/**
- * 下面的extend代码段提供了以下方法：
- * 1、attr(name)：获取DOM元素的属性，这里的属性往往是系统属性，比如src、alt、width、class等。jQuery会为我们处理不同浏览器的兼容性问题
- * 		attr(name, value)：设置DOM元素的属性
- * 		attr(obj)：这个用于一次设置多个属性，将obj对象的属性都设置到DOM对象中去
- * 		attr(name, callback)：给DOM元素设置属性，属性的值是callback函数的返回值。callback的原型是callback(i, oldvalue)，这里的i是元素在jQuery对象中的index。
- * 2、removeAttr(name)：删除属性
- * 3、addClass(class)：给DOM元素增加样式。DOM元素的class属性往往内含多个样式，本方法往里面增加样式
- * 	  addClass(callback)：给DOM元素增加样式，等于attr("class",callback)
- * 4、removeClass(name):删除样式
- * 	  removeClass(callback)：删除样式，样式的值是callback的返回值
- * 5、toggleClass(class):切换样式
- * 6、hasClass(selector)：是否含有指定的样式
- * 7、val():获取qobj[0]的值。对各种控件都可以获取到正确的值，比如文本框、checkbox、listbox等等。
- * 	  val(value)：设置DOM元素的值
- * 	  val(callback)：设置DOM元素的值，新的值是callback函数的返回值。callback的原型是callback(i, oldvalue)，其中i是元素在qobj中的index
- * 上面这些方法用于设置DOM元素的属性、样式。没有详细看它们是如何实现的。
- */
 jQuery.fn.extend({
 	attr: function( name, value ) {
 		return jQuery.access( this, name, value, true, jQuery.attr );
@@ -2042,6 +1931,11 @@ jQuery.fn.extend({
 							// Multi-Selects return an array
 							values.push( value );
 						}
+					}
+
+					// Fixes Bug #2551 -- select.val() broken in IE after form.reset()
+					if ( one && !values.length && options.length ) {
+						return jQuery( options[ index ] ).val();
 					}
 
 					return values;
@@ -2237,21 +2131,8 @@ var rnamespaces = /\.(.*)$/,
 	rescape = /[^\w\s.|`]/g,
 	fcleanup = function( nm ) {
 		return nm.replace(rescape, "\\$&");
-	},
-	eventKey = "events";
+	};
 
-/**
- * 全局的事件对象，这个对象有如下静态成员：
- * 1、add：增加事件处理函数
- * 2、global：
- * 3、remove：删除事件处理函数
- * 4、trigger：触发事件
- * 5、handle：
- * 6、props：定义了事件对象的属性
- * 7、fix：
- * 8、special
- * 事件处理的代码在jquery.js中很多，大概从
- */
 /*
  * A number of helper functions used for managing events.
  * Many of the ideas behind this code originated from
@@ -2266,17 +2147,22 @@ jQuery.event = {
 			return;
 		}
 
-		// For whatever reason, IE has trouble passing the window object
-		// around, causing it to be cloned in the process
-		if ( jQuery.isWindow( elem ) && ( elem !== window && !elem.frameElement ) ) {
-			elem = window;
+		// TODO :: Use a try/catch until it's safe to pull this out (likely 1.6)
+		// Minor release fix for bug #8018
+		try {
+			// For whatever reason, IE has trouble passing the window object
+			// around, causing it to be cloned in the process
+			if ( jQuery.isWindow( elem ) && ( elem !== window && !elem.frameElement ) ) {
+				elem = window;
+			}
 		}
+		catch ( e ) {}
 
 		if ( handler === false ) {
 			handler = returnFalse;
 		} else if ( !handler ) {
 			// Fixes bug #7229. Fix recommended by jdalton
-		  return;
+			return;
 		}
 
 		var handleObjIn, handleObj;
@@ -2300,23 +2186,10 @@ jQuery.event = {
 			return;
 		}
 
-		var events = elemData[ eventKey ],
+		var events = elemData.events,
 			eventHandle = elemData.handle;
 
-		if ( typeof events === "function" ) {
-			// On plain objects events is a fn that holds the the data
-			// which prevents this data from being JSON serialized
-			// the function does not need to be called, it just contains the data
-			eventHandle = events.handle;
-			events = events.events;
-
-		} else if ( !events ) {
-			if ( !elem.nodeType ) {
-				// On plain objects, create a fn that acts as the holder
-				// of the values to avoid JSON serialization of event data
-				elemData[ eventKey ] = elemData = function(){};
-			}
-
+		if ( !events ) {
 			elemData.events = events = {};
 		}
 
@@ -2417,15 +2290,10 @@ jQuery.event = {
 
 		var ret, type, fn, j, i = 0, all, namespaces, namespace, special, eventType, handleObj, origType,
 			elemData = jQuery.hasData( elem ) && jQuery._data( elem ),
-			events = elemData && elemData[ eventKey ];
+			events = elemData && elemData.events;
 
 		if ( !elemData || !events ) {
 			return;
-		}
-
-		if ( typeof events === "function" ) {
-			elemData = events;
-			events = events.events;
 		}
 
 		// types is actually an event object here
@@ -2527,10 +2395,7 @@ jQuery.event = {
 			delete elemData.events;
 			delete elemData.handle;
 
-			if ( typeof elemData === "function" ) {
-				jQuery.removeData( elem, eventKey, true );
-
-			} else if ( jQuery.isEmptyObject( elemData ) ) {
+			if ( jQuery.isEmptyObject( elemData ) ) {
 				jQuery.removeData( elem, undefined, true );
 			}
 		}
@@ -2571,7 +2436,7 @@ jQuery.event = {
 						// points to jQuery.expando
 						var internalKey = jQuery.expando,
 							internalCache = this[ internalKey ];
-						if ( internalCache && internalCache.events && internalCache.events[type] ) {
+						if ( internalCache && internalCache.events && internalCache.events[ type ] ) {
 							jQuery.event.trigger( event, data, internalCache.handle.elem );
 						}
 					});
@@ -2597,9 +2462,7 @@ jQuery.event = {
 		event.currentTarget = elem;
 
 		// Trigger the event, it is assumed that "handle" is a function
-		var handle = elem.nodeType ?
-			jQuery._data( elem, "handle" ) :
-			(jQuery._data( elem, eventKey ) || {}).handle;
+		var handle = jQuery._data( elem, "handle" );
 
 		if ( handle ) {
 			handle.apply( elem, data );
@@ -2677,11 +2540,7 @@ jQuery.event = {
 
 		event.namespace = event.namespace || namespace_sort.join(".");
 
-		events = jQuery._data(this, eventKey);
-
-		if ( typeof events === "function" ) {
-			events = events.events;
-		}
+		events = jQuery._data(this, "events");
 
 		handlers = (events || {})[ event.type ];
 
@@ -2823,7 +2682,6 @@ jQuery.event = {
 	}
 };
 
-/*删除事件*/
 jQuery.removeEvent = document.removeEventListener ?
 	function( elem, type, handle ) {
 		if ( elem.removeEventListener ) {
@@ -2836,14 +2694,6 @@ jQuery.removeEvent = document.removeEventListener ?
 		}
 	};
 
-/**
- * 事件类，它是对浏览器event对象的包装，创建它需要浏览器event对象。它有如下方法和属性：
- * 1、type：等于src.type，即事件类型
- * 2、originalEvent：等于src，即被包装的事件对象
- * 3、preventDefault：禁止执行默认的事件处理函数。对每个事件，浏览器都有自己的事件处理函数，比如点击链接的默认行为是跳转页面，如果在链接的onclick事件处理函数中调用preventDefault，那么就不会跳转。
- * 4、stopPropagation：propagation是传播的意思。当一个dom的某事件被触发时，父dom的该事件也会被触发，这就是所谓的“事件向上冒泡”。调用本方法可以阻止事件冒泡。
- * 5、stopImmediatePropagation：作用和stopPropagation方法类似，但是除了禁止父dom的事件被触发，还会立即停止其他事件处理函数的执行。一个DOM的一个事件可以有多个事件处理函数，调用本方法可以禁止剩余的事件处理函数的执行，而stopPropagation不会。
- */
 jQuery.Event = function( src ) {
 	// Allow instantiation without the 'new' keyword
 	if ( !this.preventDefault ) {
@@ -2857,7 +2707,7 @@ jQuery.Event = function( src ) {
 
 		// Events bubbling up the document may have been marked as prevented
 		// by a handler lower down the tree; reflect the correct value.
-		this.isDefaultPrevented = (src.defaultPrevented || src.returnValue === false || 
+		this.isDefaultPrevented = (src.defaultPrevented || src.returnValue === false ||
 			src.getPreventDefault && src.getPreventDefault()) ? returnTrue : returnFalse;
 
 	// Event type
@@ -2932,6 +2782,12 @@ var withinElement = function( event ) {
 	// Firefox sometimes assigns relatedTarget a XUL element
 	// which we cannot access the parentNode property of
 	try {
+
+		// Chrome does something similar, the parentNode property
+		// can be accessed but is null.
+		if ( parent !== document && !parent.parentNode ) {
+			return;
+		}
 		// Traverse up the tree
 		while ( parent && parent !== this ) {
 			parent = parent.parentNode;
@@ -2956,9 +2812,6 @@ delegate = function( event ) {
 	jQuery.event.handle.apply( this, arguments );
 };
 
-/**
- * 增加mouseenter和mouseleave事件，它们等于mouseover和mouseout事件
- */
 // Create mouseenter and mouseleave events
 jQuery.each({
 	mouseenter: "mouseover",
@@ -2985,8 +2838,7 @@ if ( !jQuery.support.submitBubbles ) {
 						type = elem.type;
 
 					if ( (type === "submit" || type === "image") && jQuery( elem ).closest("form").length ) {
-						e.liveFired = undefined;
-						return trigger( "submit", this, arguments );
+						trigger( "submit", this, arguments );
 					}
 				});
 
@@ -2995,8 +2847,7 @@ if ( !jQuery.support.submitBubbles ) {
 						type = elem.type;
 
 					if ( (type === "text" || type === "password") && jQuery( elem ).closest("form").length && e.keyCode === 13 ) {
-						e.liveFired = undefined;
-						return trigger( "submit", this, arguments );
+						trigger( "submit", this, arguments );
 					}
 				});
 
@@ -3059,7 +2910,7 @@ if ( !jQuery.support.changeBubbles ) {
 		if ( data != null || val ) {
 			e.type = "change";
 			e.liveFired = undefined;
-			return jQuery.event.trigger( e, arguments[1], elem );
+			jQuery.event.trigger( e, arguments[1], elem );
 		}
 	};
 
@@ -3073,7 +2924,7 @@ if ( !jQuery.support.changeBubbles ) {
 				var elem = e.target, type = elem.type;
 
 				if ( type === "radio" || type === "checkbox" || elem.nodeName.toLowerCase() === "select" ) {
-					return testChange.call( this, e );
+					testChange.call( this, e );
 				}
 			},
 
@@ -3085,7 +2936,7 @@ if ( !jQuery.support.changeBubbles ) {
 				if ( (e.keyCode === 13 && elem.nodeName.toLowerCase() !== "textarea") ||
 					(e.keyCode === 32 && (type === "checkbox" || type === "radio")) ||
 					type === "select-multiple" ) {
-					return testChange.call( this, e );
+					testChange.call( this, e );
 				}
 			},
 
@@ -3124,21 +2975,28 @@ if ( !jQuery.support.changeBubbles ) {
 }
 
 function trigger( type, elem, args ) {
-	args[0].type = type;
-	return jQuery.event.handle.apply( elem, args );
+	// Piggyback on a donor event to simulate a different one.
+	// Fake originalEvent to avoid donor's stopPropagation, but if the
+	// simulated event prevents default then we do the same on the donor.
+	// Don't pass args or remember liveFired; they apply to the donor event.
+	var event = jQuery.extend( {}, args[ 0 ] );
+	event.type = type;
+	event.originalEvent = {};
+	event.liveFired = undefined;
+	jQuery.event.handle.call( elem, event );
+	if ( event.isDefaultPrevented() ) {
+		args[ 0 ].preventDefault();
+	}
 }
 
-/**
- * 创建focus和blur事件
- */
 // Create "bubbling" focus and blur events
 if ( document.addEventListener ) {
 	jQuery.each({ focus: "focusin", blur: "focusout" }, function( orig, fix ) {
 		jQuery.event.special[ fix ] = {
 			setup: function() {
 				this.addEventListener( orig, handler, true );
-			}, 
-			teardown: function() { 
+			},
+			teardown: function() {
 				this.removeEventListener( orig, handler, true );
 			}
 		};
@@ -3184,25 +3042,6 @@ jQuery.each(["bind", "one"], function( i, name ) {
 	};
 });
 
-/**
- * 定义一些处理事件的方法：
- * 0、bind(type,data,handler)：绑定事件处理函数
- * 1、unbind(type,fn)：解除事件处理函数
- * 2、delegate(selector, types, data, fn)：字面意思是代表，它和bind方法的意义类似，也是注册事件处理函数，但是有差别，参考：http://iunbug.appspot.com/article.html?objNews.id=221001
- * 3、undelegate(selector,types,fn)：
- * 4、trigger(type, data)：触发事件。
- * 5、toggle(showOrHidden)：切换。toggle(true)用于显示DOM元素，toggle(false)用于隐藏DOM元素。
- * 	  toggle(duration ,callback):例子$('input').toggle('slow')，效果是所有input控件慢慢消失，很过瘾。支持'slow'和'fast'两种
- * 6、hover(fnOver, fnOut):鼠标进入对象时执行fnOver，出去时执行fnOut
- * 7、live：注册事件处理函数。bind、live、delegate三者的区别可以参考：http://iunbug.appspot.com/article.html?objNews.id=221001
- * 			相同点在于live、bind、delegate都是绑定事件到DOM元素，不同点在于：
- * 			1、bind是及时绑定，而live和delegate会全程绑定，当前或者以后加入的符合选择器的DOM元素都会绑定。可以这样理解，live和delegate是把事件绑定到一个选择器，而不是一个具体的DOM元素。
- * 			2、live的用法是：$("a").live("click",func)，把func绑定到"a"。在live的实现中，实际上是把事件绑定到document，然后记录下选择器。每当事件发生时，会判断事件源是否符合选择器，如果符合，则执行事件处理函数。
- * 			3、delegate的用法是：$("#container").delegate("a","click",func)，把func绑定到container元素下面的所有"a"。$("a").live()等于$(document).delegate("a", ...)
- * 				delegate的内部实现是用live实现的。
- * 			4、上面的参考链接中说delegate>live>bind，因为delegate速度更快、支持链式写法。
- * 8、die：删除事件处理函数
- */
 jQuery.fn.extend({
 	unbind: function( type, fn ) {
 		// Handle object literals
@@ -3350,11 +3189,7 @@ function liveHandler( event ) {
 	var stop, maxLevel, related, match, handleObj, elem, j, i, l, data, close, namespace, ret,
 		elems = [],
 		selectors = [],
-		events = jQuery._data( this, eventKey );
-
-	if ( typeof events === "function" ) {
-		events = events.events;
-	}
+		events = jQuery._data( this, "events" );
 
 	// Make sure we avoid non-left-click bubbling in Firefox (#3861) and disabled elements in IE (#6911)
 	if ( event.liveFired === this || !events || !events.live || event.target.disabled || event.button && event.type === "click" ) {
@@ -3388,7 +3223,7 @@ function liveHandler( event ) {
 		for ( j = 0; j < live.length; j++ ) {
 			handleObj = live[j];
 
-			if ( close.selector === handleObj.selector && (!namespace || namespace.test( handleObj.namespace )) ) {
+			if ( close.selector === handleObj.selector && (!namespace || namespace.test( handleObj.namespace )) && !close.elem.disabled ) {
 				elem = close.elem;
 				related = null;
 
@@ -3437,14 +3272,6 @@ function liveConvert( type, selector ) {
 	return (type && type !== "*" ? type + "." : "") + selector.replace(rperiod, "`").replace(rspace, "&");
 }
 
-/**
- * DOM元素的事件集合，调用形式是这样：
- * 		$("a").click(function(event){ ... } );
- * 		$("a").click({action:"delete", id:"375"}, function(event){ ... } );
- * 事件处理函数的原型是callback(event)，这和浏览器原始的事件处理函数的原型是一致的。在callback中，this对象是被点击的DOM元素，比如就是链接，这也和浏览器原始的事件处理函数一致。
- * 这个event有扩展属性event.handleObj、event.data，有用的是event.data，它是上面的{action:"delete", id:"375"}对象，表示事件的数据。对第一种调用形式，event.data是null。
- * 我们经常在callback中看到$(this)实际上就是获取当前点击的DOM对象的jQuery对象，效率很高。
- */
 jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblclick " +
 	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
 	"change select submit keydown keypress keyup error").split(" "), function( i, name ) {
@@ -3466,18 +3293,7 @@ jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblcl
 	}
 });
 
-/**
- * 下面的匿名函数代码段（在jquery.js中是从3306到4685，大概有1380行）是实现sizzle选择器引擎，即通常我们写$("div")内部就是调用的sizzle引擎的方法，看下面的代码：
-		// EXPOSE（暴露）
-		jQuery.find = Sizzle;
-		jQuery.expr = Sizzle.selectors;
-		jQuery.expr[":"] = jQuery.expr.filters;
-		jQuery.unique = Sizzle.uniqueSort;
-		jQuery.text = Sizzle.getText;
-		jQuery.isXMLDoc = Sizzle.isXML;
-		jQuery.contains = Sizzle.contains;
-	这里jQuery的查找方法都是用sizzle函数的别名。
- */
+
 /*!
  * Sizzle CSS Selector Engine
  *  Copyright 2011, The Dojo Foundation
@@ -3490,7 +3306,9 @@ var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[
 	done = 0,
 	toString = Object.prototype.toString,
 	hasDuplicate = false,
-	baseHasDuplicate = true;
+	baseHasDuplicate = true,
+	rBackslash = /\\/g,
+	rNonWord = /\W/;
 
 // Here we check if the JavaScript engine is using some sort of
 // optimization where it does not always call our comparision
@@ -3689,7 +3507,7 @@ Sizzle.find = function( expr, context, isXML ) {
 			match.splice( 1, 1 );
 
 			if ( left.substr( left.length - 1 ) !== "\\" ) {
-				match[1] = (match[1] || "").replace(/\\/g, "");
+				match[1] = (match[1] || "").replace( rBackslash, "" );
 				set = Expr.find[ type ]( match, context, isXML );
 
 				if ( set != null ) {
@@ -3828,13 +3646,16 @@ var Expr = Sizzle.selectors = {
 	attrHandle: {
 		href: function( elem ) {
 			return elem.getAttribute( "href" );
+		},
+		type: function( elem ) {
+			return elem.getAttribute( "type" );
 		}
 	},
 
 	relative: {
 		"+": function(checkSet, part){
 			var isPartStr = typeof part === "string",
-				isTag = isPartStr && !/\W/.test( part ),
+				isTag = isPartStr && !rNonWord.test( part ),
 				isPartStrNotTag = isPartStr && !isTag;
 
 			if ( isTag ) {
@@ -3862,7 +3683,7 @@ var Expr = Sizzle.selectors = {
 				i = 0,
 				l = checkSet.length;
 
-			if ( isPartStr && !/\W/.test( part ) ) {
+			if ( isPartStr && !rNonWord.test( part ) ) {
 				part = part.toLowerCase();
 
 				for ( ; i < l; i++ ) {
@@ -3896,7 +3717,7 @@ var Expr = Sizzle.selectors = {
 				doneName = done++,
 				checkFn = dirCheck;
 
-			if ( typeof part === "string" && !/\W/.test(part) ) {
+			if ( typeof part === "string" && !rNonWord.test( part ) ) {
 				part = part.toLowerCase();
 				nodeCheck = part;
 				checkFn = dirNodeCheck;
@@ -3910,7 +3731,7 @@ var Expr = Sizzle.selectors = {
 				doneName = done++,
 				checkFn = dirCheck;
 
-			if ( typeof part === "string" && !/\W/.test( part ) ) {
+			if ( typeof part === "string" && !rNonWord.test( part ) ) {
 				part = part.toLowerCase();
 				nodeCheck = part;
 				checkFn = dirNodeCheck;
@@ -3953,7 +3774,7 @@ var Expr = Sizzle.selectors = {
 	},
 	preFilter: {
 		CLASS: function( match, curLoop, inplace, result, not, isXML ) {
-			match = " " + match[1].replace(/\\/g, "") + " ";
+			match = " " + match[1].replace( rBackslash, "" ) + " ";
 
 			if ( isXML ) {
 				return match;
@@ -3976,11 +3797,11 @@ var Expr = Sizzle.selectors = {
 		},
 
 		ID: function( match ) {
-			return match[1].replace(/\\/g, "");
+			return match[1].replace( rBackslash, "" );
 		},
 
 		TAG: function( match, curLoop ) {
-			return match[1].toLowerCase();
+			return match[1].replace( rBackslash, "" ).toLowerCase();
 		},
 
 		CHILD: function( match ) {
@@ -4011,14 +3832,14 @@ var Expr = Sizzle.selectors = {
 		},
 
 		ATTR: function( match, curLoop, inplace, result, not, isXML ) {
-			var name = match[1] = match[1].replace(/\\/g, "");
+			var name = match[1] = match[1].replace( rBackslash, "" );
 			
 			if ( !isXML && Expr.attrMap[name] ) {
 				match[1] = Expr.attrMap[name];
 			}
 
 			// Handle if an un-quoted value was used
-			match[4] = ( match[4] || match[5] || "" ).replace(/\\/g, "");
+			match[4] = ( match[4] || match[5] || "" ).replace( rBackslash, "" );
 
 			if ( match[2] === "~=" ) {
 				match[4] = " " + match[4] + " ";
@@ -4073,7 +3894,9 @@ var Expr = Sizzle.selectors = {
 		selected: function( elem ) {
 			// Accessing this property makes selected-by-default
 			// options in Safari work properly
-			elem.parentNode.selectedIndex;
+			if ( elem.parentNode ) {
+				elem.parentNode.selectedIndex;
+			}
 			
 			return elem.selected === true;
 		},
@@ -4095,7 +3918,9 @@ var Expr = Sizzle.selectors = {
 		},
 
 		text: function( elem ) {
-			return "text" === elem.type;
+			// IE6 and 7 will map elem.type to 'text' for new HTML5 types (search, etc) 
+			// use getAttribute instead to test this case
+			return "text" === elem.getAttribute( 'type' );
 		},
 		radio: function( elem ) {
 			return "radio" === elem.type;
@@ -4628,7 +4453,8 @@ if ( document.querySelectorAll ) {
 				// and working up from there (Thanks to Andrew Dupont for the technique)
 				// IE 8 doesn't work on object elements
 				} else if ( context.nodeType === 1 && context.nodeName.toLowerCase() !== "object" ) {
-					var old = context.getAttribute( "id" ),
+					var oldContext = context,
+						old = context.getAttribute( "id" ),
 						nid = old || id,
 						hasParent = context.parentNode,
 						relativeHierarchySelector = /^\s*[+~]/.test( query );
@@ -4650,7 +4476,7 @@ if ( document.querySelectorAll ) {
 					} catch(pseudoError) {
 					} finally {
 						if ( !old ) {
-							context.removeAttribute( "id" );
+							oldContext.removeAttribute( "id" );
 						}
 					}
 				}
@@ -4877,19 +4703,6 @@ var runtil = /Until$/,
 		prev: true
 	};
 
-/**
- * 下面代码段（这部分代码在jquery.js中有130行）定义一些方法，这些方法是什么意义，如何使用这些方法，我们看一些例子：
- * 1、has(selector): $("div:has(p)"), 选择子元素中有p元素的div。注意会查找所有后代。
- * 2、not(selector): $("div:not(:checked)")
- * 上面是在选择器中使用，也可以通过方法调用，比如：
- * 1、$("div").filter("p")：选择子元素中有p元素的div，返回div元素
- * 2、$("div").find("p")：在所有div中选择p元素，返回p元素
- * 3、$("div").is(".css1")：判定是不是所有div都有css1样式
- * 4、closest(selectors, context)
- * 5、index(elem)
- * 6、add(selector, context)
- * 7、addSelf()
- */
 jQuery.fn.extend({
 	find: function( selector ) {
 		var ret = this.pushStack( "", "find", selector ),
@@ -5036,28 +4849,6 @@ function isDisconnected( node ) {
 	return !node || !node.parentNode || node.parentNode.nodeType === 11;
 }
 
-/**
- * 下面代码段（在jquery.js中有60行）定义了遍历DOM树的方法，每个方法的返回值都是一个新的jQuery对象：
- * 1、parent():求父dom。返回一个新的jQuery对象。新的jQuery对象中的元素是老元素的父dom
- * 	  parent(selector):如果指定selector参数，则是对父dom的一个过滤
- * 2、parents():求所有父dom。如果jQuery里面有多个元素，那么将它们的所有父dom组成一个新的jQuery对象，注意，会去掉重复的。
- * 3、parentsUntil
- * 4、next():下一个兄弟元素
- * 5、prev():前一个兄弟元素
- * 6、nextAll()：下面的所有兄弟元素
- * 7、prevAll()：前面的所有兄弟元素
- * 8、nextUntil()
- * 9、prevUnitl()
- * 10、siblings():所有兄弟元素
- * 11、children():所有直接子元素
- * 11、contents():
- * 加上下面的jQuery静态方法：
- * 1、filter
- * 2、dir
- * 3、nth
- * 4、sibling
- * 共有110行代码。
- */
 jQuery.each({
 	parent: function( elem ) {
 		var parent = elem.parentNode;
@@ -5101,11 +4892,11 @@ jQuery.each({
 }, function( name, fn ) {
 	jQuery.fn[ name ] = function( until, selector ) {
 		var ret = jQuery.map( this, fn, until ),
-                // The variable 'args' was introduced in
-                // https://github.com/jquery/jquery/commit/52a0238
-                // to work around a bug in Chrome 10 (Dev) and should be removed when the bug is fixed.
-                // http://code.google.com/p/v8/issues/detail?id=1050
-                    args = slice.call(arguments);
+			// The variable 'args' was introduced in
+			// https://github.com/jquery/jquery/commit/52a0238
+			// to work around a bug in Chrome 10 (Dev) and should be removed when the bug is fixed.
+			// http://code.google.com/p/v8/issues/detail?id=1050
+			args = slice.call(arguments);
 
 		if ( !runtil.test( name ) ) {
 			selector = until;
@@ -5176,7 +4967,6 @@ jQuery.extend({
 });
 
 // Implement the identical functionality for filter and not
-/* 翻译：实施过滤器或者不实施。 winnow的意义是簸箕、筛子*/
 function winnow( elements, qualifier, keep ) {
 	if ( jQuery.isFunction( qualifier ) ) {
 		return jQuery.grep(elements, function( elem, i ) {
@@ -5216,7 +5006,7 @@ var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 	rtbody = /<tbody/i,
 	rhtml = /<|&#?\w+;/,
 	rnocache = /<(?:script|object|embed|option|style)/i,
-	// checked="checked" or checked (html5)
+	// checked="checked" or checked
 	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
 	wrapMap = {
 		option: [ 1, "<select multiple='multiple'>", "</select>" ],
@@ -5238,32 +5028,6 @@ if ( !jQuery.support.htmlSerialize ) {
 	wrapMap._default = [ 1, "div<div>", "</div>" ];
 }
 
-/**
- * 下面的代码段（在jquery.js中从5029到5702，共670行）定义了设置DOM元素的方法：
- * 1、text()：获取DOM元素的文字，包括p、div、span等的文字
- * 	  text(text)：设置DOM元素的文字。
- * 2、wrapAll：
- * 3、wrapInner：
- * 4、wrap：
- * 5、unwrap
- * 6、append(html):往dom中新增元素。例如$(dom).append("<div>new dom</div><br/>");甚至可以增加script标签，会自动执行脚本。
- * 				   返回jQuery对象。
- * 7、prepend
- * 8、before
- * 9、after
- * 10、remove
- * 11、empty
- * 12、clone
- * 13、html
- * 14、replaceWith
- * 15、detach
- * 16、domManip
- * 17、appendTo
- * 18、prependTo:等于prepend
- * 19、insertBefore:等于before
- * 20、insertAfter:等于after
- * 21、replaceAll
- */
 jQuery.fn.extend({
 	text: function( text ) {
 		if ( jQuery.isFunction(text) ) {
@@ -5344,10 +5108,6 @@ jQuery.fn.extend({
 		}).end();
 	},
 
-	/**
-	 * 往dom中新增元素。
-	 * eg: $(dom).append("<div>new dom</div><br/>");
-	 */
 	append: function() {
 		return this.domManip(arguments, true, function( elem ) {
 			if ( this.nodeType === 1 ) {
@@ -5398,7 +5158,7 @@ jQuery.fn.extend({
 				}
 
 				if ( elem.parentNode ) {
-					 elem.parentNode.removeChild( elem );
+					elem.parentNode.removeChild( elem );
 				}
 			}
 		}
@@ -5423,7 +5183,7 @@ jQuery.fn.extend({
 	},
 
 	clone: function( dataAndEvents, deepDataAndEvents ) {
-		dataAndEvents = dataAndEvents == null ? true : dataAndEvents;
+		dataAndEvents = dataAndEvents == null ? false : dataAndEvents;
 		deepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;
 
 		return this.map( function () {
@@ -5592,8 +5352,8 @@ function cloneCopyEvent( src, dest ) {
 	}
 
 	var internalKey = jQuery.expando,
-			oldData = jQuery.data( src ),
-			curData = jQuery.data( dest, oldData );
+		oldData = jQuery.data( src ),
+		curData = jQuery.data( dest, oldData );
 
 	// Switch to use the internal data object, if it exists, for the next
 	// stage of data copying
@@ -5607,7 +5367,7 @@ function cloneCopyEvent( src, dest ) {
 
 			for ( var type in events ) {
 				for ( var i = 0, l = events[ type ].length; i < l; i++ ) {
-					jQuery.event.add( dest, type, events[ type ][ i ], events[ type ][ i ].data );
+					jQuery.event.add( dest, type + ( events[ type ][ i ].namespace ? "." : "" ) + events[ type ][ i ].namespace, events[ type ][ i ], events[ type ][ i ].data );
 				}
 			}
 		}
@@ -5728,6 +5488,18 @@ jQuery.each({
 	};
 });
 
+function getAll( elem ) {
+	if ( "getElementsByTagName" in elem ) {
+		return elem.getElementsByTagName( "*" );
+	
+	} else if ( "querySelectorAll" in elem ) {
+		return elem.querySelectorAll( "*" );
+
+	} else {
+		return [];
+	}
+}
+
 jQuery.extend({
 	clone: function( elem, dataAndEvents, deepDataAndEvents ) {
 		var clone = elem.cloneNode(true),
@@ -5735,17 +5507,20 @@ jQuery.extend({
 				destElements,
 				i;
 
-		if ( !jQuery.support.noCloneEvent && (elem.nodeType === 1 || elem.nodeType === 11) && !jQuery.isXMLDoc(elem) ) {
+		if ( (!jQuery.support.noCloneEvent || !jQuery.support.noCloneChecked) &&
+				(elem.nodeType === 1 || elem.nodeType === 11) && !jQuery.isXMLDoc(elem) ) {
 			// IE copies events bound via attachEvent when using cloneNode.
 			// Calling detachEvent on the clone will also remove the events
 			// from the original. In order to get around this, we use some
 			// proprietary methods to clear the events. Thanks to MooTools
 			// guys for this hotness.
 
+			cloneFixAttributes( elem, clone );
+
 			// Using Sizzle here is crazy slow, so we use getElementsByTagName
 			// instead
-			srcElements = elem.getElementsByTagName("*");
-			destElements = clone.getElementsByTagName("*");
+			srcElements = getAll( elem );
+			destElements = getAll( clone );
 
 			// Weird iteration because IE will replace the length property
 			// with an element if you are cloning the body and one of the
@@ -5753,30 +5528,25 @@ jQuery.extend({
 			for ( i = 0; srcElements[i]; ++i ) {
 				cloneFixAttributes( srcElements[i], destElements[i] );
 			}
-
-			cloneFixAttributes( elem, clone );
 		}
 
 		// Copy the events from the original to the clone
 		if ( dataAndEvents ) {
-
 			cloneCopyEvent( elem, clone );
 
-			if ( deepDataAndEvents && "getElementsByTagName" in elem ) {
+			if ( deepDataAndEvents ) {
+				srcElements = getAll( elem );
+				destElements = getAll( clone );
 
-				srcElements = elem.getElementsByTagName("*");
-				destElements = clone.getElementsByTagName("*");
-
-				if ( srcElements.length ) {
-					for ( i = 0; srcElements[i]; ++i ) {
-						cloneCopyEvent( srcElements[i], destElements[i] );
-					}
+				for ( i = 0; srcElements[i]; ++i ) {
+					cloneCopyEvent( srcElements[i], destElements[i] );
 				}
 			}
 		}
+
 		// Return the cloned set
 		return clone;
-  },
+},
 	clean: function( elems, context, fragment, scripts ) {
 		context = context || document;
 
@@ -5953,12 +5723,6 @@ var ralpha = /alpha\([^)]*\)/i,
 		return letter.toUpperCase();
 	};
 
-/**
- * jQuery常用的设置样式的方法，用几个例子说明它的用法：
- * 1、$("input").css("background","#ff0000"); //这里是设置背景颜色，参数是属性名和值
- * 2、$("input").css({color:"#ff0000", fontSize:"20pt", border:"4px solid #000000"}); //这里批量设置属性，参数是一个对象
- * 3、var a1 = $("input").css("fontSize") //这里获取样式的值
- */
 jQuery.fn.css = function( name, value ) {
 	// Setting 'undefined' is a no-op
 	if ( arguments.length === 2 && value === undefined ) {
@@ -6203,7 +5967,7 @@ if ( document.defaultView && document.defaultView.getComputedStyle ) {
 
 if ( document.documentElement.currentStyle ) {
 	currentStyle = function( elem, name ) {
-		var left, 
+		var left,
 			ret = elem.currentStyle && elem.currentStyle[ name ],
 			rsLeft = elem.runtimeStyle && elem.runtimeStyle[ name ],
 			style = elem.style;
@@ -6281,8 +6045,10 @@ var r20 = /%20/g,
 	rbracket = /\[\]$/,
 	rCRLF = /\r?\n/g,
 	rhash = /#.*$/,
-	rheaders = /^(.*?):\s*(.*?)\r?$/mg, // IE leaves an \r character at EOL
+	rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg, // IE leaves an \r character at EOL
 	rinput = /^(?:color|date|datetime|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,
+	// #7653, #8125, #8152: local protocol detection
+	rlocalProtocol = /(?:^file|^widget|\-extension):$/,
 	rnoContent = /^(?:GET|HEAD)$/,
 	rprotocol = /^\/\//,
 	rquery = /\?/,
@@ -6290,7 +6056,11 @@ var r20 = /%20/g,
 	rselectTextarea = /^(?:select|textarea)/i,
 	rspacesAjax = /\s+/,
 	rts = /([?&])_=[^&]*/,
-	rurl = /^(\w+:)\/\/([^\/?#:]+)(?::(\d+))?/,
+	rucHeaders = /(^|\-)([a-z])/g,
+	rucHeadersFunc = function( _, $1, $2 ) {
+		return $1 + $2.toUpperCase();
+	},
+	rurl = /^([\w\+\.\-]+:)\/\/([^\/?#:]*)(?::(\d+))?/,
 
 	// Keep a copy of the old load method
 	_load = jQuery.fn.load,
@@ -6311,7 +6081,28 @@ var r20 = /%20/g,
 	 * 2) the catchall symbol "*" can be used
 	 * 3) selection will start with transport dataType and THEN go to "*" if needed
 	 */
-	transports = {};
+	transports = {},
+
+	// Document location
+	ajaxLocation,
+
+	// Document location segments
+	ajaxLocParts;
+
+// #8138, IE may throw an exception when accessing
+// a field from document.location if document.domain has been set
+try {
+	ajaxLocation = document.location.href;
+} catch( e ) {
+	// Use the href attribute of an A element
+	// since IE will modify it given document.location
+	ajaxLocation = document.createElement( "a" );
+	ajaxLocation.href = "";
+	ajaxLocation = ajaxLocation.href;
+}
+
+// Segment location into parts
+ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() );
 
 // Base "constructor" for jQuery.ajaxPrefilter and jQuery.ajaxTransport
 function addToPrefiltersOrTransports( structure ) {
@@ -6350,7 +6141,7 @@ function addToPrefiltersOrTransports( structure ) {
 }
 
 //Base inspection function for prefilters and transports
-function inspectPrefiltersOrTransports( structure, options, originalOptions, jXHR,
+function inspectPrefiltersOrTransports( structure, options, originalOptions, jqXHR,
 		dataType /* internal */, inspected /* internal */ ) {
 
 	dataType = dataType || options.dataTypes[ 0 ];
@@ -6365,16 +6156,16 @@ function inspectPrefiltersOrTransports( structure, options, originalOptions, jXH
 		selection;
 
 	for(; i < length && ( executeOnly || !selection ); i++ ) {
-		selection = list[ i ]( options, originalOptions, jXHR );
+		selection = list[ i ]( options, originalOptions, jqXHR );
 		// If we got redirected to another dataType
-		// we try there if not done already
+		// we try there if executing only and not done already
 		if ( typeof selection === "string" ) {
-			if ( inspected[ selection ] ) {
+			if ( !executeOnly || inspected[ selection ] ) {
 				selection = undefined;
 			} else {
 				options.dataTypes.unshift( selection );
 				selection = inspectPrefiltersOrTransports(
-						structure, options, originalOptions, jXHR, selection, inspected );
+						structure, options, originalOptions, jqXHR, selection, inspected );
 			}
 		}
 	}
@@ -6382,76 +6173,13 @@ function inspectPrefiltersOrTransports( structure, options, originalOptions, jXH
 	// we try the catchall dataType if not done already
 	if ( ( executeOnly || !selection ) && !inspected[ "*" ] ) {
 		selection = inspectPrefiltersOrTransports(
-				structure, options, originalOptions, jXHR, "*", inspected );
+				structure, options, originalOptions, jqXHR, "*", inspected );
 	}
 	// unnecessary when only executing (prefilters)
 	// but it'll be ignored by the caller in that case
 	return selection;
 }
 
-/**
- * 下面的代码段（在jquery.js中从6160行到7350，共1200行）定义ajax方法。
- * 
- * 绑定一系列的ajax事件处理函数到jQuery.prototype
- * 0、load(url, params, callback)：从服务器端获取html设置到DOM元素中去
- * 0.1、serialize()：序列化表单内容为字符串
- * 0.2、serializeArray():序列化表单内容为JS对象
- * 1、ajaxStart:开始新的Ajax请求，并且此时没有其他ajax请求正在进行。
- * 2、ajaxStop:当没有Ajax正在进行中的时候，触发。
- * 3、ajaxComplete:全局的请求完成时触发。
- * 4、ajaxError:全局的发生错误时触发。
- * 5、ajaxSuccess:全局的请求成功。
- * 6、ajaxSend:请求开始前触发的全局事件。
- * 需要注意的是：
- * 1、这些函数不是jQuery的静态方法，而是对象方法。所以要通过对象去访问它们
- * 2、它们的触发是全局的，任何一个ajax请求都会触发上面的事件。当然，每个ajax都可以指定自己不触发这些事件。
- * 3、为什么要让它们是对象方法，而不是静态方法？估计是为了好写事件处理函数。定义成对象方法之后，可以直接在事件处理函数中用$(this)来引用对象。并且，删除对象之后，这些事件就被删除了。
- * 
- * 下面还绑定了静态方法到jQuery：
- * 1、get(url,data,callback,type)：
- * 		data：发送给服务器的数据，用Key/value的形式，比如{action:"delete", id:"1321"}
- * 		callback:载入成功时回调函数(只有当Response的返回状态是success才是调用该方法)。
- * 				 callback的原型是callback(responseData, statusText, jXHR)，这里responseData可能是字符串、xml doc、json对象。在callback中可以引用this，this就是传入的
- * 		type的值是返回值的类似，有xml、html、text、json、script、jsonp等等可选值。
- * 2、post(url,data,callback,type):和get类似
- * 这2个方法是jQuery.ajax()方法的简化形式。
- * 
- * 下面是一些静态方法：
- * 1、getScript(url, callback)：等于jQuery.get(url,null,callback,"script")。据说会自动执行script。？
- * 2、getJSON(url, data, callback):等于jQuery.get(url,data,callback,"json")。callback得到的数据就是json对象。
- * 3、ajaxSetup(settings):设置全局 AJAX 默认选项，具体有哪些参数，请看ajaxSettings
- * 4、ajaxSettings：默认的ajax参数设置
- * 		url：要访问的链接地址。默认是本页面的地址
- * 		global：是否触发全局事件。默认是触发
- * 		type：有get和post两种，默认是get
- * 		contenttype:
- * 		context:在调用success、error等回调函数时的上下文对象，可以通过this取到它。
- * 		processData:是否处理数据。默认是true ？
- * 		async:是否异步执行。默认是异步
- * 		timeout:设置请求超时时间（毫秒）。此设置将覆盖全局设置。
- * 		data: 
- * 		dataType:返回值的数据类型，有xml、html、text、json、script、jsonp等等可选值。如果指定成xml，那么给回调函数的是一个document对象，而不是字符串。
- * 		username：用户名
- * 		password：密码
- * 		cache：是否允许从浏览器缓存获取数据
- * 		traditional：?
- * 		headers：{} ？
- * 		crossDomain:
- * 		beforeSend：当一个Ajax请求开始时触发。如果需要，你可以在这里设置XHR对象。
- * 		success:请求成功时触发。即服务器没有返回错误，返回的数据也没有错误。success事件处理函数的原型是callback(responseData, statusText, jXHR)。
- * 				
- * 		error：仅当发生错误时触发。你无法同时执行success和error两个回调函数。error事件处理函数的原型是callback(jXHR, statusText, errorMessage)
- * 		complete:不管你请求成功还是失败，即便是同步请求，你都能在请求完成时触发这个事件。
- * 		converters:转换器，默认是：{"* text": window.String, "text html": true, "text json": jQuery.parseJSON, "text xml": jQuery.parseXML, "text script":一个jquery自己定义的转换器}
- * 5、ajaxPrefilter
- * 6、ajaxTransport
- * 7、ajax(url, options)：这是主要的ajax函数，第一个参数是url地址，options是参数，有哪些参数可以参考ajaxSettings对象。
- * 		在调用ajax时，通常会在options里面指定下面的参数：
- * 			1、success：success是访问成功之后回调的函数，其原型是callback(responseData, statusText, jXHR)，这里responseData可能是字符串、xml doc、json对象。在success函数中可以引用this，this就是传入的options对象。比如this.data就是传入数据。
- * 			2、error：error是访问失败之后回调的函数
- * 			3、data：
- * 8、param(a, traditional)
- */
 jQuery.fn.extend({
 	load: function( url, params, callback ) {
 		if ( typeof url !== "string" && _load ) {
@@ -6477,7 +6205,7 @@ jQuery.fn.extend({
 			if ( jQuery.isFunction( params ) ) {
 				// We assume that it's the callback
 				callback = params;
-				params = null;
+				params = undefined;
 
 			// Otherwise, build a param string
 			} else if ( typeof params === "object" ) {
@@ -6495,14 +6223,14 @@ jQuery.fn.extend({
 			dataType: "html",
 			data: params,
 			// Complete callback (responseText is used internally)
-			complete: function( jXHR, status, responseText ) {
-				// Store the response as specified by the jXHR object
-				responseText = jXHR.responseText;
+			complete: function( jqXHR, status, responseText ) {
+				// Store the response as specified by the jqXHR object
+				responseText = jqXHR.responseText;
 				// If successful, inject the HTML into all the matched elements
-				if ( jXHR.isResolved() ) {
+				if ( jqXHR.isResolved() ) {
 					// #4825: Get the actual response in case
 					// a dataFilter is present in ajaxSettings
-					jXHR.done(function( r ) {
+					jqXHR.done(function( r ) {
 						responseText = r;
 					});
 					// See if a selector was specified
@@ -6521,7 +6249,7 @@ jQuery.fn.extend({
 				}
 
 				if ( callback ) {
-					self.each( callback, [ responseText, status, jXHR ] );
+					self.each( callback, [ responseText, status, jqXHR ] );
 				}
 			}
 		});
@@ -6569,7 +6297,7 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 		if ( jQuery.isFunction( data ) ) {
 			type = type || callback;
 			callback = data;
-			data = null;
+			data = undefined;
 		}
 
 		return jQuery.ajax({
@@ -6585,22 +6313,39 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 jQuery.extend({
 
 	getScript: function( url, callback ) {
-		return jQuery.get( url, null, callback, "script" );
+		return jQuery.get( url, undefined, callback, "script" );
 	},
 
 	getJSON: function( url, data, callback ) {
 		return jQuery.get( url, data, callback, "json" );
 	},
 
-	ajaxSetup: function( settings ) {
-		jQuery.extend( true, jQuery.ajaxSettings, settings );
-		if ( settings.context ) {
-			jQuery.ajaxSettings.context = settings.context;
+	// Creates a full fledged settings object into target
+	// with both ajaxSettings and settings fields.
+	// If target is omitted, writes into ajaxSettings.
+	ajaxSetup: function ( target, settings ) {
+		if ( !settings ) {
+			// Only one parameter, we extend ajaxSettings
+			settings = target;
+			target = jQuery.extend( true, jQuery.ajaxSettings, settings );
+		} else {
+			// target was provided, we extend into it
+			jQuery.extend( true, target, jQuery.ajaxSettings, settings );
 		}
+		// Flatten fields we don't want deep extended
+		for( var field in { context: 1, url: 1 } ) {
+			if ( field in settings ) {
+				target[ field ] = settings[ field ];
+			} else if( field in jQuery.ajaxSettings ) {
+				target[ field ] = jQuery.ajaxSettings[ field ];
+			}
+		}
+		return target;
 	},
 
 	ajaxSettings: {
-		url: location.href,
+		url: ajaxLocation,
+		isLocal: rlocalProtocol.test( ajaxLocParts[ 1 ] ),
 		global: true,
 		type: "GET",
 		contentType: "application/x-www-form-urlencoded",
@@ -6662,9 +6407,8 @@ jQuery.extend({
 	// Main method
 	ajax: function( url, options ) {
 
-		// If options is not an object,
-		// we simulate pre-1.5 signature
-		if ( typeof options !== "object" ) {
+		// If url is an object, simulate pre-1.5 signature
+		if ( typeof url === "object" ) {
 			options = url;
 			url = undefined;
 		}
@@ -6673,19 +6417,22 @@ jQuery.extend({
 		options = options || {};
 
 		var // Create the final options object
-			s = jQuery.extend( true, {}, jQuery.ajaxSettings, options ),
-			// Callbacks contexts
-			// We force the original context if it exists
-			// or take it from jQuery.ajaxSettings otherwise
-			// (plain objects used as context get extended)
-			callbackContext =
-				( s.context = ( "context" in options ? options : jQuery.ajaxSettings ).context ) || s,
-			globalEventContext = callbackContext === s ? jQuery.event : jQuery( callbackContext ),
+			s = jQuery.ajaxSetup( {}, options ),
+			// Callbacks context
+			callbackContext = s.context || s,
+			// Context for global events
+			// It's the callbackContext if one was provided in the options
+			// and if it's a DOM node or a jQuery collection
+			globalEventContext = callbackContext !== s &&
+				( callbackContext.nodeType || callbackContext instanceof jQuery ) ?
+						jQuery( callbackContext ) : jQuery.event,
 			// Deferreds
 			deferred = jQuery.Deferred(),
 			completeDeferred = jQuery._Deferred(),
 			// Status-dependent callbacks
 			statusCode = s.statusCode || {},
+			// ifModified key
+			ifModifiedKey,
 			// Headers (they are sent all at once)
 			requestHeaders = {},
 			// Response headers
@@ -6696,22 +6443,22 @@ jQuery.extend({
 			// timeout handle
 			timeoutTimer,
 			// Cross-domain detection vars
-			loc = document.location,
-			protocol = loc.protocol || "http:",
 			parts,
-			// The jXHR state
+			// The jqXHR state
 			state = 0,
+			// To know if global events are to be dispatched
+			fireGlobals,
 			// Loop variable
 			i,
 			// Fake xhr
-			jXHR = {
+			jqXHR = {
 
 				readyState: 0,
 
 				// Caches the header
 				setRequestHeader: function( name, value ) {
-					if ( state === 0 ) {
-						requestHeaders[ name.toLowerCase() ] = value;
+					if ( !state ) {
+						requestHeaders[ name.toLowerCase().replace( rucHeaders, rucHeadersFunc ) ] = value;
 					}
 					return this;
 				},
@@ -6733,7 +6480,15 @@ jQuery.extend({
 						}
 						match = responseHeaders[ key.toLowerCase() ];
 					}
-					return match || null;
+					return match === undefined ? null : match;
+				},
+
+				// Overrides response content-type header
+				overrideMimeType: function( type ) {
+					if ( !state ) {
+						s.mimeType = type;
+					}
+					return this;
 				},
 
 				// Cancel the request
@@ -6750,7 +6505,7 @@ jQuery.extend({
 		// Callback for when everything is done
 		// It is defined here because jslint complains if it is declared
 		// at the end of the function (which would be more logical and readable)
-		function done( status, statusText, responses, headers) {
+		function done( status, statusText, responses, headers ) {
 
 			// Called once
 			if ( state === 2 ) {
@@ -6766,19 +6521,19 @@ jQuery.extend({
 			}
 
 			// Dereference transport for early garbage collection
-			// (no matter how long the jXHR object will be used)
+			// (no matter how long the jqXHR object will be used)
 			transport = undefined;
 
 			// Cache response headers
 			responseHeadersString = headers || "";
 
 			// Set readyState
-			jXHR.readyState = status ? 4 : 0;
+			jqXHR.readyState = status ? 4 : 0;
 
 			var isSuccess,
 				success,
 				error,
-				response = responses ? ajaxHandleResponses( s, jXHR, responses ) : undefined,
+				response = responses ? ajaxHandleResponses( s, jqXHR, responses ) : undefined,
 				lastModified,
 				etag;
 
@@ -6788,11 +6543,11 @@ jQuery.extend({
 				// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
 				if ( s.ifModified ) {
 
-					if ( ( lastModified = jXHR.getResponseHeader( "Last-Modified" ) ) ) {
-						jQuery.lastModified[ s.url ] = lastModified;
+					if ( ( lastModified = jqXHR.getResponseHeader( "Last-Modified" ) ) ) {
+						jQuery.lastModified[ ifModifiedKey ] = lastModified;
 					}
-					if ( ( etag = jXHR.getResponseHeader( "Etag" ) ) ) {
-						jQuery.etag[ s.url ] = etag;
+					if ( ( etag = jqXHR.getResponseHeader( "Etag" ) ) ) {
+						jQuery.etag[ ifModifiedKey ] = etag;
 					}
 				}
 
@@ -6819,7 +6574,7 @@ jQuery.extend({
 				// We extract error from statusText
 				// then normalize statusText and status for non-aborts
 				error = statusText;
-				if( status ) {
+				if( !statusText || status ) {
 					statusText = "error";
 					if ( status < 0 ) {
 						status = 0;
@@ -6828,42 +6583,30 @@ jQuery.extend({
 			}
 
 			// Set data for the fake xhr object
-			jXHR.status = status;
-			jXHR.statusText = statusText;
+			jqXHR.status = status;
+			jqXHR.statusText = statusText;
 
-			/**
-			 * 处理ajax响应，
-			 * 成功则调用success(successText, statusText, jXHR)：
-			 * 		successText：服务器端返回的文字内容，如果返回的是xml，那么successText是xml的doc对象。
-			 * 		statusText: 通常就是"success"
-			 * 		jXHR: 类似HttpReponse对象
-			 * 失败则调用error(jXHR, statusText, errorMessage)：
-			 * 		jXHR: 类似HttpReponse对象
-			 * 		statusText: 通常就是"error"
-			 * 		errorMessage: 如果是url不存在，那么错误信息是"Not Found"
-			 * 这里的error和success是在调用ajax函数时传入进来的参数，比如：$.ajax(url:"xx.html", error:function(){}, success:function(){})
-			 */
 			// Success/Error
 			if ( isSuccess ) {
-				deferred.resolveWith( callbackContext, [ success, statusText, jXHR ] );
+				deferred.resolveWith( callbackContext, [ success, statusText, jqXHR ] );
 			} else {
-				deferred.rejectWith( callbackContext, [ jXHR, statusText, error ] );
+				deferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] );
 			}
 
 			// Status-dependent callbacks
-			jXHR.statusCode( statusCode );
+			jqXHR.statusCode( statusCode );
 			statusCode = undefined;
 
-			if ( s.global ) {
+			if ( fireGlobals ) {
 				globalEventContext.trigger( "ajax" + ( isSuccess ? "Success" : "Error" ),
-						[ jXHR, s, isSuccess ? success : error ] );
+						[ jqXHR, s, isSuccess ? success : error ] );
 			}
 
 			// Complete
-			completeDeferred.resolveWith( callbackContext, [ jXHR, statusText ] );
+			completeDeferred.resolveWith( callbackContext, [ jqXHR, statusText ] );
 
-			if ( s.global ) {
-				globalEventContext.trigger( "ajaxComplete", [ jXHR, s] );
+			if ( fireGlobals ) {
+				globalEventContext.trigger( "ajaxComplete", [ jqXHR, s] );
 				// Handle the global AJAX counter
 				if ( !( --jQuery.active ) ) {
 					jQuery.event.trigger( "ajaxStop" );
@@ -6872,13 +6615,13 @@ jQuery.extend({
 		}
 
 		// Attach deferreds
-		deferred.promise( jXHR );
-		jXHR.success = jXHR.done;
-		jXHR.error = jXHR.fail;
-		jXHR.complete = completeDeferred.done;
+		deferred.promise( jqXHR );
+		jqXHR.success = jqXHR.done;
+		jqXHR.error = jqXHR.fail;
+		jqXHR.complete = completeDeferred.done;
 
 		// Status-dependent callbacks
-		jXHR.statusCode = function( map ) {
+		jqXHR.statusCode = function( map ) {
 			if ( map ) {
 				var tmp;
 				if ( state < 2 ) {
@@ -6886,8 +6629,8 @@ jQuery.extend({
 						statusCode[ tmp ] = [ statusCode[tmp], map[tmp] ];
 					}
 				} else {
-					tmp = map[ jXHR.status ];
-					jXHR.then( tmp, tmp );
+					tmp = map[ jqXHR.status ];
+					jqXHR.then( tmp, tmp );
 				}
 			}
 			return this;
@@ -6896,7 +6639,7 @@ jQuery.extend({
 		// Remove hash character (#7531: and string promotion)
 		// Add protocol if not provided (#5866: IE7 issue with protocol-less urls)
 		// We also use the url parameter if available
-		s.url = ( "" + ( url || s.url ) ).replace( rhash, "" ).replace( rprotocol, protocol + "//" );
+		s.url = ( ( url || s.url ) + "" ).replace( rhash, "" ).replace( rprotocol, ajaxLocParts[ 1 ] + "//" );
 
 		// Extract dataTypes list
 		s.dataTypes = jQuery.trim( s.dataType || "*" ).toLowerCase().split( rspacesAjax );
@@ -6905,9 +6648,9 @@ jQuery.extend({
 		if ( !s.crossDomain ) {
 			parts = rurl.exec( s.url.toLowerCase() );
 			s.crossDomain = !!( parts &&
-				( parts[ 1 ] != protocol || parts[ 2 ] != loc.hostname ||
+				( parts[ 1 ] != ajaxLocParts[ 1 ] || parts[ 2 ] != ajaxLocParts[ 2 ] ||
 					( parts[ 3 ] || ( parts[ 1 ] === "http:" ? 80 : 443 ) ) !=
-						( loc.port || ( protocol === "http:" ? 80 : 443 ) ) )
+						( ajaxLocParts[ 3 ] || ( ajaxLocParts[ 1 ] === "http:" ? 80 : 443 ) ) )
 			);
 		}
 
@@ -6917,7 +6660,15 @@ jQuery.extend({
 		}
 
 		// Apply prefilters
-		inspectPrefiltersOrTransports( prefilters, s, options, jXHR );
+		inspectPrefiltersOrTransports( prefilters, s, options, jqXHR );
+
+		// If request was aborted inside a prefiler, stop there
+		if ( state === 2 ) {
+			return false;
+		}
+
+		// We can fire global events as of now if asked to
+		fireGlobals = s.global;
 
 		// Uppercase the type
 		s.type = s.type.toUpperCase();
@@ -6926,7 +6677,7 @@ jQuery.extend({
 		s.hasContent = !rnoContent.test( s.type );
 
 		// Watch for a new set of requests
-		if ( s.global && jQuery.active++ === 0 ) {
+		if ( fireGlobals && jQuery.active++ === 0 ) {
 			jQuery.event.trigger( "ajaxStart" );
 		}
 
@@ -6937,6 +6688,9 @@ jQuery.extend({
 			if ( s.data ) {
 				s.url += ( rquery.test( s.url ) ? "&" : "?" ) + s.data;
 			}
+
+			// Get ifModifiedKey before adding the anti-cache parameter
+			ifModifiedKey = s.url;
 
 			// Add anti-cache in url if needed
 			if ( s.cache === false ) {
@@ -6952,78 +6706,77 @@ jQuery.extend({
 
 		// Set the correct header, if data is being sent
 		if ( s.data && s.hasContent && s.contentType !== false || options.contentType ) {
-			requestHeaders[ "content-type" ] = s.contentType;
+			requestHeaders[ "Content-Type" ] = s.contentType;
 		}
 
 		// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
 		if ( s.ifModified ) {
-			if ( jQuery.lastModified[ s.url ] ) {
-				requestHeaders[ "if-modified-since" ] = jQuery.lastModified[ s.url ];
+			ifModifiedKey = ifModifiedKey || s.url;
+			if ( jQuery.lastModified[ ifModifiedKey ] ) {
+				requestHeaders[ "If-Modified-Since" ] = jQuery.lastModified[ ifModifiedKey ];
 			}
-			if ( jQuery.etag[ s.url ] ) {
-				requestHeaders[ "if-none-match" ] = jQuery.etag[ s.url ];
+			if ( jQuery.etag[ ifModifiedKey ] ) {
+				requestHeaders[ "If-None-Match" ] = jQuery.etag[ ifModifiedKey ];
 			}
 		}
 
 		// Set the Accepts header for the server, depending on the dataType
-		requestHeaders.accept = s.dataTypes[ 0 ] && s.accepts[ s.dataTypes[0] ] ?
+		requestHeaders.Accept = s.dataTypes[ 0 ] && s.accepts[ s.dataTypes[0] ] ?
 			s.accepts[ s.dataTypes[0] ] + ( s.dataTypes[ 0 ] !== "*" ? ", */*; q=0.01" : "" ) :
 			s.accepts[ "*" ];
 
 		// Check for headers option
 		for ( i in s.headers ) {
-			requestHeaders[ i.toLowerCase() ] = s.headers[ i ];
+			jqXHR.setRequestHeader( i, s.headers[ i ] );
 		}
 
 		// Allow custom headers/mimetypes and early abort
-		if ( s.beforeSend && ( s.beforeSend.call( callbackContext, jXHR, s ) === false || state === 2 ) ) {
+		if ( s.beforeSend && ( s.beforeSend.call( callbackContext, jqXHR, s ) === false || state === 2 ) ) {
 				// Abort if not done already
-				done( 0, "abort" );
-				// Return false
-				jXHR = false;
+				jqXHR.abort();
+				return false;
 
+		}
+
+		// Install callbacks on deferreds
+		for ( i in { success: 1, error: 1, complete: 1 } ) {
+			jqXHR[ i ]( s[ i ] );
+		}
+
+		// Get transport
+		transport = inspectPrefiltersOrTransports( transports, s, options, jqXHR );
+
+		// If no transport, we auto-abort
+		if ( !transport ) {
+			done( -1, "No Transport" );
 		} else {
-
-			// Install callbacks on deferreds
-			for ( i in { success: 1, error: 1, complete: 1 } ) {
-				jXHR[ i ]( s[ i ] );
+			jqXHR.readyState = 1;
+			// Send global event
+			if ( fireGlobals ) {
+				globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] );
+			}
+			// Timeout
+			if ( s.async && s.timeout > 0 ) {
+				timeoutTimer = setTimeout( function(){
+					jqXHR.abort( "timeout" );
+				}, s.timeout );
 			}
 
-			// Get transport
-			transport = inspectPrefiltersOrTransports( transports, s, options, jXHR );
-
-			// If no transport, we auto-abort
-			if ( !transport ) {
-				done( -1, "No Transport" );
-			} else {
-				// Set state as sending
-				state = jXHR.readyState = 1;
-				// Send global event
-				if ( s.global ) {
-					globalEventContext.trigger( "ajaxSend", [ jXHR, s ] );
-				}
-				// Timeout
-				if ( s.async && s.timeout > 0 ) {
-					timeoutTimer = setTimeout( function(){
-						jXHR.abort( "timeout" );
-					}, s.timeout );
-				}
-
-				try {
-					//在这发送请求
-					transport.send( requestHeaders, done );
-				} catch (e) {
-					// Propagate exception as error if not done
-					if ( status < 2 ) {
-						done( -1, e );
-					// Simply rethrow otherwise
-					} else {
-						jQuery.error( e );
-					}
+			try {
+				state = 1;
+				transport.send( requestHeaders, done );
+			} catch (e) {
+				// Propagate exception as error if not done
+				if ( status < 2 ) {
+					done( -1, e );
+				// Simply rethrow otherwise
+				} else {
+					jQuery.error( e );
 				}
 			}
 		}
-		return jXHR;
+
+		return jqXHR;
 	},
 
 	// Serialize an array of form elements or a set of
@@ -7042,7 +6795,7 @@ jQuery.extend({
 		}
 
 		// If an array was passed in, assume that it is an array of form elements.
-		if ( jQuery.isArray( a ) || a.jquery ) {
+		if ( jQuery.isArray( a ) || ( a.jquery && !jQuery.isPlainObject( a ) ) ) {
 			// Serialize the form elements
 			jQuery.each( a, function() {
 				add( this.name, this.value );
@@ -7089,9 +6842,9 @@ function buildParams( prefix, obj, traditional, add ) {
 
 		// Serialize object item.
 		} else {
-			jQuery.each( obj, function( k, v ) {
-				buildParams( prefix + "[" + k + "]", v, traditional, add );
-			});
+			for ( var name in obj ) {
+				buildParams( prefix + "[" + name + "]", obj[ name ], traditional, add );
+			}
 		}
 
 	} else {
@@ -7118,7 +6871,7 @@ jQuery.extend({
  * - finds the right dataType (mediates between content-type and expected dataType)
  * - returns the corresponding response
  */
-function ajaxHandleResponses( s, jXHR, responses ) {
+function ajaxHandleResponses( s, jqXHR, responses ) {
 
 	var contents = s.contents,
 		dataTypes = s.dataTypes,
@@ -7131,7 +6884,7 @@ function ajaxHandleResponses( s, jXHR, responses ) {
 	// Fill responseXXX fields
 	for( type in responseFields ) {
 		if ( type in responses ) {
-			jXHR[ responseFields[type] ] = responses[ type ];
+			jqXHR[ responseFields[type] ] = responses[ type ];
 		}
 	}
 
@@ -7139,7 +6892,7 @@ function ajaxHandleResponses( s, jXHR, responses ) {
 	while( dataTypes[ 0 ] === "*" ) {
 		dataTypes.shift();
 		if ( ct === undefined ) {
-			ct = jXHR.getResponseHeader( "content-type" );
+			ct = s.mimeType || jqXHR.getResponseHeader( "content-type" );
 		}
 	}
 
@@ -7191,8 +6944,9 @@ function ajaxConvert( s, response ) {
 	}
 
 	var dataTypes = s.dataTypes,
-		converters = s.converters,
+		converters = {},
 		i,
+		key,
 		length = dataTypes.length,
 		tmp,
 		// Current and previous dataTypes
@@ -7208,6 +6962,16 @@ function ajaxConvert( s, response ) {
 
 	// For each dataType in the chain
 	for( i = 1; i < length; i++ ) {
+
+		// Create converters map
+		// with lowercased keys
+		if ( i === 1 ) {
+			for( key in s.converters ) {
+				if( typeof key === "string" ) {
+					converters[ key.toLowerCase() ] = s.converters[ key ];
+				}
+			}
+		}
 
 		// Get the dataTypes
 		prev = current;
@@ -7271,9 +7035,9 @@ jQuery.ajaxSetup({
 });
 
 // Detect, normalize options and install callbacks for jsonp requests
-jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, dataIsString /* internal */ ) {
+jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
-	dataIsString = ( typeof s.data === "string" );
+	var dataIsString = ( typeof s.data === "string" );
 
 	if ( s.dataTypes[ 0 ] === "jsonp" ||
 		originalSettings.jsonpCallback ||
@@ -7287,7 +7051,15 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, dataIsString 
 			previous = window[ jsonpCallback ],
 			url = s.url,
 			data = s.data,
-			replace = "$1" + jsonpCallback + "$2";
+			replace = "$1" + jsonpCallback + "$2",
+			cleanUp = function() {
+				// Set callback back to previous value
+				window[ jsonpCallback ] = previous;
+				// Call if it was a function and we have a response
+				if ( responseContainer && jQuery.isFunction( previous ) ) {
+					window[ jsonpCallback ]( responseContainer[ 0 ] );
+				}
+			};
 
 		if ( s.jsonp !== false ) {
 			url = url.replace( jsre, replace );
@@ -7305,32 +7077,17 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, dataIsString 
 		s.url = url;
 		s.data = data;
 
+		// Install callback
 		window[ jsonpCallback ] = function( response ) {
 			responseContainer = [ response ];
 		};
 
-		s.complete = [ function() {
-
-			// Set callback back to previous value
-			window[ jsonpCallback ] = previous;
-
-			// Call if it was a function and we have a response
-			if ( previous) {
-				if ( responseContainer && jQuery.isFunction( previous ) ) {
-					window[ jsonpCallback ] ( responseContainer[ 0 ] );
-				}
-			} else {
-				// else, more memory leak avoidance
-				try{
-					delete window[ jsonpCallback ];
-				} catch( e ) {}
-			}
-
-		}, s.complete ];
+		// Install cleanUp function
+		jqXHR.then( cleanUp, cleanUp );
 
 		// Use data converter to retrieve json after script execution
 		s.converters["script json"] = function() {
-			if ( ! responseContainer ) {
+			if ( !responseContainer ) {
 				jQuery.error( jsonpCallback + " was not called" );
 			}
 			return responseContainer[ 0 ];
@@ -7350,13 +7107,13 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, dataIsString 
 // Install script dataType
 jQuery.ajaxSetup({
 	accepts: {
-		script: "text/javascript, application/javascript"
+		script: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript"
 	},
 	contents: {
-		script: /javascript/
+		script: /javascript|ecmascript/
 	},
 	converters: {
-		"text script": function( text ) { //如果返回值是script，那么就执行它
+		"text script": function( text ) {
 			jQuery.globalEval( text );
 			return text;
 		}
@@ -7381,7 +7138,7 @@ jQuery.ajaxTransport( "script", function(s) {
 	if ( s.crossDomain ) {
 
 		var script,
-			head = document.getElementsByTagName( "head" )[ 0 ] || document.documentElement;
+			head = document.head || document.getElementsByTagName( "head" )[0] || document.documentElement;
 
 		return {
 
@@ -7436,17 +7193,35 @@ jQuery.ajaxTransport( "script", function(s) {
 
 
 
-var // Next active xhr id
+var // #5280: next active xhr id and list of active xhrs' callbacks
 	xhrId = jQuery.now(),
-
-	// active xhrs
-	xhrs = {},
-
-	// #5280: see below
-	xhrUnloadAbortInstalled,
+	xhrCallbacks,
 
 	// XHR used to determine supports properties
 	testXHR;
+
+// #5280: Internet Explorer will keep connections alive if we don't abort on unload
+function xhrOnUnloadAbort() {
+	jQuery( window ).unload(function() {
+		// Abort all pending requests
+		for ( var key in xhrCallbacks ) {
+			xhrCallbacks[ key ]( 0, 1 );
+		}
+	});
+}
+
+// Functions to create xhrs
+function createStandardXHR() {
+	try {
+		return new window.XMLHttpRequest();
+	} catch( e ) {}
+}
+
+function createActiveXHR() {
+	try {
+		return new window.ActiveXObject( "Microsoft.XMLHTTP" );
+	} catch( e ) {}
+}
 
 // Create the request object
 // (This is still attached to ajaxSettings for backward compatibility)
@@ -7458,27 +7233,13 @@ jQuery.ajaxSettings.xhr = window.ActiveXObject ?
 	 * we need a fallback.
 	 */
 	function() {
-		if ( window.location.protocol !== "file:" ) {
-			try {
-				return new window.XMLHttpRequest();
-			} catch( xhrError ) {}
-		}
-
-		try {
-			return new window.ActiveXObject("Microsoft.XMLHTTP");
-		} catch( activeError ) {}
+		return !this.isLocal && createStandardXHR() || createActiveXHR();
 	} :
 	// For all other browsers, use the standard XMLHttpRequest object
-	function() {
-		return new window.XMLHttpRequest();
-	};
+	createStandardXHR;
 
 // Test if we can create an xhr object
-try {
-	testXHR = jQuery.ajaxSettings.xhr();
-} catch( xhrCreationException ) {}
-
-//Does this browser support XHR requests?
+testXHR = jQuery.ajaxSettings.xhr();
 jQuery.support.ajax = !!testXHR;
 
 // Does this browser support crossDomain XHR requests
@@ -7499,28 +7260,11 @@ if ( jQuery.support.ajax ) {
 			return {
 				send: function( headers, complete ) {
 
-					// #5280: we need to abort on unload or IE will keep connections alive
-					if ( !xhrUnloadAbortInstalled ) {
-
-						xhrUnloadAbortInstalled = 1;
-
-						jQuery(window).bind( "unload", function() {
-
-							// Abort all pending requests
-							jQuery.each( xhrs, function( _, xhr ) {
-								if ( xhr.onreadystatechange ) {
-									xhr.onreadystatechange( 1 );
-								}
-							} );
-
-						} );
-					}
-
 					// Get a new xhr
 					var xhr = s.xhr(),
-						handle;
+						handle,
+						i;
 
-					//在这里访问服务器，调用XMLHttp对象的open方法。
 					// Open the socket
 					// Passing null username, generates a login popup on Opera (#2865)
 					if ( s.username ) {
@@ -7529,19 +7273,31 @@ if ( jQuery.support.ajax ) {
 						xhr.open( s.type, s.url, s.async );
 					}
 
+					// Apply custom fields if provided
+					if ( s.xhrFields ) {
+						for ( i in s.xhrFields ) {
+							xhr[ i ] = s.xhrFields[ i ];
+						}
+					}
+
+					// Override mime type if needed
+					if ( s.mimeType && xhr.overrideMimeType ) {
+						xhr.overrideMimeType( s.mimeType );
+					}
+
 					// Requested-With header
 					// Not set for crossDomain requests with no content
 					// (see why at http://trac.dojotoolkit.org/ticket/9486)
 					// Won't change header if already provided
-					if ( !( s.crossDomain && !s.hasContent ) && !headers["x-requested-with"] ) {
-						headers[ "x-requested-with" ] = "XMLHttpRequest";
+					if ( !( s.crossDomain && !s.hasContent ) && !headers["X-Requested-With"] ) {
+						headers[ "X-Requested-With" ] = "XMLHttpRequest";
 					}
 
 					// Need an extra try/catch for cross domain requests in Firefox 3
 					try {
-						jQuery.each( headers, function( key, value ) {
-							xhr.setRequestHeader( key, value );
-						} );
+						for ( i in headers ) {
+							xhr.setRequestHeader( i, headers[ i ] );
+						}
 					} catch( _ ) {}
 
 					// Do send the request
@@ -7552,74 +7308,78 @@ if ( jQuery.support.ajax ) {
 					// Listener
 					callback = function( _, isAbort ) {
 
-						// Was never called and is aborted or complete
-						if ( callback && ( isAbort || xhr.readyState === 4 ) ) {
+						var status,
+							statusText,
+							responseHeaders,
+							responses,
+							xml;
 
-							// Only called once
-							callback = 0;
+						// Firefox throws exceptions when accessing properties
+						// of an xhr when a network error occured
+						// http://helpful.knobs-dials.com/index.php/Component_returned_failure_code:_0x80040111_(NS_ERROR_NOT_AVAILABLE)
+						try {
 
-							// Do not keep as active anymore
-							if ( handle ) {
-								xhr.onreadystatechange = jQuery.noop;
-								delete xhrs[ handle ];
-							}
+							// Was never called and is aborted or complete
+							if ( callback && ( isAbort || xhr.readyState === 4 ) ) {
 
-							// If it's an abort
-							if ( isAbort ) {
-								// Abort it manually if needed
-								if ( xhr.readyState !== 4 ) {
-									xhr.abort();
+								// Only called once
+								callback = undefined;
+
+								// Do not keep as active anymore
+								if ( handle ) {
+									xhr.onreadystatechange = jQuery.noop;
+									delete xhrCallbacks[ handle ];
 								}
-							} else {
-								// Get info
-								var status = xhr.status,
-									statusText,
-									responseHeaders = xhr.getAllResponseHeaders(),
-									responses = {},
+
+								// If it's an abort
+								if ( isAbort ) {
+									// Abort it manually if needed
+									if ( xhr.readyState !== 4 ) {
+										xhr.abort();
+									}
+								} else {
+									status = xhr.status;
+									responseHeaders = xhr.getAllResponseHeaders();
+									responses = {};
 									xml = xhr.responseXML;
 
-								// Construct response list
-								if ( xml && xml.documentElement /* #4958 */ ) {
-									responses.xml = xml;
+									// Construct response list
+									if ( xml && xml.documentElement /* #4958 */ ) {
+										responses.xml = xml;
+									}
+									responses.text = xhr.responseText;
+
+									// Firefox throws an exception when accessing
+									// statusText for faulty cross-domain requests
+									try {
+										statusText = xhr.statusText;
+									} catch( e ) {
+										// We normalize with Webkit giving an empty statusText
+										statusText = "";
+									}
+
+									// Filter status for non standard behaviors
+
+									// If the request is local and we have data: assume a success
+									// (success with no data won't get notified, that's the best we
+									// can do given current implementations)
+									if ( !status && s.isLocal && !s.crossDomain ) {
+										status = responses.text ? 200 : 404;
+									// IE - #1450: sometimes returns 1223 when it should be 204
+									} else if ( status === 1223 ) {
+										status = 204;
+									}
 								}
-								responses.text = xhr.responseText;
-
-								// Firefox throws an exception when accessing
-								// statusText for faulty cross-domain requests
-								try {
-									statusText = xhr.statusText;
-								} catch( e ) {
-									// We normalize with Webkit giving an empty statusText
-									statusText = "";
-								}
-
-								// Filter status for non standard behaviours
-								status =
-									// Opera returns 0 when it should be 304
-									// Webkit returns 0 for failing cross-domain no matter the real status
-									status === 0 ?
-										(
-											// Webkit, Firefox: filter out faulty cross-domain requests
-											!s.crossDomain || statusText ?
-											(
-												// Opera: filter out real aborts #6060
-												responseHeaders ?
-												304 :
-												0
-											) :
-											// We assume 302 but could be anything cross-domain related
-											302
-										) :
-										(
-											// IE sometimes returns 1223 when it should be 204 (see #1450)
-											status == 1223 ?
-												204 :
-												status
-										);
-
-								// Call complete
-								complete( status, statusText, responses, responseHeaders );
 							}
+						} catch( firefoxAccessException ) {
+							if ( !isAbort ) {
+								complete( -1, firefoxAccessException );
+							}
+						}
+
+						// Call complete if needed
+						if ( responses ) {
+							complete( status, statusText, responses, responseHeaders );
 						}
 					};
 
@@ -7629,10 +7389,15 @@ if ( jQuery.support.ajax ) {
 					if ( !s.async || xhr.readyState === 4 ) {
 						callback();
 					} else {
-						// Add to list of active xhrs
+						// Create the active xhrs callbacks list if needed
+						// and attach the unload handler
+						if ( !xhrCallbacks ) {
+							xhrCallbacks = {};
+							xhrOnUnloadAbort();
+						}
+						// Add to list of active xhrs callbacks
 						handle = xhrId++;
-						xhrs[ handle ] = xhr;
-						xhr.onreadystatechange = callback;
+						xhr.onreadystatechange = xhrCallbacks[ handle ] = callback;
 					}
 				},
 
@@ -7662,28 +7427,6 @@ var elemdisplay = {},
 		[ "opacity" ]
 	];
 
-/**
- * 这段代码（在jquery.js中是从7367到8162，共800行代码）定义了一些动画方法，包括：
- * 1、show(speed,easing,callback)：用动画的形式慢慢显示DOM，speed是动画共运行的时间，callback是动画运行完毕之后回调的方法。如果想自己定义动画效果，可以传入easing参数。
- * 	  示例：
- * 		qobj.show():显示DOM，无动画。内部实现的效率还是比较高的，基本上就是设置dom.style.display='';
- * 		qobj.show("slow")：慢慢地显示DOM
- * 		qobj.show(5000)：在5秒钟之后显示完DOM
- * 2、hide(speed,easing,callback)：类似show方法
- * 3、toggle(fn,fn2,fn3,...)：点击对象时循环执行fn,fn2,fn3....。toggle还有另外一个作用，就是切换DOM元素的隐藏和显示状态。
- * 4、fadeTo(speed,to,easing,callback)：淡入淡出效果，即慢慢改变DOM元素的透明度，to参数是最终的透明度。
- * 5、fadeIn(speed,easing,callback)：淡入效果，等于fadeTo(speed, 1, easing,callback)。效果和show的动画有点类似，但是有区别，自己体会。
- * 6、fadeOut(speed,easing,callback)：淡出效果，等于fadeTo(speed, 0, easing,callback)。效果和hide的动画有点类似，但是有区别，自己体会。
- * 7、animate(prop,speed,easing,callback)：用于显示动画，prop指定了最终的效果，animate会慢慢改变DOM的样式直到显示成最终效果，示例：
- * 		qobj.animate({width:200}, 5000)：改变宽度，小的变大，大的变小，最终都是200像素宽。
- * 		qobj.animate({width:200, opacity:0}, 5000)：改变宽度和透明度，慢慢让元素都消失。
- * 		prop参数和css方法的参数很像，代表样式。可以有多个样式，每个样式都会慢慢变化。
- * 8、stop(clearQueue,gotoEnd):停止当前正在运行的动画
- * 9、slideDown:参数和效果与show类似，区别是show是改变透明度，而slideDown是改变高度，看起来是从下往上长
- * 10、slideUp:参数和效果与hide类似，区别是hide是改变透明度，而slideUp是改变高度，看起来是从上往下关闭
- * 11、slideToggle：应该就是切换显示和隐藏状态，但是动画效果类似slideDown和slideUp
- * 12、fadeToggle：类似slideToggle
- */
 jQuery.fn.extend({
 	show: function( speed, easing, callback ) {
 		var elem, display;
@@ -7856,11 +7599,11 @@ jQuery.fn.extend({
 
 				} else {
 					var parts = rfxnum.exec(val),
-						start = e.cur() || 0;
+						start = e.cur();
 
 					if ( parts ) {
 						var end = parseFloat( parts[2] ),
-							unit = parts[3] || "px";
+							unit = parts[3] || ( jQuery.cssNumber[ name ] ? "" : "px" );
 
 						// We need to compute starting value
 						if ( unit !== "px" ) {
@@ -8007,8 +7750,12 @@ jQuery.fx.prototype = {
 			return this.elem[ this.prop ];
 		}
 
-		var r = parseFloat( jQuery.css( this.elem, this.prop ) );
-		return r || 0;
+		var parsed,
+			r = jQuery.css( this.elem, this.prop );
+		// Empty strings, null, undefined and "auto" are converted to 0,
+		// complex values such as "rotate(1rad)" are returned as is,
+		// simple values such as "10px" are parsed to Float.
+		return isNaN( parsed = parseFloat( r ) ) ? !r || r === "auto" ? 0 : r : parsed;
 	},
 
 	// Start an animation from one number to another
@@ -8019,7 +7766,7 @@ jQuery.fx.prototype = {
 		this.startTime = jQuery.now();
 		this.start = from;
 		this.end = to;
-		this.unit = unit || this.unit || "px";
+		this.unit = unit || this.unit || ( jQuery.cssNumber[ this.prop ] ? "" : "px" );
 		this.now = this.start;
 		this.pos = this.state = 0;
 
@@ -8407,13 +8154,6 @@ jQuery.offset = {
 };
 
 
-/**
- * 下面的代码段（在jquery.js中从8095行到）定义了获取DOM元素位置的方法：
- * 1、position()：元素和父元素的相对位置
- * 2、offsetParent()：获取“定位祖先（positioned ancestor）”。一个元素是positioned，表示它的position属性是fixed、relative或者absolute。
- * 3、left()：获取左边的坐标
- * 4、top():获取顶部坐标
- */
 jQuery.fn.extend({
 	position: function() {
 		if ( !this[0] ) {
@@ -8477,7 +8217,7 @@ jQuery.each( ["Left", "Top"], function( i, name ) {
 				if ( win ) {
 					win.scrollTo(
 						!i ? val : jQuery(win).scrollLeft(),
-						 i ? val : jQuery(win).scrollTop()
+						i ? val : jQuery(win).scrollTop()
 					);
 
 				} else {
@@ -8572,4 +8312,5 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 });
 
 
-//})(window);
+window.jQuery = window.$ = jQuery;
+})(window);
