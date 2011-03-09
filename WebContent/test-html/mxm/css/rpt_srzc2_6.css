@@ -82,6 +82,11 @@ h4{
 	list-style-image:url(../image/collapse.gif);
 }
 
+.proxy{
+	border:1px solid #ccc;
+	background:#fafafa;
+}
+
 ul{
 	cursor:pointer;
 	list-style-image:url(../image/pic.gif);

@@ -26,11 +26,6 @@
 			 * 函数等，其中事件处理函数根据不同的编辑器类型可能有不同名称不同数目的回调函数。
 			 */
 			var config = $.extend({},{
-				renderTo:$(document.body),
-				width:100,
-				titleWidth:0.3,
-				titleAlign:'center',
-				caption:'属性',
 				defaultType:'edit',
 				items:[]
 			},setting);
@@ -40,12 +35,9 @@
 			 * 标题的代码
 			 */
 			var tableObj = $('<table></table>')
+				.css("width","100%")
 				.attr("frame","border")
-				.attr("rules","all").appendTo(config.renderTo);
-			var row = $('<tr></tr>').appendTo(tableObj);
-			tableObj.css('width',config.width);
-			$('<td colspan=2>'+config.caption+'</td>')
-				.css('text-align',config.titleAlign).appendTo(row);
+				.attr("rules","all").appendTo($(this));
 			
 			/**
 			 * 以下是建立属性编辑器中的各编辑器项目，每个编辑器项目的配置信息必须至少包括以下2个：标题、
@@ -54,7 +46,6 @@
 			$.each(config.items,function(i,item){
 				row = $('<tr></tr>').appendTo(tableObj);
 				var title = $('<td>'+item.title+'</td>').appendTo(row);
-				title.css('width',config.titleWidth*config.width);
 				
 				var info = $.extend({},{
 					title:'title',
@@ -120,14 +111,12 @@
 					var obj = $('<table></table>').appendTo(editor);
 					var r = $('<tr></tr>').appendTo(obj);
 					var o1 = $('<td></td>').appendTo(r);
-					var t = $('<input type="text" value="'+info.defaultValue+'"/>')
-						.css('width',(1-config.titleWidth)*config.width-30).appendTo(o1);
+					var t = $('<input type="text" value="'+info.defaultValue+'"/>').appendTo(o1);
 					var o2 = $('<td></td>').appendTo(r);
-					var b = $('<input type="button" value="."/>').appendTo(o2);
+					var b = $('<a href="\">更多</a>').appendTo(o2);
 				}else if(type == 'file'){
 					obj = $.fn.jUploadFile({
-						renderTo:editor,
-						width:(1-config.titleWidth)*config.width
+						renderTo:editor
 					});
 				}else if(type == 'button'){
 					obj = $('<input type="button" value="'+info.defaultValue+'"/>').css('align','center').appendTo(editor);
@@ -135,7 +124,6 @@
 					obj = $('<input type="password" value="'+info.defaultValue+'"/>')
 						.css('text-align',info.align).appendTo(editor);
 				}
-				editor.css('width',(1-config.titleWidth)*config.width);
 				
 				/**
 				 * 绑定消息的处理函数

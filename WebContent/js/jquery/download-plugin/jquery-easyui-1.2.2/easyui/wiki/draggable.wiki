@@ -1,0 +1,28 @@
+#summary Enable any DOM element to be draggable
+#labels Featured
+
+= Usage =
+{{{
+$('#dd').draggable();
+$('#dd').draggable({handle:'#title'});
+}}}
+
+= Options =
+
+Override defaults with $.fn.draggable.defaults
+
+ * handle: null
+   * the handle that starts the draggable
+ * disabled: false
+   * when true stop the drag, false start the dragg
+ * edge:0
+   * the drag edge with in which will start draggable
+ * axis:null
+   * define the axis which the dragged elements moves on
+   * the value can be 'v' or 'h', when set to null will move across 'v' and 'h' direction
+ * onStartDrag: function(){}
+   * triggered when the dragging starts
+ * onDrag: function(){}
+   * triggered during the dragging
+ * onStopDrag: function(){}
+   * triggered when the dragging stops

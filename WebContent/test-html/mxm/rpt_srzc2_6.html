@@ -15,10 +15,12 @@
 	src="../../js/jquery/myplugin/mxm/jquery.properies.editor.js"></script>
 <script type="text/javascript"
 	src="../../js/jquery/myplugin/mxm/jquery.table.js"></script>
+<script type="text/javascript"
+	src="rpt_editor.js"></script>
 <script type="text/javascript">
 	$(function(){
-		var p = $('body').layout("panel","north");
-		var toolbar = $(".coolbar").appendTo(p);
+		var layout = $("body").layout().data("layout");
+		var toolbar = $(".coolbar").appendTo(layout.panels["north"]);
 		toolbar.find("img").bind("click",function(){
 			var fn = $(this).attr("cmd");
 			if(fn){
@@ -28,7 +30,7 @@
 			}
 		})
 		
-		var tableObj = $("<div></div>").addClass("tableContainer").appendTo($('body').layout("panel","center"));
+		var tableObj = $("<div></div>").addClass("tableContainer").appendTo(layout.panels["center"]);
 		tableObj.draggable({containment: "parent"});
 		var table = new $.succezBI.jTable({
 			renderTo:tableObj
@@ -51,11 +53,26 @@
 			}
 		});
 		
-		$.fn.jproeditor({
-			renderTo:l.panes.east,
-			caption:'报表属性',
-			width:300,
-			titleWidth:0.35,
+		$("#components").find(">tbody>tr>td>img").draggable({
+			revert:true,
+			deltaX:10,
+			deltaY:10,
+			proxy:function(source){
+				var n = $($.succezBI.getDomHtmlByTag($(source).attr("name"))).addClass("proxy").appendTo('body');
+				return n;
+			}
+		});
+		
+		layout.panels["center"].droppable({
+			accept:'img',
+			onDrop:function(e,source){
+				var d = $($.succezBI.getDomHtmlByTag($(source).attr("name")))
+						.css("left",e.pageX).css("top",e.pageY).draggable();;
+				$(this).append(d);
+			}
+		});
+		
+		layout.panels["east"].jproeditor({
 			defaultType:'type',
 			items:[
 				{
@@ -142,10 +159,6 @@
 						}
 					}]
 				},{
-					title:'上传文件',
-					type:'file',
-					defaultValue:'1.test'
-				},{
 					title:'报表类型',
 					type:'radio',
 					name:'report_type',
@@ -225,12 +238,24 @@
 </ul>
 </div>
 <div title="控件列表" iconCls="icon-reload" selected="true"
-	style="padding: 0px;"></div>
+	style="padding: 0px;">
+	<table id="components" width="100%">
+		<tr>
+			<td align="center"><img name="label" src="image/more.gif" title="标签"/></td>
+		</tr>
+		<tr>
+			<td align="center"><img name="edit" src="image/more.gif" title="输入框"/></td>
+		</tr>
+		<tr>
+			<td align="center"><img name="button" src="image/more.gif" title="按钮"/></td>
+		</tr>
+	</table>
 </div>
 </div>
-<div region="east" split="true" title="East"
-	style="width: 100px; padding: 10px;"></div>
-<div region="center" title="报表区域"></div>
+</div>
+<div region="east" split="true" title="属性列表"
+	style="width: 300px; padding: 0px;"></div>
+<div region="center" title="报表区域" style="overflow:inherit;"></div>
 
 <table class="coolbar">
 	<tr>

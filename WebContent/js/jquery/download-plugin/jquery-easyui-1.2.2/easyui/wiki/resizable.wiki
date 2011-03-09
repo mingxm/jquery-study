@@ -1,0 +1,47 @@
+#summary Enable any DOM element to be resizable
+#labels Featured
+
+= Usage =
+{{{
+$('#rd').resizable({
+	minWidth: 50,
+	maxWidth: 150,
+	minHeight: 100,
+	maxHeight: 200,
+	onStartResize: function(e){
+		$('#info').html('start'+$(this).css('width'));
+	},
+	onResize: function(e){
+		$('#info').html($(this).css('width'));
+	},
+	onStopResize: function(e){
+		$('#info').html('stop:'+$(this).css('width'));
+	}
+});
+}}}
+
+= Options =
+
+Override defaults with $.fn.resizable.defaults
+
+ * disabled: false
+   * when true to disable resizable, false to enable it.
+ * handles: 'n, e, s, w, ne, se, sw, nw, all'
+   * indicate the direction of resizable,'n' is the north,'e' is the east,etc.
+ * minWidth: 10
+   * the minimum width when resizable
+ * minHeight: 10
+   * the minimum height when resizable
+ * maxWidth: 10
+   * the maximum width when resizable
+ * maxHeight: 10
+   * then maximum height when resizable
+ * edge:5
+   * the edge of border to be resized
+ * onStartResize: function(){}
+   * triggered when element start resize
+ * onResize: function(){}
+   * triggered when element resizing
+   * when return false, the DOM element will acts not real resizing
+ * onStopResize: function(){}
+   * triggered when element stop resize

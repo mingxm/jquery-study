@@ -1,0 +1,58 @@
+= Usage =
+
+== Markup ==
+
+{{{
+<form id="ff" method="post">
+...
+</form>
+}}}
+
+== jQuery ==
+
+To make the form become ajax submit form
+{{{
+$('#ff').form({
+	url:...,
+	onSubmit: function(){
+		// do some check
+		// return false to prevent submit;
+	},
+	success:function(data){
+		alert(data)
+	}
+});
+}}}
+
+To do a submit action
+{{{
+$('#ff').form('submit', {
+	url:...,
+	onSubmit: function(){
+		// do some check
+		// return false to prevent submit;
+	},
+	success:function(data){
+		alert(data)
+	}
+});
+}}}
+
+= Options =
+Override defaults with $.fn.form.defaults.
+
+== Properties ==
+
+|| *Name* || *Type* || *Description* || *Default* ||
+|| url || string || The form action URL to submit. || null ||
+
+== Events ==
+|| *Name* || *Parameters* || *Description* ||
+|| onSubmit || none|| Fires before submit, return false to prevent submit action. ||
+|| success || data|| Firesk when the form submitted. ||
+
+== Methods ==
+|| *Name* || *Parameter* || *Description* ||
+|| submit || options || The submit options, contains {url,onSubmit,success}. ||
+|| load || data || If data is a string type, load from remote site, otherwise load from local record(data). ||
+|| clear || none || Clear the form fields. ||

@@ -1,0 +1,56 @@
+= Usage =
+
+== Markup ==
+{{{
+<div id="mm" style="width:120px;">
+	<div>New</div>
+	<div>
+		<span>Open</span>
+		<div style="width:150px;">
+			<div><b>Word</b></div>
+			<div>Excel</div>
+			<div>PowerPoint</div>
+		</div>
+	</div>
+	<div icon="icon-save">Save</div>
+	<div class="menu-sep"></div>
+	<div>Exit</div>
+</div>
+}}}
+
+== jQuery ==
+To create a menu
+{{{
+$('#mm').menu(options);
+}}}
+
+To show a menu on special postion
+{{{
+$('#mm').menu('show', {
+  left: 200,
+  top: 100
+});
+}}}
+
+= Options =
+
+Override defaults with $.fn.menu.defaults.
+
+== Properties ==
+
+|| *Name* || *Type* || *Description* || *Default* ||
+|| zIndex || number || Menu z-index style,increase from it. || 110000 ||
+|| left || number || Menu left position. || 0 ||
+|| top || number || Menu top position. || 0 ||
+
+== Events ==
+
+|| *Name* || *Parameters* || *Description* ||
+|| onShow || none || Fires after menu is showed. ||
+|| onHide || none || Fires after menu is hidded. ||
+
+== Methods ==
+
+|| *Name* || *Parameter* || *Description* ||
+|| show || pos || Show a menu on special position, pos parameter contains {left,top}. ||
+|| hide || none || Hide a menu. ||
