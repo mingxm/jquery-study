@@ -26,7 +26,11 @@
    		  //下面三个都是子菜单的ID
    		  newNode:'',
    		  nodeEdit:'',
-   		  nodeDelete:''
+   		  nodeDelete:'',
+   		  //当前需要编辑或正在编辑的节点
+   		  currentNode:{},
+   		  //上一个被编辑的节点
+   		  oldNode:{}
    		};
    		$.extend(true,defaultSetting,option);
    		
@@ -42,38 +46,80 @@
    		//设置
    		biTreePlugin.Setting=this.defaultSetting;
    		biTreePlugin.parent=this;
-   		//鼠标右键点击的当前节点
-   		biTreePlugin.currentNode={};
-   		biTreePlugin.test=function() {
-   			alert("test");
-   		};
+   		
    		biTreePlugin.bindrightClick=function(){
    			$("."+defaultSetting.fileNode_class).live("contextmenu",function(event){
-   				this.currentNode=event.target;
+   				defaultSetting.currentNode=event.target;
    				var menu=$(defaultSetting.rightMenuId);
-   				menu.css("display","block");
+   				menu.show(300);
    				menu.css("left",event.pageX);
    				menu.css("top",event.pageY);
    				return false;
    			});
    			//绑定右键菜单的新建节点子菜单项
    			$(defaultSetting.newNode).live("click",function(event){
-   			
+   				var m_newNode=$("<li><span class="+defaultSetting.fileNode_class+"><input type='text' value=''><span></li>");
+   				$(defaultSetting.currentNode).parent().parent().after(m_newNode);
+   				var m_replaceNode=$("<a href='#'></a>");
+   				defaultSetting.oldNode=m_replaceNode;
+   				defaultSetting.currentNode=$(m_newNode).find("input");
+   				$(this).parent().hide();
    			});
    			//绑定右键菜单的编辑节点菜单项
    			$(defaultSetting.nodeEdit).live("click",function(event){
- 				var value=$(this).text();
-				var m_width=$(this).width();
-				//将<a>节点元素替换为文本输入框，供用户编辑，在页面点击事件中将用户输入后的内容还原成<a>元素内容
-				$(this).replace($("<input type='text' style='overflow:visible;width:"+m_width+"px' value="+value+">"));					
+   				if (defaultSetting.isEditing)
+   				{
+   					return;
+   				}else{
+   					var value=$(defaultSetting.currentNode).text();
+					var m_width=$(defaultSetting.currentNode).width();
+					var m_href=$(defaultSetting.currentNode).attr("href");
+					//将<a>节点元素替换为文本输入框，供用户编辑，在页面点击事件中将用户输入后的内容还原成<a>元素内容
+					var temp=$("<input type='text' style='overflow:visible;width:"+m_width+"px' value="+value+">");
+					$(defaultSetting.currentNode).replaceWith(temp);
+					defaultSetting.oldNode=defaultSetting.currentNode;
+   			   		defaultSetting.currentNode=temp;
+   			   		defaultSetting.isEditing=true;
+   			   		//将右键菜单隐藏起来
+   			   		$(this).parent().hide();
+   				};
    			});
    			//绑定右键菜单的删除节点菜单项
    			$(defaultSetting.nodeDelete).live("click",function(event){
-   			
+   				$(defaultSetting.currentNode).parent().parent().remove();
+   				$(this).parent().hide();	
    			});
+   			//绑定新建节点子菜单的移进移出事件
+   			$(defaultSetting.newNode).hover(function(){
+   				$(this).css("background-color","#4F9D9D");
+   			},function(){
+   				$(this).css("background-color","");
+   			});
+   			//绑定删除子菜单的移进移出事件
+   			$(defaultSetting.nodeDelete).hover(function(){
+   				$(this).css("background-color","#4F9D9D");
+   			},function(){
+   				$(this).css("background-color","");
+   			});
+   			//绑定编辑子菜单的鼠标移进移出事件
+   			$(defaultSetting.nodeEdit).hover(function(){
+   				$(this).css("background-color","#4F9D9D");
+   			},function(){
+   				$(this).css("background-color","");
+   			});
+   			/*
+   		 	* 绑定页面上的键盘事件，如用户按下的是回车键那么，结束编辑节点
+   		 	*/
+   		 	$(document).keydown(function(event){
+              	if (event.keyCode==13){
+              		var m_text=$(defaultSetting.currentNode).attr("value");
+              		$(defaultSetting.oldNode).text(m_text);
+              		$(defaultSetting.currentNode).replaceWith(defaultSetting.oldNode);
+              		defaultSetting.isEditing = false;
+              	}
+      	 	});
    		};
    		return biTreePlugin;
-   
    };   
    //根据传入的xml文件路径，全量初始化所有的节点
    function showTree(item,xmlPath,Setting){
