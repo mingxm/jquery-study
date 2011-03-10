@@ -1,0 +1,51 @@
+= Usage =
+
+== Markup ==
+{{{
+<div id="win" icon="icon-save" title="My Window">
+  Window Content
+</div>
+}}}
+
+== jQuery ==
+
+To create window
+{{{
+$('#win').window(options)
+}}}
+
+To invoke window method
+{{{
+$('#win').window('open')
+}}}
+
+= Options =
+Override defaults with $.fn.window.defaults
+
+== Properties ==
+
+Many window properties can inhirit from panel,bellow is the window private properties
+
+|| *Name* || *Type* || *Description* || *Default* ||
+|| zIndex || number || Window z-index,increase from it || 9000 ||
+|| draggable || boolean || Defines if window can be dragged || true ||
+|| resizable || boolean || Defines if window can be resized || true ||
+|| shadow || boolean || If set to true,when window show the shadow will show also || true ||
+|| modal || boolean || Defines if window is a modal window || false ||
+
+Window override some panel properties
+
+|| *Name* || *Type* || *Description* || *Default* ||
+|| title || string || The window title text || New Window ||
+|| collapsible || boolean || Defines if to show collapsible button || true ||
+|| minimizable || boolean || Defines if to show minimizable button || true ||
+|| maximizable || boolean || Defines if to show maximizable button || true ||
+|| closable || boolean || Defines if to show closable button || true ||
+
+== Events ==
+
+Window events is same as panel events, see panel events for more information.
+
+== Methods ==
+
+Window methods is same as panel methods, except the 'header' and 'body' method.

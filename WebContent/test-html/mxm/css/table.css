@@ -1,0 +1,63 @@
+@CHARSET "UTF-8";
+body {
+	font-family: verdana, sans serif;
+	font-size: small;
+	padding: 0px;
+	margin: 0px;
+}
+td {
+	padding: 0px;
+	margin:  0px;
+}
+
+.mytable{
+	table-layout:fixed;
+	offset:0px;
+}
+
+.cell{
+	overflow:hidden;
+	text-overflow:ellipsis;
+	width:72px;
+	height:24px;
+	word-break:keep-all;
+}
+
+#editarea{
+	position:absolute;
+}
+
+#edit{
+	position:absolute;
+}
+
+#rubbered{
+	position: absolute;
+	border: 1px solid #000;
+	background: transparent;
+	padding: 0px;
+	margin:  0px;
+	visibility: hidden;
+}
+
+#selected{
+	position: absolute;
+	border: 2px solid #000;
+	background: #EFF;
+	opacity: 0.5;
+	visibility: hidden;
+}
+
+#area{
+	position: relative;
+	width: 2000px;
+	height: 2000px;
+}
+
+#tablearea{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+}

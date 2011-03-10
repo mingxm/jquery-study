@@ -1,0 +1,97 @@
+= Usage =
+== Markup ==
+The markup can contain panel's attribute
+{{{
+<div id="p" title="My Panel" collapsible="true" style="padding:10px;">
+  Panel Content
+</div>
+}}}
+
+== jQuery ==
+To create panel from markup
+{{{
+$('#p').panel(options)
+}}}
+
+To create panel with custom tools
+{{{
+$('#p').panel({
+  title: 'My Panel',
+  tools: [{
+    iconCls:'icon-new',
+    handler:function(){alert('new')}
+  },{
+    iconCls:'icon-save'
+    handler:function(){alert('save')}
+  }]
+});
+}}}
+
+To invoke a panel method
+{{{
+$('#p').panel('move',{
+  left:100,
+  top:100
+});
+}}}
+
+= Options =
+Override defaults with $.fn.panel.defaults
+== Properties ==
+|| *Name* || *Type* || *Description* || *Default* ||
+||title||string||The title text to display in panel header||null||
+||iconCls||string||A CSS class to display a 16x16 icon in panel||null||
+||width||number||Set the panel width||auto||
+||height||number||Set the panel height||auto||
+||left||number||Set the panel left position||null||
+||top||number||Set the panel top position||null||
+||cls||string||Add a CSS class to the panel||null||
+||headerCls||string||Add a CSS class to the panel header||null||
+||bodyCls||string||Add a CSS class to the panel body||null||
+||style||object||Add a custom specification style to the panel||{}||
+||fit||boolean||When true to set the panel size fit it's parent container||false||
+||border||boolean||Defines if to show panel border||true||
+||doSize||boolean||If set to true,the panel will be resize and do layout when created||true||
+||collapsible||boolean||Defines if to show collapsible button||false||
+||minimizable||boolean||Defines if to show minimizable button||false||
+||maximizable||boolean||Defines if to show maximizable button||false||
+||closable||boolean||Defines if to show closable button||false||
+||tools||array||custom tools, every tool can contain two properties: iconCls and handler||`[]`||
+||collapsed||boolean||Defines if the panel is collapsed at initialization||false||
+||minimized||boolean||Defines if the panel is minimized at initialization||false||
+||maximized||boolean||Defines if the panel is maximized at initialization||false||
+||closed||boolean||Defines if the panel is closed at initialization||false||
+||href||string||A URL to load remote data and then display in the panel||null||
+||loadingMessage||string||When loading remote data show a message in the panel||Loading...||
+
+== Events ==
+|| *Name* || *Parameters* || *Description* ||
+||onLoad||none||Fires when remote data is loaded||
+||onBeforeOpen||none||Fires before panel is opened||
+||onOpen||none||Fires after panel is opened||
+||onBeforeClose||none||Fires before panel is closed||
+||onClose||none||Fires after panel is closed||
+||onBeforeDestroy||none||Fires before panel is destroyed||
+||onDestroy||none||Fires after panel is destroyed||
+||onBeforeCollapse||none||Fires before panel is collapsed||
+||onCollapse||none||Fires after panel is collapsed||
+||onBeforeExpand||none||Fires before panel is expanded||
+||onExpand||none||Fires after panel is expanded||
+||onResize||width,height||Fires when panel is resized.width is the new outer width,height is the new outer height||
+||onMove||left,top||Fires when panel is moved. left is the new left position and top is the new top position||
+||onMaximize||none||Fires after the window has been maximized||
+||onRestore||none||Fires after the window has been restored to its original size||
+||onMinimize||none||Fires after the window has been minimized||
+
+== Methods ==
+|| *Name* || *Parameter* || *Description* ||
+||options||none||Return options property||
+||panel||none||Return the panel object||
+||header||none||Return the panel header object||
+||body||none||Return the panel body object||
+||open||forceOpen||When forceOpen parameter set to true, the panel is opened bypass the onBeforeOpen callback||
+||close||forceClose||When forceClose parameter set to true, the panel is closed bypass the onBeforeClose callback||
+||destroy||forceDestroy||When forceDestroy parameter set to true, the panel is destroyed bypass the onBeforeDestroy callback||
+||refresh||none||Refresh the panel to load remote data when href property is setted||
+||resize||properties||Set panel size and do layout, the properties can contains {width,height,left,top}||
+||move||properties||Move then panel to a new position, the properties can contains {left,top}||
