@@ -1,13 +1,21 @@
 /*      资源树的基本样式信息*/
 body{
-	font-size:13px;
+	font-size:14px;
 	height:100%;
 	font-family:cambria;  
-	font-color:#DF1515;}
+	font-color:#28004D;
+}
 ul,li{  
 	list-style:none;  
 	padding-left:15px;  
-	margin-top:3px;}
+	margin-top:3px;
+	margin-bottom:3px;
+}
+/*资源树上叶子节点连接的样式*/
+a{
+  text-decoration:none;
+  color:#28004D;
+}
 /*加号样式 */
 div.clickPlusErea{  
 	width:15px;  
@@ -43,9 +51,9 @@ span{
 }	
 #m_drag{  
 	width:300px;  
-	background-color:#D8D8D8;  
-	border:2px solid #848484;  
 	position:absolute;
+	height:600px;
+	scroll:auto;
 	}
 .roottree{  
 	margin-left:15px;

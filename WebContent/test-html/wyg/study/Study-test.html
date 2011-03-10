@@ -60,6 +60,10 @@
     background-color:#FF0000;
     border:solid 2px #c3c3c3;    
   }
+  li
+  {
+  	list-style-type:none;
+  }
 </style>
 </head>
 <body>  
@@ -76,21 +80,58 @@
   </div> 
   <div id="pad">学习使用data函数</div>
   <div id="m_event">学习使用事件，点击查看效果！</div>
+  <div id="rightClick">点击弹出右键菜单</div>
+  <div>
+  <ul>
+  <li><span><a href='http://www.baidu.com'>百度一下</a></span></li>
+  </ul>
+  </div>
+  <ul style="backgroud-color:#F1F1F1;border:1px solid #FF0000;position:absolute;display:block;left:500px">
+  <li>新建</li>
+  <li>保存</li>
+  <li>删除</li>
+  </ul>
+  <hr>
+  <hr>
+  <li><span id="m_edit">百度一下</span></li>
   <script type="text/javascript">
     $.fn.ready(
     	function($){
-    		alert($("#test")[0].innerHTML);
+//    		alert($("#test")[0].innerHTML);
     		$("<div style=\"border:solid 1px #FF0000\">动态创建的 div</div>").insertAfter(".ex");
-    	    alert($(".ex").prev().html());
+//    	    alert($(".ex").prev().html());
     	    $("div").attr("class","ex2");
     	    $("p").css({ color: "#ff0011", background: "blue" }); 
-    	    $("#pad").data("a","123");
+//    	    $("#pad").data("a","123");
     	    $("#m_event").bind("click",function(){
     	    	alert("click");
     	    })  
     	    $("#m_event").bind("click",function(){
     	    	alert("bind 函数关联事件为多播时间，新绑定的事件处理函数不会冲掉原来的事件处理函数 ！")
     	    })
+    	    $("#rightClick").bind("contextmenu",function(){
+    	    	alert("右键被点击 ");
+    	    })
+    	    var a=new Object();
+			function B(){
+				this.b= 1;
+			}  
+			var b=new B;
+			var abc=function(x,y){
+				return x*y;
+			};
+			$("#m_edit").bind("dblclick",function(event){
+				var value=$(this).text();
+				var m_width=$(this).width();
+				$(this).replaceWith($("<input type='text' style='overflow:visible;width:"+m_width+"px' value="+value+">"));					
+			});
+			$("#pad").bind("click",function(){
+//				alert("click document");
+				var te=$("input").attr("value");
+				$("input").hide();
+				$("#m_edit").show();
+				$("#m_edit").text(te);	
+			})
     	}
     )
   </script>
