@@ -697,18 +697,10 @@ jQuery.extend({
 	 * 判定dom元素的名字
 	 * eg: jQuery.nodeName(dom, 'div');
 	 */
-	/**
-	 * 判定dom元素的名字
-	 * eg: jQuery.nodeName(dom, 'div');
-	 */
 	nodeName: function( elem, name ) {
 		return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
 	},
 
-	/**
-	 * each函数的回调函数的原型是：callback(i, element)。比如可以这样调用：
-	 * 		$("#div1").children().each(function(i, element){ .. })
-	 */
 	/**
 	 * each函数的回调函数的原型是：callback(i, element)。比如可以这样调用：
 	 * 		$("#div1").children().each(function(i, element){ .. })
@@ -5356,10 +5348,6 @@ jQuery.fn.extend({
 	 * 往dom中新增元素。
 	 * eg: $(dom).append("<div>new dom</div><br/>");
 	 */
-	/**
-	 * 往dom中新增元素。
-	 * eg: $(dom).append("<div>new dom</div><br/>");
-	 */
 	append: function() {
 		return this.domManip(arguments, true, function( elem ) {
 			if ( this.nodeType === 1 ) {
@@ -6843,18 +6831,6 @@ jQuery.extend({
 			jXHR.status = status;
 			jXHR.statusText = statusText;
 
-			/**
-			 * 处理ajax响应，
-			 * 成功则调用success(successText, statusText, jXHR)：
-			 * 		successText：服务器端返回的文字内容，如果返回的是xml，那么successText是xml的doc对象。
-			 * 		statusText: 通常就是"success"
-			 * 		jXHR: 类似HttpReponse对象
-			 * 失败则调用error(jXHR, statusText, errorMessage)：
-			 * 		jXHR: 类似HttpReponse对象
-			 * 		statusText: 通常就是"error"
-			 * 		errorMessage: 如果是url不存在，那么错误信息是"Not Found"
-			 * 这里的error和success是在调用ajax函数时传入进来的参数，比如：$.ajax(url:"xx.html", error:function(){}, success:function(){})
-			 */
 			/**
 			 * 处理ajax响应，
 			 * 成功则调用success(successText, statusText, jXHR)：

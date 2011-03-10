@@ -7,14 +7,6 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>testajax</servlet-name>
-		<url-pattern>*.do</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>testajax</servlet-name>
-		<servlet-class>com.jquery.xh.AjaxTestAction</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>testajax</servlet-name>
 		<url-pattern>*.testajax</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>

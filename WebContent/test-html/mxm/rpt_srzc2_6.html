@@ -3,21 +3,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="css/rpt_srzc2_6.css">
+<link rel="stylesheet" type="text/css" href="css/table.css">
+<link rel="stylesheet" type="text/css"
+	href="../../js/jquery/download-plugin/jquery-easyui-1.2.2/themes/default/easyui.css">
 <script type="text/javascript" src="../../js/jquery/jquery-1.4.4.js"></script>
-<script type="text/javascript" src="../../js/jquery/download-plugin/jquery.layout.all-1.2.0/jquery.layout-latest.js"></script>
-<script type="text/javascript" src="../../js/jquery/download-plugin/jquery.layout.all-1.2.0/jquery-ui-1.8.10.custom.min.js"></script>
-<script type="text/javascript" src="../../js/jquery/myplugin/mxm/jquery.uploadfile.js"></script>
-<script type="text/javascript" src="../../js/jquery/myplugin/mxm/jquery.properies.editor.js"></script>
+<script type="text/javascript"
+	src="../../js/jquery/download-plugin/jquery-easyui-1.2.2/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="../../js/jquery/myplugin/mxm/jquery.uploadfile.js"></script>
+<script type="text/javascript"
+	src="../../js/jquery/myplugin/mxm/jquery.properies.editor.js"></script>
+<script type="text/javascript"
+	src="../../js/jquery/myplugin/mxm/jquery.table.js"></script>
+<script type="text/javascript"
+	src="rpt_editor.js"></script>
 <script type="text/javascript">
 	$(function(){
-		var defaultOption = { 
-				north__size:23,
-				spacing_open:2,
-				spacing_closed:2,
-				west__onresize:function(){accor.accordion("resize")}
-			};
-		var l = $('body').layout(defaultOption);
-		var toolbar = $(".coolbar").appendTo(l.panes.north);
+		var layout = $("body").layout().data("layout");
+		var toolbar = $(".coolbar").appendTo(layout.panels["north"]);
 		toolbar.find("img").bind("click",function(){
 			var fn = $(this).attr("cmd");
 			if(fn){
@@ -26,17 +29,12 @@
 				alert("没有绑定单击处理函数");
 			}
 		})
-		var westDiv = $(l.panes.west);
-		var accor = $("<div></div>").addClass("basic").appendTo(westDiv);
-		$("<h3>报表结构</h3>").appendTo(accor);
-		var rptStructContent = $("<div></div>").appendTo(accor);
-		$("#rptStruct").appendTo(rptStructContent);
-		$("<h3>组件列表</h3>").appendTo(accor);
-		$("<div></div>").appendTo(accor);
-		accor.accordion({fillSpace:true});
 		
-		var tableObj = $("<div></div>").addClass("tableContainer").appendTo(l.panes.center);
+		var tableObj = $("<div></div>").addClass("tableContainer").appendTo(layout.panels["center"]);
 		tableObj.draggable({containment: "parent"});
+		var table = new $.succezBI.jTable({
+			renderTo:tableObj
+		});
 		
 		$("li").bind("click",function(e){
 			if(e.target != this) return;
@@ -55,11 +53,26 @@
 			}
 		});
 		
-		$.fn.jproeditor({
-			renderTo:l.panes.east,
-			caption:'报表属性',
-			width:300,
-			titleWidth:0.35,
+		$("#components").find(">tbody>tr>td>img").draggable({
+			revert:true,
+			deltaX:10,
+			deltaY:10,
+			proxy:function(source){
+				var n = $($.succezBI.getDomHtmlByTag($(source).attr("name"))).addClass("proxy").appendTo('body');
+				return n;
+			}
+		});
+		
+		layout.panels["center"].droppable({
+			accept:'img',
+			onDrop:function(e,source){
+				var d = $($.succezBI.getDomHtmlByTag($(source).attr("name")))
+						.css("left",e.pageX).css("top",e.pageY).draggable();;
+				$(this).append(d);
+			}
+		});
+		
+		layout.panels["east"].jproeditor({
 			defaultType:'type',
 			items:[
 				{
@@ -146,10 +159,6 @@
 						}
 					}]
 				},{
-					title:'上传文件',
-					type:'file',
-					defaultValue:'1.test'
-				},{
 					title:'报表类型',
 					type:'radio',
 					name:'report_type',
@@ -178,54 +187,77 @@
 </script>
 <title>Insert title here</title>
 </head>
-<body>
-<div class="ui-layout-west"></div>
-<div class="ui-layout-north"></div>
-<div class="ui-layout-center"></div>
-<div class="ui-layout-east"></div>
-
+<body class="easyui-layout">
+<div region="north" border="false"
+	style="height: 30px; background: #B3DFDA;"></div>
+<div region="west" split="true" title="West"
+	style="width: 150px; padding: 0px;">
+<div class="easyui-accordion" fit="true" style="width: 100%">
+<div title="报表结构" iconCls="icon-ok"
+	style="overflow: auto; padding: 0px;">
 <ul id="rptStruct">
 	<li class="collapse">报表结构
-		<ul>
+	<ul>
 		<li class="collapse">表头
-			<ul>
-				<li>HHH0</li>
-				<li>HHH1</li>
-				<li>HHH2</li>
-				<li>HHH3</li>
-			</ul>
+		<ul>
+			<li>HHH0</li>
+			<li>HHH1</li>
+			<li>HHH2</li>
+			<li>HHH3</li>
+		</ul>
 		</li>
 		<li class="collapse">表格
-			<ul>
-				<li>A1</li>
-				<li>A2</li>
-				<li>A3</li>
-				<li>A4</li>
-				<li>A5</li>
-				<li>A6</li>
-				<li>A7</li>
-				<li>A8</li>
-				<li>A9</li>
-			</ul>
+		<ul>
+			<li>A1</li>
+			<li>A2</li>
+			<li>A3</li>
+			<li>A4</li>
+			<li>A5</li>
+			<li>A6</li>
+			<li>A7</li>
+			<li>A8</li>
+			<li>A9</li>
+		</ul>
 		</li>
 		<li class="collapse">参数
-			<ul>
-				<li>@bbq</li>
-				<li>@xzqh</li>
-			</ul>
+		<ul>
+			<li>@bbq</li>
+			<li>@xzqh</li>
+		</ul>
 		</li>
 		<li class="collapse">统计图
-			<ul>
-				<li>chart1</li>
-				<li>chart2</li>
-				<li>chart3</li>
-			</ul>
+		<ul>
+			<li>chart1</li>
+			<li>chart2</li>
+			<li>chart3</li>
+		</ul>
 		</li>
 		<li class="collapse">其它</li>
-		</ul>
+	</ul>
 	</li>
 </ul>
-<table class = "coolbar">
+</div>
+<div title="控件列表" iconCls="icon-reload" selected="true"
+	style="padding: 0px;">
+	<table id="components" width="100%">
+		<tr>
+			<td align="center"><img name="label" src="image/more.gif" title="标签"/></td>
+		</tr>
+		<tr>
+			<td align="center"><img name="edit" src="image/more.gif" title="输入框"/></td>
+		</tr>
+		<tr>
+			<td align="center"><img name="button" src="image/more.gif" title="按钮"/></td>
+		</tr>
+	</table>
+</div>
+</div>
+</div>
+<div region="east" split="true" title="属性列表"
+	style="width: 300px; padding: 0px;"></div>
+<div region="center" title="报表区域" style="overflow:inherit;"></div>
+
+<table class="coolbar">
 	<tr>
 		<td><img src="image/more.gif" title="更多" cmd="alert('click')"></img></td>
 		<td><img src="image/new.gif"></img></td>

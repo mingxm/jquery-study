@@ -18,9 +18,6 @@
 }
 
 .tableContainer{
-	background:#EEF;
-	width:200px;
-	height:200px;
 }
 
 h3{ /* Headers & Footer in Center & East panes */
@@ -83,6 +80,11 @@ h4{
 
 .collapse{
 	list-style-image:url(../image/collapse.gif);
+}
+
+.proxy{
+	border:1px solid #ccc;
+	background:#fafafa;
 }
 
 ul{
