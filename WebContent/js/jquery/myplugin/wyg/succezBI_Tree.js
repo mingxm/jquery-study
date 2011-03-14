@@ -40,7 +40,7 @@
    		      defaultSetting.preNodeClick(event);
    		  });
    		//静态初始化
-   		showTree($(this),defaultSetting.xmlPath,defaultSetting);	
+   		showTree($(this),defaultSetting);	
    		
    		var biTreePlugin={};
    		//设置
@@ -49,21 +49,28 @@
    		
    		biTreePlugin.bindrightClick=function(){
    			$("."+defaultSetting.fileNode_class).live("contextmenu",function(event){
-   				defaultSetting.currentNode=event.target;
-   				var menu=$(defaultSetting.rightMenuId);
-   				menu.show(300);
-   				menu.css("left",event.pageX);
-   				menu.css("top",event.pageY);
-   				return false;
+   				//处于编辑状态的时候不允许再弹出右键菜单，这里的处理是立即返回
+   				if (defaultSetting.isEditing)
+   				{
+   				  	return false;
+   				}else{
+   					defaultSetting.currentNode=event.target;
+   					var menu=$(defaultSetting.rightMenuId);
+   					menu.show(300);
+   					menu.css("left",event.pageX);
+   					menu.css("top",event.pageY);
+   					return false;
+   				}
    			});
    			//绑定右键菜单的新建节点子菜单项
    			$(defaultSetting.newNode).live("click",function(event){
+   				$(this).parent().hide();
    				var m_newNode=$("<li><span class="+defaultSetting.fileNode_class+"><input type='text' value=''><span></li>");
    				$(defaultSetting.currentNode).parent().parent().after(m_newNode);
    				var m_replaceNode=$("<a href='#'></a>");
    				defaultSetting.oldNode=m_replaceNode;
    				defaultSetting.currentNode=$(m_newNode).find("input");
-   				$(this).parent().hide();
+   				defaultSetting.isEditing=true;
    			});
    			//绑定右键菜单的编辑节点菜单项
    			$(defaultSetting.nodeEdit).live("click",function(event){
@@ -81,7 +88,7 @@
    			   		defaultSetting.currentNode=temp;
    			   		defaultSetting.isEditing=true;
    			   		//将右键菜单隐藏起来
-   			   		$(this).parent().hide();
+   			   		$(this).parent().hide(200);
    				};
    			});
    			//绑定右键菜单的删除节点菜单项
@@ -121,31 +128,21 @@
    		};
    		return biTreePlugin;
    };   
-   //根据传入的xml文件路径，全量初始化所有的节点
-   function showTree(item,xmlPath,Setting){
-   		if (xmlPath=="") return fasle;
+   //根据传入的xml文件路径，初始化根节点
+   function showTree(item,Setting){
+   		if (Setting.xmlPath=="") return fasle;
    		//加载初始化所需的xml文件
-   		var html=$("<div/>");
-   		//标识当前加载的数据为第几层的数据
-   		var level=1;
-   		$.ajax({
-		   type:"GET",
-		   url:xmlPath,
-		   dataType:"xml",
-		   timeout:1000,
-		   error:function(xml){
-		             alert("error!");
-		             return;
-		         },
-		   success:function(xml){
-		            //如果加载成功，那么初始化所有的节点
-		         	initNodes($(xml).find("nodes"),html,Setting,level);  
-		         }         		      			
-   		});	
+   		var html=$("<div/>");	
+   		//初始化根节点
+   		initNodes(html,Setting,"0");
    		//将节点加入到html的Dom之中
    		item.append(html);
    		//绑定加减号按钮的click事件
    		$("."+Setting.plus_Ico_class).live("click",function(e){
+   			if ($(this).parent().data("loaded")==false){
+   				initNodes($(this).parent(),Setting,$(this).attr("id"));
+   				$(this).parent().data("loaded",true);
+   			}
    			treeUnfold(e);
    			return false;
    		});
@@ -171,7 +168,7 @@
  * 根据XML中的数据结构，除了Nodes以外，所有节点均为Node标签定义，有明确的层次结构,
  * 所以初始化的基本思想就是递归遍历
  */
-   function initNodes(xmlDoc,htmlDoc,Setting,level){
+/*   function initNodes(xmlDoc,htmlDoc,Setting,id){
    	    //递归遍历
    		xmlDoc.find("> node").each(function(){
    			if ($(this).find("> node").length>0){
@@ -204,6 +201,48 @@
    			};	
    			
    		});    	
+   }*/
+   
+   function initNodes(htmlDoc,Setting,id){ 
+   	    //定义一个节点对象
+   		var xmlDoc={};
+   		//首先从服务器请求所需要的节点
+   	   	$.ajax({
+		   type:"GET",
+		   url:Setting.xmlPath,
+		   dataType:"xml",
+		   timeout:1000,
+		   error:function(xml){
+		             alert("error!");
+		             return;
+		         },
+		   success:function(xml){
+		            //如果加载成功，那么首先初始化根节点
+		   			xmlDoc=xml;
+		         }         		      			
+   		});
+   		//因为返回的节点是全部的节点，所以要进行筛选
+   		$(xmlDoc).find("[parent_Id="+id+"]").each(function(){
+   			//如果还有子节点，那么该节点就是父节点
+   			if ($(this).children().length>0){
+   				var node=$("<ul/>");
+				var nodeText=$(this).attr("text");
+				var nodeId=$(this).attr("id");
+   				if (nodeText && nodeText!='')
+   				{
+   					node.append($("<div class="+Setting.plus_Ico_class+" id="+nodeId+"></div>"));
+   					node.append($("<li><span class="+Setting.root_Ico_class+">"+nodeText+"</span></li>"));                               		  	   
+   				}  
+   				$(node).data("loaded",false);
+   				htmlDoc.append(node);
+   			}else
+   			{
+   				//子节点直接添加到htmlDoc之中
+   				var m_text = $(this).text();
+   				var m_href = $(this).attr("href");
+   				htmlDoc.append($("<li><span class="+Setting.fileNode_class+"><a href="+m_href+">"+m_text+"</a></span></li>"));
+   			}
+   		});
    }
 /*
  * 树节点的收缩事件
@@ -215,7 +254,7 @@
     	var childelememt=$(m_target).next().nextAll();
     	//判断节点的是否含有子节点 
     	if (childelememt.length>0){
-    		childelememt.show(500);
+    		childelememt.slideDown(300);
     	    $(m_target).toggleClass("clickSubErea clickPlusErea");
     	}else
     		alert("No childNode");   
@@ -225,7 +264,7 @@
  */   
    function treeFold(e){
     	var m_target=e.target;
-    	$(m_target).next().nextAll().hide(200);
+    	$(m_target).next().nextAll().slideUp(300);
     	  $(m_target).toggleClass("clickPlusErea clickSubErea");     
    }
 })(jQuery)

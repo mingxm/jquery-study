@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nodes>
-	<node text="succezBI总体设计1">
-		<node text="树的二级节点">
-			<node>二级节点SuccezBi界面的总体设计4</node>			
-			<node>二级节点多语言支持4</node>			
-			<node>二级节点客户端js框架选型4</node>			
-			<node>二级节点插件机制4</node>			
-			<node>二级节点集群支持设计4</node>			
-			<node>二级节点SuccezBi界面的总体设计4</node>			
-			<node>二级节点SuccezBi界面的总体设计4</node>																				
+<nodes srcType="xml">
+	<node text="succezBI总体设计1" id="1" parent_Id="0">
+		<node text="树的二级节点" id="2" parent_Id="1">
+			<node href="http://www.baidu.com" id="3" parent_Id="2">二级节点SuccezBi界面的总体设计4</node>			
+			<node href="http://www.hao123.com" id="4" parent_Id="2">二级节点多语言支持4</node>			
+			<node href="http://www.goole.com" id="5" parent_Id="2">二级节点客户端js框架选型4</node>			
+			<node href="http://www.baidu.com" id="6" parent_Id="2">二级节点插件机制4</node>			
+			<node href="http://www.baidu.com" id="7" parent_Id="2">二级节点集群支持设计4</node>			
+			<node href="http://www.baidu.com" id="8" parent_Id="2">二级节点SuccezBi界面的总体设计4</node>			
+			<node href="http://www.baidu.com" id="9" parent_Id="2">二级节点SuccezBi界面的总体设计4</node>																				
 		</node>		
-		<node>SuccezBi界面的总体设计1</node>  		
-		<node>多语言支持1</node> 		
-		<node>客户端js框架选型1</node>		
-		<node>插件机制1</node>		
-		<node>集群支持设计1</node>		
-		<node>SuccezBi界面的总体设计1</node>		
-		<node>SuccezBi界面的总体设计1</node>	
+		<node href="http://www.baidu.com" id="10" parent_Id="1">SuccezBi界面的总体设计1</node>  		
+		<node href="http://www.baidu.com" id="11" parent_Id="1">多语言支持1</node> 		
+		<node href="http://www.baidu.com" id="12" parent_Id="1">客户端js框架选型1</node>		
+		<node href="http://www.baidu.com" id="13" parent_Id="1">插件机制1</node>		
+		<node href="http://www.baidu.com" id="14" parent_Id="1">集群支持设计1</node>		
+		<node href="http://www.baidu.com" id="15" parent_Id="1">SuccezBi界面的总体设计1</node>		
+		<node href="http://www.baidu.com" id="16" parent_Id="1">SuccezBi界面的总体设计1</node>	
 	</node>				
-	<node text="succezBI总体设计2">		
-		<node>SuccezBi界面的总体设计3</node>  		
-		<node>多语言支持3</node> 		
-		<node>客户端js框架选型3</node>		
-		<node>插件机制3</node>		
-		<node>集群支持设计3</node>		
-		<node>SuccezBi界面的总体设计3</node>		
-		<node>SuccezBi界面的总体设计3</node>				
+	<node text="succezBI总体设计2" id="17" parent_Id="0">		
+		<node href="http://www.baidu.com" id="18" parent_Id="17">SuccezBi界面的总体设计3</node>  		
+		<node href="http://www.baidu.com" id="19" parent_Id="17">多语言支持3</node> 		
+		<node href="http://www.baidu.com" id="20" parent_Id="17">客户端js框架选型3</node>		
+		<node href="http://www.baidu.com" id="21" parent_Id="17">插件机制3</node>		
+		<node href="http://www.baidu.com" id="22" parent_Id="17">集群支持设计3</node>		
+		<node href="http://www.baidu.com" id="23" parent_Id="17">SuccezBi界面的总体设计3</node>		
+		<node href="http://www.baidu.com" id="24" parent_Id="17">SuccezBi界面的总体设计3</node>				
 	</node>		
-	<node>SuccezBi界面的总体设计31</node>  	
-	<node>多语言支持31</node> 	
-	<node>客户端js框架选型31</node>	
-	<node>插件机制31</node>	
-	<node>集群支持设计31</node>	
-	<node>SuccezBi界面的总体设计31</node>	
-	<node>SuccezBi界面的总体设计31</node>	
+	<node href="http://www.baidu.com" id="25" parent_Id="0">SuccezBi界面的总体设计31</node>  	
+	<node href="http://www.baidu.com" id="26" parent_Id="0">多语言支持31</node> 	
+	<node href="http://www.baidu.com" id="27" parent_Id="0">客户端js框架选型31</node>	
+	<node href="http://www.baidu.com" id="28" parent_Id="0">插件机制31</node>	
+	<node href="http://www.baidu.com" id="29" parent_Id="0">集群支持设计31</node>	
+	<node href="http://www.baidu.com" id="30" parent_Id="0">SuccezBi界面的总体设计31</node>	
+	<node href="http://www.baidu.com" id="31" parent_Id="0">SuccezBi界面的总体设计31</node>	
 </nodes>	

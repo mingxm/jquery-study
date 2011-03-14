@@ -17,9 +17,18 @@ function initxml(xmlpath){
 		   error:function(xml){alert("error!");},
 		   success:function(xml){
 			   alert("success!");
-			   var m_html=$(xml).find("nodes").find("> node").each(function(){
-				   alert($(this).text());
-				   alert($(this).find("> node").length.toString());
+			   //查找到父节点id=0的所有节点，其实是查找的根节点 
+			   $(xml).find("[parent_Id='0']").each(function(){
+				   alert($(this).children().length);
+				   //如果该节点下面还有子节点，那就证明该节点为根节点 
+				   if ($(this).children().length>0)
+				   {
+					   alert($(this).attr("text"))
+				   }else
+				   {
+					   //否则就说明该节点为叶子节点 
+					   alert($(this).text());    
+				   }
 			   });
 			   }
 	});	
