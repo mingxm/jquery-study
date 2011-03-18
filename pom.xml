@@ -24,8 +24,8 @@
 					<encoding>utf-8</encoding><!-- BI及其所依赖的工程源文件编码为UTF-8 -->
 					<meminitial>128m</meminitial><!-- 编译时分配给JVM的最小内存 -->
 					<maxmem>512m</maxmem><!-- 编译时分配给JVM的最大内存 -->
-					<source>1.4</source><!-- 源代码编译级别 -->
-					<target>1.4</target><!-- class文件级别 -->
+					<source>1.5</source><!-- 源代码编译级别 -->
+					<target>1.5</target><!-- class文件级别 -->
 					<verbose>true</verbose>
 				</configuration>
 			</plugin>
