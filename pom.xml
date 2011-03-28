@@ -40,7 +40,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- 执行：mvn site，生成工程的网站。这个网站将包括：javadoc、test-javadoc、测试报告、codestyle检查报告-->
+			<!-- 执行：mvn site，生成工程的网站。这个网站将包括：javadoc、test-javadoc、测试报告、codestyle检查报告 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -48,7 +48,7 @@
 				<configuration>
 					<inputEncoding>utf-8</inputEncoding><!-- 源代码文件的编码 -->
 					<outputEncoding>utf-8</outputEncoding><!-- 生成报告文件的编码 -->
-					
+
 					<reportPlugins>
 						<!-- 输出工程的基本信息， 比如依赖哪些jar包 -->
 						<plugin>
@@ -56,7 +56,7 @@
 							<artifactId>maven-project-info-reports-plugin</artifactId>
 							<version>2.0.1</version>
 						</plugin>
-						
+
 						<!-- 生成javadoc -->
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
@@ -71,7 +71,7 @@
 								<maxmemory>512m</maxmemory>
 							</configuration>
 						</plugin>
-						
+
 						<!-- 将源码生成html，方便在ie中浏览源码. -->
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
@@ -79,16 +79,18 @@
 							<version>2.1</version>
 							<configuration>
 								<aggregate>true</aggregate>
+								<inputEncoding>utf-8</inputEncoding><!-- 源代码文件的编码 -->
+								<outputEncoding>utf-8</outputEncoding><!-- 生成报告文件的编码 -->
 							</configuration>
 						</plugin>
-						
+
 						<!-- 运行单元测试，会自动运行所有testcase -->
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-surefire-report-plugin</artifactId>
 							<version>2.6</version>
 						</plugin>
-						
+
 						<!-- 检测单元测试的覆盖率，生成覆盖率报告 -->
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
@@ -100,14 +102,14 @@
 									<format>html</format>
 								</formats>
 								<encoding>utf-8</encoding>
-								<instrumentation><!--排除测试代码，测试代码不用检测覆盖率-->
+								<instrumentation><!--排除测试代码，测试代码不用检测覆盖率 -->
 									<excludes>
 										<exclude>**/Test*.class</exclude>
 									</excludes>
 								</instrumentation>
 							</configuration>
 						</plugin>
-						
+
 						<!-- 检测代码风格 -->
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
@@ -115,7 +117,7 @@
 							<version>2.6</version>
 							<configuration>
 								<encoding>utf-8</encoding>
-							</configuration>						
+							</configuration>
 						</plugin>
 					</reportPlugins>
 				</configuration>
